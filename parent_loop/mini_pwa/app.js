@@ -39,11 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mp3 = new Audio(`/pwa/audio/${key}.mp3`);
     activeAudio = mp3;
     mp3.play().catch(() => {
-      const m4a = new Audio(`/pwa/audio/${key}.m4a`);
-      activeAudio = m4a;
-      m4a.play().catch(() => {
-        speakHindi(fallbackText);
-      });
+      speakHindi(fallbackText);
     });
   }
 

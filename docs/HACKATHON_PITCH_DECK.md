@@ -29,24 +29,29 @@
 ### Minute 0:45 – 3:00: Live Airplane Mode Demonstration on a ₹9,000 Android Phone
 *(Action: Hold up an ₹8,000–₹10,000 budget Android handset. Open the top system shade visibly on the venue projector: Wi-Fi is OFF, Mobile Data is OFF, Airplane Mode is ON.)*
 
-> *"Everything you are about to see is running 100% offline on Google LiteRT, OpenCV, and Sherpa-ONNX on this ₹9,000 budget phone.*
+> *"Everything you are about to see is running 100% offline inside the browser PWA on this ₹9,000 phone, powered by WebAssembly and local ONNX Runtime:*
 >
 > *First: Notice the **₹2 laminated CalibCard** you are holding. In rural Anganwadis, yellow incandescent bulbs and dark shadows destroy standard vision models. Our card provides an ArUco coordinate anchor, a metric scale, a 6-patch color constancy strip, and a central friendly fixation target that locks the child's gaze straight ahead.*
 >
 > *Watch our **Rejection-First Quality Gate** in action: (Demonstrate: Wave phone rapidly to create blur). The phone instantly detects low Laplacian variance and speaks in Hindi: 'कैमरा स्थिर रखें, धुंधलापन हटाएं'. It refuses to guess on garbage frames.*
 >
-> *(Hold card steady in view): The gate passes in 60 milliseconds. Watch: It reads this digital scale LCD in real-time, calculates exact WHO LMS Z-scores, checks ocular alignment using the Hirschberg corneal light reflex to rule out pseudo-strabismus, and scores a fine-motor pencil trace using OpenCV homography and Hausdorff distance.*
+> *(Hold card steady in view): The gate passes in 60 milliseconds. Watch: Three neural ONNX models run right inside the phone's browser WASM sandbox:*
+> 1. *INT8 Quantized MobileNetV3 for mucosal conjunctival pallor screening (1.23 MB).*
+> 2. *Field LCD OCR for infant weighing scales and digital haemoglobinometers.*
+> 3. *Dialect-invariant speech acoustic prosody model for early vocalization delay.*
+>
+> *Crucially: Bal-Setu does not use brittle threshold heuristics. We run **Split Conformal Prediction (1 - α = 0.90)** with mathematical guarantees: when model confidence is ambiguous, the system safely abstains and routes the child to a community tele-review instead of forcing a panic referral.*
 >
 > *At the end of the 90-second sweep, it speaks the results in plain, non-diagnostic Hindi to the mother (UC-3) and outputs a fully compliant **ABDM FHIR R4 Document Bundle (ndhm.in#6.5.0)** with zero raw child photos stored on device or cloud!"*
 
 ---
 
 ### Minute 3:00 – 4:00: Closed-Loop Referral Scan & 7:30 PM Parent Loop
-*(Action: Display the generated Offline Referral QR Token. Have a second teammate scan it on a simulated CHC/DEIC hospital desk terminal.)*
+*(Action: Display the generated Offline Referral QR Token. Have a second teammate scan it using the live video camera scanner on the hospital desk terminal at `/facility/`.)*
 
 > *"For referred children (UC-4), Bal-Setu eliminates India's 53% tracking dropout gap. This QR embeds an HMAC-SHA256 tamper-proof token and a 1-tap dispatch to UP's free **102 ambulance network**.*
 >
-> *(Teammate scans QR on laptop): Notice what happened: The hospital desk verified the arrival, transitioned the RBSK 2.0 status from 'Referred' to 'Treatment Initiated', and **automatically credited the ASHA's ₹250 referral incentive** into her e-Kavach task list—fixing the incentive documentation delay that plagues frontline workers.*
+> *(Teammate scans QR live with camera on `/facility/`): Notice what happened: The hospital desk verified the arrival cryptographically, transitioned the RBSK 2.0 status from 'Referred' to 'Treatment Initiated', and **automatically credited the ASHA's ₹250 referral incentive** into her e-Kavach task list—fixing the incentive documentation delay that plagues frontline workers.*
 >
 > *Now, what about the 15% borderline children in the Yellow tier? (UC-5, UC-6): We do NOT run an unaffordable daily WhatsApp bot. In rural UP, NFHS-5 shows only 24.5% of women have internet, and the family phone leaves with the father in the morning.*
 >

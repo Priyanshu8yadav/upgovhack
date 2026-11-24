@@ -57,9 +57,10 @@ class BalSetuWorkerApp {
     if (typeof ort !== 'undefined') {
       try {
         console.log('[Bal-Setu WASM] Pre-loading onnxruntime-web sessions from local /worker/libs/ ...');
-        // Explicitly set local wasm paths and single-thread execution to avoid CDN fetches or COOP/COEP headers
+        // Explicitly set local wasm paths, single-threaded execution, and standard non-SIMD WASM binary (<10 MB for HF Spaces)
         ort.env.wasm.wasmPaths = '/worker/libs/';
         ort.env.wasm.numThreads = 1;
+        ort.env.wasm.simd = false;
 
         this.ortSessionSkin = await ort.InferenceSession.create('/worker/models/skin_pallor_mobilenetv3.onnx', {
           executionProviders: ['wasm']
@@ -156,21 +157,15 @@ class BalSetuWorkerApp {
     const dialect = document.getElementById('dialectSelect')?.value || 'hi-IN';
     const langKey = (dialect === 'bho') ? 'bho' : 'hi';
     const mp3Path = `/worker/audio/${key}_${langKey}.mp3`;
-    const m4aPath = `/worker/audio/${key}_${langKey}.m4a`;
 
     if (this.currentAudio) {
       try { this.currentAudio.pause(); } catch(e){}
     }
 
-    // Dual-codec universal playback: try MP3 first (cross-device/Android WebViews/Linux Firefox), then M4A, then Web Speech
     const audio = new Audio(mp3Path);
     this.currentAudio = audio;
     audio.play().catch(() => {
-      const fallbackAudio = new Audio(m4aPath);
-      this.currentAudio = fallbackAudio;
-      fallbackAudio.play().catch(() => {
-        this.speakFallback(fallbackText || this.speechPrompts[key] || "");
-      });
+      this.speakFallback(fallbackText || this.speechPrompts[key] || "");
     });
   }
 
