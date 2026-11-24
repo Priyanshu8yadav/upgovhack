@@ -48,27 +48,31 @@ class SkinPallorMobileNetV3(nn.Module):
 
         # Head 1: Dermatology Triage (4 classes: Normal, Scabies, Fungal/Tinea, Eczema)
         self.skin_head = nn.Sequential(
-            nn.Linear(in_features, 128),
-            nn.Hardswish(),
+            nn.Linear(in_features + 6, 128),
+            nn.ReLU(),
             nn.Dropout(0.2),
             nn.Linear(128, 4)
         )
 
         # Head 2: Pallor Regression (CIELAB a*, L*, Hb g/dL)
         self.pallor_head = nn.Sequential(
-            nn.Linear(in_features, 64),
+            nn.Linear(in_features + 6, 64),
             nn.ReLU(),
-            nn.Linear(64, 3)
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 3)
         )
         # Initialize regression biases to population means: [a*=16.0, L*=48.0, Hb=10.25 g/dL]
-        nn.init.zeros_(self.pallor_head[2].weight)
-        self.pallor_head[2].bias.data = torch.tensor([16.0, 48.0, 10.25], dtype=torch.float32)
+        nn.init.xavier_uniform_(self.pallor_head[4].weight)
+        self.pallor_head[4].bias.data = torch.tensor([16.0, 48.0, 10.25], dtype=torch.float32)
 
     def forward(self, x):
         feat = self.features(x)
         pooled = self.pool(feat).flatten(1)
-        skin_logits = self.skin_head(pooled)
-        pallor_preds = self.pallor_head(pooled)
+        stats = torch.cat([x.mean(dim=[2, 3]), x.std(dim=[2, 3])], dim=1)
+        comb = torch.cat([pooled, stats], dim=1)
+        skin_logits = self.skin_head(comb)
+        pallor_preds = self.pallor_head(comb)
         return skin_logits, pallor_preds
 
 
@@ -156,45 +160,65 @@ def train_skin_pallor_model():
     X_train, y_train, p_train = generate_skin_data(n_train)
     X_val, y_val, p_val = generate_skin_data(n_val)
 
-    train_ds = TensorDataset(X_train, y_train, p_train)
-    train_loader = DataLoader(train_ds, batch_size=32, shuffle=True)
-
     model = SkinPallorMobileNetV3()
-    # Freeze initial early conv layers, fine-tune top features and heads
-    for param in model.features[:6].parameters():
-        param.requires_grad = False
+    for p in model.features.parameters():
+        p.requires_grad = False
+
+    # Precompute features for ultra-fast, stable convergence
+    model.eval()
+    with torch.no_grad():
+        feat_tr = model.pool(model.features(X_train)).flatten(1)
+        stats_tr = torch.cat([X_train.mean(dim=[2, 3]), X_train.std(dim=[2, 3])], dim=1)
+        comb_tr = torch.cat([feat_tr, stats_tr], dim=1)
+
+        feat_val = model.pool(model.features(X_val)).flatten(1)
+        stats_val = torch.cat([X_val.mean(dim=[2, 3]), X_val.std(dim=[2, 3])], dim=1)
+        comb_val = torch.cat([feat_val, stats_val], dim=1)
+
+    train_ds = TensorDataset(comb_tr, y_train, p_train)
+    train_loader = DataLoader(train_ds, batch_size=32, shuffle=True)
 
     ce_criterion = nn.CrossEntropyLoss()
     mse_criterion = nn.MSELoss()
-    mae_criterion = nn.L1Loss()
-    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1.5e-3, weight_decay=1e-4)
+    optimizer = optim.Adam(
+        list(model.skin_head.parameters()) + list(model.pallor_head.parameters()),
+        lr=3e-3,
+        weight_decay=1e-4
+    )
 
-    model.train()
-    for epoch in range(6):
+    for epoch in range(25):
+        model.skin_head.train()
+        model.pallor_head.train()
         total_loss = 0.0
         correct = 0
         total = 0
-        for imgs, lbls, plrs in train_loader:
+        for bx, by, bp in train_loader:
             optimizer.zero_grad()
-            skin_logits, pallor_preds = model(imgs)
-            loss_skin = ce_criterion(skin_logits, lbls)
-            loss_hb = mse_criterion(pallor_preds[:, 2], plrs[:, 2]) * 0.20
-            loss_al = mse_criterion(pallor_preds[:, :2], plrs[:, :2]) * 0.02
+            skin_logits = model.skin_head(bx)
+            pallor_preds = model.pallor_head(bx)
+
+            loss_skin = ce_criterion(skin_logits, by) * 2.0
+            hb_pred_norm = (pallor_preds[:, 2] - 10.25) / 3.75
+            hb_true_norm = (bp[:, 2] - 10.25) / 3.75
+            loss_hb = mse_criterion(hb_pred_norm, hb_true_norm) * 5.0
+            loss_al = mse_criterion(pallor_preds[:, :2], bp[:, :2]) * 0.05
             loss = loss_skin + loss_hb + loss_al
             loss.backward()
             optimizer.step()
 
-            total_loss += loss.item() * len(lbls)
+            total_loss += loss.item() * len(by)
             preds = torch.argmax(skin_logits, dim=1)
-            correct += (preds == lbls).sum().item()
-            total += len(lbls)
+            correct += (preds == by).sum().item()
+            total += len(by)
 
-        train_acc = correct / total
-        print(f"  Epoch {epoch+1}/6 - Loss: {total_loss/total:.4f} - Train Acc: {train_acc*100:.1f}%")
+        if (epoch + 1) % 5 == 0 or epoch == 24:
+            train_acc = correct / total
+            print(f"  Epoch {epoch+1}/25 - Loss: {total_loss/total:.4f} - Train Acc: {train_acc*100:.1f}%")
 
     model.eval()
     with torch.no_grad():
-        val_logits, val_pallor = model(X_val)
+        val_logits = model.skin_head(comb_val)
+        val_pallor = model.pallor_head(comb_val)
         val_preds = torch.argmax(val_logits, dim=1)
         val_acc = (val_preds == y_val).sum().item() / len(y_val)
         val_hb = val_pallor[:, 2].numpy()
@@ -441,10 +465,10 @@ def train_speech_prosody_model():
 
     model = SpeechAcousticProsodyModel()
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=2e-3)
+    optimizer = optim.Adam(model.parameters(), lr=3e-3)
 
     model.train()
-    for epoch in range(3):
+    for epoch in range(6):
         total_loss = 0.0
         for audio, tgts in train_loader:
             optimizer.zero_grad()
@@ -453,7 +477,7 @@ def train_speech_prosody_model():
             loss.backward()
             optimizer.step()
             total_loss += loss.item() * len(audio)
-        print(f"  Epoch {epoch+1}/5 - Speech Loss: {total_loss/len(train_ds):.4f}")
+        print(f"  Epoch {epoch+1}/6 - Speech Loss: {total_loss/len(train_ds):.4f}")
 
     model.eval()
     with torch.no_grad():
@@ -553,10 +577,10 @@ def train_motor_kinematics_model():
 
     model = MotorKinematicsClassifier()
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=2e-3)
+    optimizer = optim.Adam(model.parameters(), lr=3e-3)
 
     model.train()
-    for epoch in range(3):
+    for epoch in range(6):
         total_loss = 0.0
         for seqs, tgts in train_loader:
             optimizer.zero_grad()
@@ -565,7 +589,7 @@ def train_motor_kinematics_model():
             loss.backward()
             optimizer.step()
             total_loss += loss.item() * len(seqs)
-        print(f"  Epoch {epoch+1}/5 - Motor Loss: {total_loss/len(train_ds):.4f}")
+        print(f"  Epoch {epoch+1}/6 - Motor Loss: {total_loss/len(train_ds):.4f}")
 
     model.eval()
     with torch.no_grad():

@@ -148,16 +148,20 @@ class SpeechBiomarkersEngine:
                 metrics = self.session.run(None, {"audio_16khz": onnx_input})[0][0]
                 # metrics: [syllable_envelope, phonation_feat, pitch_var_feat, delay_score]
                 delay_score_raw = float(metrics[3])
-                if delay_score_raw > 50.0 or simulated_delay:
+                # Direct contribution of ONNX acoustic delay biomarker head (metrics[3])
+                if delay_score_raw > 50.0:
                     delay_prob = 0.82
-                elif delay_score_raw < 30.0:
+                else:
                     delay_prob = 0.18
             except Exception as e:
                 print(f"[SpeechBiomarkers] Inference execution: {e}")
 
-        # Speech score: 0 to 100
-        speech_score = max(10.0, min(100.0, (syllable_rate * 20.0) + (phonation_ratio * 0.4) + (pitch_var * 0.5) - (latency_sec * 8.0)))
-        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or simulated_delay
+        if simulated_delay:
+            delay_prob = 0.85
+
+        # Speech score: 0 to 100, incorporating acoustic signal features and ONNX prosodic biomarker head
+        speech_score = max(10.0, min(100.0, (syllable_rate * 20.0) + (phonation_ratio * 0.4) + (pitch_var * 0.5) - (latency_sec * 8.0) - (delay_prob * 10.0)))
+        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or (delay_prob > 0.5) or simulated_delay
 
         if delay_flagged:
             finding = f"भाषा विकास में विलंब (Syllable rate: {syllable_rate:.1f}/s < 2.0/s, Pitch variability: {pitch_var:.1f} Hz monotone, Response latency: {latency_sec:.1f}s)."

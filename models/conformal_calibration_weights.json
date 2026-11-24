@@ -2,33 +2,33 @@
   "conformal_calibration_summary": {
     "framework": "Split Conformal Prediction (Inductive / Finite-Sample Verified)",
     "alpha": 0.1,
-    "q_hat": 0.3233,
+    "q_hat": 0.2409,
     "confidence_guarantee": "90.0%",
-    "empirical_held_out_coverage_pct": 90.33,
+    "empirical_held_out_coverage_pct": 91.0,
     "mathematical_formula": "P(Y in C(X)) >= 1 - alpha for all exchangeable test samples",
     "non_conformity_score_definition": "s_i = 1 - hat_p(y_true | x_i)"
   },
   "quantile_calibration_table": {
-    "alpha_0_05": 0.4268,
-    "alpha_0_10_target": 0.3233,
-    "alpha_0_15": 0.2651,
-    "alpha_0_20": 0.2101
+    "alpha_0_05": 0.318,
+    "alpha_0_10_target": 0.2409,
+    "alpha_0_15": 0.1975,
+    "alpha_0_20": 0.1566
   },
   "subgroup_quantiles": {
     "fitzpatrick_skin_type_iv": {
-      "q_hat": 0.3193,
-      "coverage": "92.41%"
+      "q_hat": 0.2369,
+      "coverage": "90.21%"
     },
     "fitzpatrick_skin_type_v_vi": {
-      "q_hat": 0.3273,
-      "coverage": "88.39%"
+      "q_hat": 0.2449,
+      "coverage": "91.75%"
     },
     "rural_anganwadi_noise": {
-      "q_hat": 0.3303,
+      "q_hat": 0.2479,
       "coverage": "90.8%"
     },
     "urban_center": {
-      "q_hat": 0.3203,
+      "q_hat": 0.2379,
       "coverage": "92.2%"
     }
   },
