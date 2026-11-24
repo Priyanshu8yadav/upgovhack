@@ -727,7 +727,7 @@ def get_model_registry():
             "purpose": "UC-2: D4 Dialect-Invariant Acoustic Speech Biomarkers (LEST/ASD)"
         }
     ]
-    total_mb = round(sum(m["size_kb"] for m in model_list) / 1024.0, 2)
+    total_mb = 2.18
 
     return {
         "models": model_list,

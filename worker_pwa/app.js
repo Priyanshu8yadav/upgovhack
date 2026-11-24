@@ -211,6 +211,16 @@ class BalSetuWorkerApp {
   goToStep(step) {
     if (step < 1 || step > this.totalSteps) return;
 
+    // Parental Consent gate enforcement for Step 1 -> Step 2 (DPDP Act 2023)
+    if (this.currentStep === 1 && step > 1) {
+      const consent = document.getElementById("parentalConsentCheck");
+      if (consent && !consent.checked) {
+        alert("⚠️ DPDP अधिनियम 2023: कृपया आगे बढ़ने से पहले अभिभावक की सहमति (Parental Consent) दर्ज करें।");
+        this.speak("कृपया पहले अभिभावक की सहमति लें।");
+        return;
+      }
+    }
+
     // Quality gate enforcement for Step 2 -> Step 3
     if (this.currentStep === 2 && step > 2 && !this.qualityGatePassed) {
       alert("अस्वीकृति-प्रथम गेट: फोटो की गुणवत्ता अपर्याप्त है। कृपया कैमरा स्थिर रखें और रोशनी ठीक करें।");
