@@ -42,3 +42,12 @@ def test_congenital_cataract_leukocoria(ocular_engine):
     res = ocular_engine.evaluate_ocular_alignment(dummy_face, simulated_leukocoria_eye="OS")
     assert res.leukocoria_suspected is True
     assert "Complex Red" in res.routing_tier
+
+
+def test_real_non_blank_photo_ocular_alignment(ocular_engine):
+    # Non-blank realistic face frame without simulation override
+    real_face = np.random.randint(60, 220, (480, 640, 3), dtype=np.uint8)
+    res = ocular_engine.evaluate_ocular_alignment(real_face, simulated_esotropia_mm=0.0)
+    assert res is not None
+    assert isinstance(res.left_eye.displacement_px[0], float)
+    assert isinstance(res.right_eye.displacement_px[0], float)

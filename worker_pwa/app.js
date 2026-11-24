@@ -77,9 +77,12 @@ class BalSetuWorkerApp {
         this.ortSessionSpeech = await ort.InferenceSession.create('/worker/models/speech_acoustic_prosody.onnx', {
           executionProviders: ['wasm']
         });
-        console.log('[Bal-Setu WASM] 100% Offline Neural WASM Sessions Initialized Successfully (3 Models Loaded Locally)!');
+        this.ortSessionMotor = await ort.InferenceSession.create('/worker/models/motor_kinematics_classifier.onnx', {
+          executionProviders: ['wasm']
+        });
+        console.log('[Bal-Setu WASM] 100% Offline Neural WASM Sessions Initialized Successfully (All 4 Models Loaded Locally)!');
         const tag = document.getElementById('networkStatusTag');
-        if (tag) tag.innerHTML = '🧠 3 ONNX WASM मॉडल सक्रिय (100% ऑफ़लाइन)';
+        if (tag) tag.innerHTML = '🧠 4 ONNX WASM मॉडल सक्रिय (100% ऑफ़लाइन)';
       } catch (e) {
         console.log('[Bal-Setu WASM] ONNX runtime web load note:', e);
       }
@@ -446,13 +449,44 @@ class BalSetuWorkerApp {
       this.qualityMetrics.focus = varianceLap;
       this.qualityGatePassed = (meanLum >= 45 && meanLum <= 225 && varianceLap >= 45);
 
-      // Pass real frame features to local ONNX Skin model
-      if (this.ortSessionSkin && this.qualityGatePassed && Math.random() < 0.1) {
+      // Pass real resized RGB frame to local ONNX Skin Pallor MobileNetV3 model
+      this.cameraFrameCount = (this.cameraFrameCount || 0) + 1;
+      if (this.ortSessionSkin && this.qualityGatePassed && (this.cameraFrameCount % 25 === 0)) {
         try {
-          const skinTensor = new Float32Array(1 * 3 * 224 * 224).fill(meanLum / 255.0);
+          if (!this._skinCanvas) {
+            this._skinCanvas = document.createElement('canvas');
+            this._skinCanvas.width = 224;
+            this._skinCanvas.height = 224;
+            this._skinCtx = this._skinCanvas.getContext('2d', { willReadFrequently: true });
+          }
+          if (this.video && this.video.videoWidth > 0) {
+            this._skinCtx.drawImage(this.video, 0, 0, 224, 224);
+          } else {
+            this._skinCtx.drawImage(this.canvas, 0, 0, 224, 224);
+          }
+          const imgData = this._skinCtx.getImageData(0, 0, 224, 224).data;
+          const plane = 224 * 224;
+          const skinTensor = new Float32Array(3 * plane);
+          const mean = [0.485, 0.456, 0.406];
+          const std = [0.229, 0.224, 0.225];
+          for (let i = 0; i < plane; i++) {
+            const r = imgData[i * 4] / 255.0;
+            const g = imgData[i * 4 + 1] / 255.0;
+            const b = imgData[i * 4 + 2] / 255.0;
+            skinTensor[i] = (r - mean[0]) / std[0];
+            skinTensor[plane + i] = (g - mean[1]) / std[1];
+            skinTensor[2 * plane + i] = (b - mean[2]) / std[2];
+          }
           const t = new ort.Tensor('float32', skinTensor, [1, 3, 224, 224]);
-          this.ortSessionSkin.run({ mucosal_image: t }).catch(() => {});
-        } catch (e) {}
+          this.ortSessionSkin.run({ normalized_roi: t }).then(out => {
+            if (out && out.pallor_metrics) {
+              const hb = out.pallor_metrics.data[2];
+              console.log(`[Bal-Setu Skin WASM AI] Mucosal Hb: ${hb?.toFixed(1)} g/dL`);
+            }
+          }).catch(err => console.warn('[Bal-Setu Skin WASM Error]:', err));
+        } catch (e) {
+          console.warn('[Bal-Setu Skin WASM Error]:', e);
+        }
       }
     }
     requestAnimationFrame(() => this.processCameraFrames());
@@ -465,14 +499,32 @@ class BalSetuWorkerApp {
     // Execute real client-side ONNX tensor inference if session loaded
     if (this.ortSessionLcd) {
       try {
-        const dummyInput = new Float32Array(1 * 3 * 320 * 320).fill(0.5);
-        const tensor = new ort.Tensor('float32', dummyInput, [1, 3, 320, 320]);
+        if (!this._lcdCanvas) {
+          this._lcdCanvas = document.createElement('canvas');
+          this._lcdCanvas.width = 320;
+          this._lcdCanvas.height = 320;
+          this._lcdCtx = this._lcdCanvas.getContext('2d', { willReadFrequently: true });
+        }
+        if (this.video && this.video.videoWidth > 0) {
+          this._lcdCtx.drawImage(this.video, 0, 0, 320, 320);
+        } else if (this.canvas) {
+          this._lcdCtx.drawImage(this.canvas, 0, 0, 320, 320);
+        }
+        const imgData = this._lcdCtx.getImageData(0, 0, 320, 320).data;
+        const plane = 320 * 320;
+        const lcdTensor = new Float32Array(3 * plane);
+        for (let i = 0; i < plane; i++) {
+          lcdTensor[i] = imgData[i * 4] / 255.0;
+          lcdTensor[plane + i] = imgData[i * 4 + 1] / 255.0;
+          lcdTensor[2 * plane + i] = imgData[i * 4 + 2] / 255.0;
+        }
+        const tensor = new ort.Tensor('float32', lcdTensor, [1, 3, 320, 320]);
         const startT = performance.now();
         const outputs = await this.ortSessionLcd.run({ field_image: tensor });
         const latency = (performance.now() - startT).toFixed(1);
-        console.log(`[Bal-Setu WASM ONNX] Real In-Browser Inference (${latency} ms):`, outputs);
+        console.log(`[Bal-Setu WASM ONNX LCD] Real In-Browser Inference (${latency} ms):`, outputs);
       } catch (err) {
-        console.warn('[Bal-Setu WASM] Inference note:', err);
+        console.warn('[Bal-Setu WASM LCD] Inference note:', err);
       }
     }
 
@@ -610,10 +662,14 @@ class BalSetuWorkerApp {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioCtx.createMediaStreamSource(stream);
       const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
+      analyser.fftSize = 256;
       source.connect(analyser);
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const timeData = new Float32Array(analyser.fftSize);
+      const pcmBuffer = new Float32Array(16000);
+      let pcmOffset = 0;
+
       let energyPeaks = 0;
       let totalRms = 0;
       let frames = 0;
@@ -624,8 +680,17 @@ class BalSetuWorkerApp {
         statusEl.style.color = "var(--accent)";
       }
 
-      const interval = setInterval(() => {
+      const interval = setInterval(async () => {
         analyser.getByteFrequencyData(dataArray);
+        if (analyser.getFloatTimeDomainData) {
+          analyser.getFloatTimeDomainData(timeData);
+          if (pcmOffset < 16000) {
+            const toCopy = Math.min(timeData.length, 16000 - pcmOffset);
+            pcmBuffer.set(timeData.subarray(0, toCopy), pcmOffset);
+            pcmOffset += toCopy;
+          }
+        }
+
         let sum = 0;
         for (let i = 0; i < dataArray.length; i++) {
           sum += dataArray[i];
@@ -647,19 +712,26 @@ class BalSetuWorkerApp {
           const syllablesPerSec = (energyPeaks / 4.0).toFixed(1);
           const pitchVar = Math.round(avg * 0.8 + 28);
 
-          // Pass feature tensor to local ONNX speech model if loaded
+          // Pass real collected PCM audio to local ONNX speech model
+          let inferredDelayScore = 15.0;
           if (this.ortSessionSpeech) {
             try {
-              const audioFeatures = new Float32Array(1 * 1 * 16000).fill(avg / 255.0);
-              const tensor = new ort.Tensor('float32', audioFeatures, [1, 1, 16000]);
-              this.ortSessionSpeech.run({ speech_pcm: tensor }).catch(() => {});
-            } catch (e) {}
+              const tensor = new ort.Tensor('float32', pcmBuffer, [1, 1, 16000]);
+              const out = await this.ortSessionSpeech.run({ audio_16khz: tensor });
+              if (out && out.prosodic_biomarkers) {
+                const bio = out.prosodic_biomarkers.data;
+                inferredDelayScore = bio[3] !== undefined ? bio[3] : 15.0;
+                console.log(`[Bal-Setu Speech WASM ONNX] Syllable Rate: ${bio[0]?.toFixed(2)}, Delay Score: ${inferredDelayScore.toFixed(1)}%`);
+              }
+            } catch (e) {
+              console.warn('[Bal-Setu Speech WASM Error]:', e);
+            }
           }
 
-          if (syllablesPerSec >= 1.2 || avg > 20) {
+          if (inferredDelayScore < 50.0 && (syllablesPerSec >= 1.2 || avg > 20)) {
             this.lestPassed = true;
             if (statusEl) {
-              statusEl.innerText = `सामान्य स्वर लय (${syllablesPerSec} शिखर/से., आवृत्ति: ${pitchVar} Hz)`;
+              statusEl.innerText = `सामान्य स्वर लय (${syllablesPerSec} शिखर/से., आवृत्ति: ${pitchVar} Hz • WASM AI)`;
               statusEl.style.color = "var(--green)";
             }
             this.speak("भाषण स्वर विश्लेषण पूरा हुआ: कोई वाक विकार नहीं।");
@@ -932,7 +1004,7 @@ class BalSetuWorkerApp {
             false,
             ["sign"]
           );
-          const cleanKeys = Object.keys(payload).sort();
+          const cleanKeys = Object.keys(payload).filter(k => k !== 'signature').sort();
           const canonicalParts = cleanKeys.map(k => `"${k}":${JSON.stringify(payload[k])}`);
           const canonicalStr = `{${canonicalParts.join(',')}}`;
           const sigBuf = await crypto.subtle.sign("HMAC", key, enc.encode(canonicalStr));
@@ -971,7 +1043,6 @@ class BalSetuWorkerApp {
         qrImg.src = "/calibcard-assets/calibcard_front.png";
       }
     }
-  }
   }
 
   call102Ambulance() {

@@ -47,7 +47,7 @@ class OfflineReferralQRGenerator:
     def _sign_payload(self, data: Dict) -> str:
         """Computes HMAC-SHA256 over canonical JSON string without the signature field."""
         clean = {k: v for k, v in data.items() if k != "signature"}
-        canonical_str = json.dumps(clean, sort_keys=True, separators=(',', ':'))
+        canonical_str = json.dumps(clean, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
         return hmac.new(self.secret_key, canonical_str.encode('utf-8'), hashlib.sha256).hexdigest()[:16]
 
     def verify_payload_signature(self, payload_dict: Dict) -> bool:
@@ -94,7 +94,7 @@ class OfflineReferralQRGenerator:
 
     def render_qr_image(self, payload: ReferralPayload, box_size: int = 8, border: int = 2) -> bytes:
         """Encodes payload as scannable PNG image."""
-        payload_json = json.dumps(asdict(payload), separators=(',', ':'))
+        payload_json = json.dumps(asdict(payload), separators=(',', ':'), ensure_ascii=False)
         qr = qrcode.QRCode(
             version=None,
             error_correction=qrcode.constants.ERROR_CORRECT_M,

@@ -120,14 +120,18 @@ class OcularAlignmentEngine:
             od_red = 0.88
             os_red = 0.86
 
+        # Compute baseline corneal light reflex displacement from pupil center
+        os_dx_px = float(os_clr[0] - os_cx)
+        od_dx_px = float(od_clr[0] - od_cx)
+
         # Apply simulated deviation if requested
         if simulated_esotropia_mm > 0.0 or is_blank:
-            os_dx_px = simulated_esotropia_mm * px_per_mm
+            os_dx_px = float(simulated_esotropia_mm * px_per_mm)
             os_clr = (os_cx + os_dx_px + 1.0, os_cy)
 
         # Compute metrics
-        disp_od_mm = 0.10
-        disp_os_mm = round(abs(os_clr[0] - os_cx) / px_per_mm, 2)
+        disp_od_mm = round(max(0.10, abs(od_dx_px) / px_per_mm), 2)
+        disp_os_mm = round(abs(os_dx_px) / px_per_mm, 2)
 
         pd_od = round(disp_od_mm * self.HIRSCHBERG_RATIO, 1)
         pd_os = round(disp_os_mm * self.HIRSCHBERG_RATIO, 1)
@@ -145,7 +149,7 @@ class OcularAlignmentEngine:
             pupil_center=(float(od_cx), float(od_cy)),
             pupil_radius_px=pupil_r,
             clr_center=od_clr,
-            displacement_px=(1.0, 0.0),
+            displacement_px=(float(od_dx_px), 0.0),
             displacement_mm=disp_od_mm,
             prism_diopters=pd_od,
             red_reflex_intensity=od_red,

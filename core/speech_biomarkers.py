@@ -148,8 +148,10 @@ class SpeechBiomarkersEngine:
                 metrics = self.session.run(None, {"audio_16khz": onnx_input})[0][0]
                 # metrics: [syllable_envelope, phonation_feat, pitch_var_feat, delay_score]
                 delay_score_raw = float(metrics[3])
-                if simulated_delay:
+                if delay_score_raw > 50.0 or simulated_delay:
                     delay_prob = 0.82
+                elif delay_score_raw < 30.0:
+                    delay_prob = 0.18
             except Exception as e:
                 print(f"[SpeechBiomarkers] Inference execution: {e}")
 

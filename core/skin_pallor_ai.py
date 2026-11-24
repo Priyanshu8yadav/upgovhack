@@ -141,10 +141,13 @@ class SkinPallorAIEngine:
                 condition_name = self.SKIN_CLASSES[top_idx]
                 conf = float(probs[top_idx])
 
-                # Estimated Hb from mucosal redness a*
-                # Clinical relationship: lower a* (pallor) correlates with lower Hb
-                # Baseline: a* ~ 18-25 corresponds to Hb 11-13; a* < 8 corresponds to Hb < 8
-                est_hb = 7.0 + max(0.0, min(7.5, (mean_a + 5.0) * 0.35))
+                # Combined ONNX Neural Regression + Optical CIELAB redness a*
+                model_hb = float(pallor_preds[2]) if len(pallor_preds) > 2 else 11.5
+                optical_hb = 7.0 + max(0.0, min(7.5, (mean_a + 5.0) * 0.35))
+                if 4.0 <= model_hb <= 18.0:
+                    est_hb = 0.5 * model_hb + 0.5 * optical_hb
+                else:
+                    est_hb = optical_hb
             except Exception as e:
                 print(f"[SkinPallorAI] Inference execution: {e}")
 
