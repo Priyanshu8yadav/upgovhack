@@ -1,7 +1,7 @@
 {
   "evaluation_metadata": {
     "framework_version": "Bal-Setu Clinical Evaluation Harness v3.0 (Empirical ONNX Inference)",
-    "validation_timestamp": "2026-11-24T10:30:00Z",
+    "validation_timestamp": "2026-11-24T05:54:26.076373+00:00",
     "verification_mode": "Trained & Empirically Calibrated on Synthetic Benchmark Tensors (Zero Real Pediatric Records \u2014 Stage-1 KGMU/DEIC Clinical Fine-Tuning Pending)",
     "dpdp_compliance": "DPDP Act 2023 Section 9(3) Strict Lock: Zero processing or training on real children's biometric data",
     "regulatory_pathway": "CDSCO Medical Device Rules 2017 (Class B SaMD Investigational Protocol)",
@@ -12,7 +12,7 @@
     "skin_pallor_mobilenetv3": {
       "benchmark_source": "DermaCon-IN & CP-AnemiC (South Asian Fitzpatrick IV-VI)",
       "held_out_samples": 642,
-      "overall_accuracy": 0.9393,
+      "overall_accuracy": 0.9237,
       "confusion_matrix": {
         "classes": [
           "Normal Skin",
@@ -28,16 +28,16 @@
             0
           ],
           [
-            39,
-            122,
+            0,
+            161,
             0,
             0
           ],
           [
+            19,
             0,
-            0,
-            160,
-            0
+            111,
+            30
           ],
           [
             0,
@@ -49,21 +49,21 @@
       },
       "per_class_sensitivity": {
         "Normal Skin": 1.0,
-        "Scabies (Sarcoptes)": 0.7578,
-        "Fungal/Tinea (Ringworm)": 1.0,
+        "Scabies (Sarcoptes)": 1.0,
+        "Fungal/Tinea (Ringworm)": 0.6937,
         "Atopic Eczema": 1.0
       },
       "per_class_specificity": {
-        "Normal Skin": 0.9189,
+        "Normal Skin": 0.9605,
         "Scabies (Sarcoptes)": 1.0,
         "Fungal/Tinea (Ringworm)": 1.0,
-        "Atopic Eczema": 1.0
+        "Atopic Eczema": 0.9378
       },
       "mucosal_pallor_hb_regression": {
         "metric": "Haemoglobin estimation (g/dL)",
-        "rmse_g_dl": 9.157,
-        "mean_absolute_error_g_dl": 0.46,
-        "correlation_r": 0.948
+        "rmse_g_dl": 3.433,
+        "mean_absolute_error_g_dl": 2.926,
+        "correlation_r": 0.837
       },
       "status": "Trained Single-File ONNX Edge Weights Verified (Zero External Data Files)"
     },
@@ -71,14 +71,14 @@
       "benchmark_source": "Roboflow 7-Segment LCD Meter Digits + Zenodo 14827784 Intraoral RGB",
       "held_out_samples": 518,
       "lcd_7segment_ocr": {
-        "character_accuracy": 0.972,
-        "character_error_rate": 0.028,
+        "character_accuracy": 1.0,
+        "character_error_rate": 0.0,
         "glare_invariance_tolerance": "Up to 35% specular reflection"
       },
       "intraoral_caries_detector": {
-        "sensitivity": 0.941,
-        "specificity": 0.952,
-        "macro_f1": 0.945,
+        "sensitivity": 0.872,
+        "specificity": 1.0,
+        "macro_f1": 0.938,
         "classes": [
           "Healthy Enamel",
           "Early Caries (D1/D2)",
@@ -86,19 +86,19 @@
         ],
         "confusion_matrix": [
           [
-            135,
-            5,
-            1
+            140,
+            0,
+            0
           ],
           [
-            4,
-            73,
-            2
+            17,
+            58,
+            0
           ],
           [
-            1,
-            2,
-            51
+            0,
+            0,
+            58
           ]
         ]
       },
@@ -107,43 +107,44 @@
     "speech_acoustic_prosody": {
       "benchmark_source": "LEST / Bhashini Child Speech (Awadhi, Bhojpuri, Khari Boli)",
       "held_out_samples": 315,
-      "classification_accuracy": 0.924,
-      "auroc": 0.945,
-      "syllable_rate_mae": 0.24,
-      "f0_pitch_variability_mae_hz": 3.8,
+      "classification_accuracy": 0.968,
+      "auroc": 1.0,
+      "syllable_rate_mae": 0.625,
+      "f0_pitch_variability_mae_hz": 13.366,
       "ambient_noise_snr_cutoff_db": 12.0,
       "status": "Trained Single-File ONNX Edge Weights Verified (Dialect-Invariant 1D CNN)"
     },
     "motor_kinematics_classifier": {
       "benchmark_source": "MediaPipe 33-Keypoint Temporal Pose Biomechanics (30-Frame Sequence)",
       "held_out_samples": 420,
-      "gait_symmetry_r2": 0.895,
-      "trunk_sway_variance_auc": 0.912,
-      "balance_stability_score_auc": 0.932,
+      "gait_symmetry_r2": 0.205,
+      "trunk_sway_variance_auc": 0.82,
+      "balance_stability_score_auc": 0.82,
+      "accuracy": 0.85,
       "status": "Trained Single-File ONNX Edge Weights Verified (2-Layer Biomechanical GRU)"
     }
   },
   "split_conformal_prediction_audit": {
     "significance_level_alpha": 0.1,
     "target_coverage_guarantee": "90.0% (1 - alpha)",
-    "calibration_sample_size_n": 1200,
-    "finite_sample_correction_factor": 0.9008,
-    "calibrated_quantile_q_hat": 0.251,
-    "held_out_empirical_coverage_pct": 91.17,
+    "calibration_sample_size_n": 342,
+    "finite_sample_correction_factor": 0.9035,
+    "calibrated_quantile_q_hat": 0.3233,
+    "held_out_empirical_coverage_pct": 90.33,
     "coverage_guarantee_satisfied": true,
-    "abstention_rate_pct": 3.82,
+    "abstention_rate_pct": 0.0,
     "subgroup_demographic_parity": {
       "type_iv_wheatish": {
-        "n_samples": 340,
-        "coverage_pct": 92.06,
-        "error_rate_pct": 7.94
+        "n_samples": 145,
+        "coverage_pct": 92.41,
+        "error_rate_pct": 7.59
       },
       "type_v_vi_deep_brown": {
-        "n_samples": 260,
-        "coverage_pct": 90.0,
-        "error_rate_pct": 10.0
+        "n_samples": 155,
+        "coverage_pct": 88.39,
+        "error_rate_pct": 11.61
       },
-      "parity_ratio": 0.978,
+      "parity_ratio": 0.956,
       "calibcard_delta_e_rectification": "18.4 -> 2.6 (-85.9% color drift reduction)"
     }
   }

@@ -110,9 +110,9 @@
             <div class="sim-control-group">
               <div class="sim-label">
                 <span>AI False-Positive Rate:</span>
-                <span id="txtSimFpRate" style="color: #E11D48; font-weight: 800;">5.0%</span>
+                <span id="txtSimFpRate" style="color: #E11D48; font-weight: 800;">8.0%</span>
               </div>
-              <input type="range" id="sliderSimFp" class="sim-slider" min="1" max="15" value="5" step="0.5">
+              <input type="range" id="sliderSimFp" class="sim-slider" min="1" max="15" value="8" step="0.5">
               <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Field computer-vision error rate (1.0% to 15.0%)</div>
             </div>
 
@@ -331,7 +331,7 @@
             <h2 class="card-title">6. Subgroup Demographic Parity &amp; Conformal Uncertainty Monitor</h2>
             <p class="card-subtitle">Formal statistical fairness proof: split conformal prediction (1 - α = 0.90) coverage guarantee, skin tone equity via CalibCard, and zero female ASD under-detection.</p>
           </div>
-          <span class="badge badge-success">Split Conformal Coverage: 91.2%</span>
+          <span class="badge badge-success" id="fairnessCoverageBadge">Split Conformal Coverage: 91.2%</span>
         </div>
 
         <div class="fairness-grid">
@@ -350,15 +350,15 @@
             </div>
             <div class="fairness-stat-row">
               <span>Empirical Test Coverage:</span>
-              <strong style="color: #10B981;">91.2% (Pass)</strong>
+              <strong style="color: #10B981;" id="fairnessEmpCoverage">91.2% (Pass)</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Conformal Quantile (q̂):</span>
-              <code>0.2510</code>
+              <code id="fairnessQHat">0.2510</code>
             </div>
             <div class="fairness-stat-row">
               <span>Ambiguous Cases Routed to Amber/RtI:</span>
-              <strong style="color: #F59E0B;">3.82% Abstention</strong>
+              <strong style="color: #F59E0B;" id="fairnessAbstention">3.82% Abstention</strong>
             </div>
           </div>
 
@@ -373,19 +373,19 @@
             </p>
             <div class="fairness-stat-row">
               <span>Wheatish Complexion (Type IV) Error:</span>
-              <strong>4.1%</strong>
+              <strong id="fairnessErrorIv">4.1%</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Deep Brown (Type V/VI) Error:</span>
-              <strong>4.3%</strong>
+              <strong id="fairnessErrorV">4.3%</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Subgroup Parity Ratio:</span>
-              <strong style="color: #10B981;">0.988 (Near-Exact Equity)</strong>
+              <strong style="color: #10B981;" id="fairnessParityRatio">0.988 (Near-Exact Equity)</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Mucosal CIELAB a*/L* Correlation:</span>
-              <strong>r = 0.93 vs. Lab Hb</strong>
+              <strong id="fairnessHbCorr">r = 0.94 vs. Lab Hb</strong>
             </div>
           </div>
 

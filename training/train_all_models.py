@@ -60,6 +60,9 @@ class SkinPallorMobileNetV3(nn.Module):
             nn.ReLU(),
             nn.Linear(64, 3)
         )
+        # Initialize regression biases to population means: [a*=16.0, L*=48.0, Hb=10.25 g/dL]
+        nn.init.zeros_(self.pallor_head[2].weight)
+        self.pallor_head[2].bias.data = torch.tensor([16.0, 48.0, 10.25], dtype=torch.float32)
 
     def forward(self, x):
         feat = self.features(x)
@@ -98,13 +101,27 @@ def train_skin_pallor_model():
             for c in range(3):
                 img[c] *= base_color[c]
 
+            # Physical conjunctival mucosal pallor coupling:
+            # Lower Hb (anemia) -> blanched/pale mucosa (reduced red channel, higher paleness L*)
+            # Higher Hb -> well-perfused erythematous mucosa (boosted red channel, lower green/blue)
+            true_hb = float(np.random.uniform(6.5, 14.0))
+            hb_norm = (true_hb - 6.5) / 7.5  # 0.0 (severe) to 1.0 (normal)
+            red_boost = (hb_norm - 0.5) * 0.32
+            img[0] = np.clip(img[0] + red_boost, 0.05, 0.95)
+            img[1] = np.clip(img[1] - red_boost * 0.35, 0.05, 0.95)
+
+            # Ground truth CIELAB targets: [a* (redness), L* (luminance), Hb (g/dL)]
+            true_a = 6.0 + hb_norm * 20.0 + np.random.normal(0, 0.3)
+            true_l = 52.0 - hb_norm * 8.0 + np.random.normal(0, 0.4)
+            pallor_targets.append([true_a, true_l, true_hb])
+
             # Inject disease-specific visual signatures
             if cls == 1:
                 # Scabies: small erythematous papules and linear burrow marks
                 for _ in range(np.random.randint(5, 12)):
                     px, py = np.random.randint(40, 180, size=2)
-                    img[0, px:px+6, py:py+6] += 0.35  # red papule
-                    img[1, px:px+6, py:py+6] -= 0.1
+                    img[0, px:px+6, py:py+6] = np.clip(img[0, px:px+6, py:py+6] + 0.35, 0, 1)
+                    img[1, px:px+6, py:py+6] = np.clip(img[1, px:px+6, py:py+6] - 0.1, 0, 1)
             elif cls == 2:
                 # Fungal/Tinea: annular scaly ring with elevated active border
                 cx, cy = np.random.randint(80, 140, size=2)
@@ -112,27 +129,20 @@ def train_skin_pallor_model():
                 y, x = np.ogrid[:224, :224]
                 dist = np.sqrt((x - cx)**2 + (y - cy)**2)
                 ring_mask = (dist >= rad - 5) & (dist <= rad + 5)
-                img[0, ring_mask] += 0.28
-                img[1, ring_mask] += 0.15
+                img[0, ring_mask] = np.clip(img[0, ring_mask] + 0.28, 0, 1)
+                img[1, ring_mask] = np.clip(img[1, ring_mask] + 0.15, 0, 1)
             elif cls == 3:
                 # Eczema: ill-defined erythematous plaque with lichenification
                 cx, cy = np.random.randint(70, 150, size=2)
                 y, x = np.ogrid[:224, :224]
                 dist = np.sqrt((x - cx)**2 + (y - cy)**2)
                 plaque_mask = dist < np.random.randint(30, 60)
-                img[0, plaque_mask] += 0.30
-                img[1, plaque_mask] -= 0.05
-                img[2, plaque_mask] -= 0.05
-
-            # Mucosal Pallor targets: L*, a*, Hb (g/dL)
-            # Lower redness a* directly correlates with lower Hb
-            true_hb = np.random.uniform(6.5, 14.0)
-            true_a = 5.0 + (true_hb - 6.5) * 2.8 + np.random.normal(0, 0.5)
-            true_l = 45.0 + np.random.uniform(-5.0, 10.0)
-            pallor_targets.append([true_a, true_l, true_hb])
+                img[0, plaque_mask] = np.clip(img[0, plaque_mask] + 0.30, 0, 1)
+                img[1, plaque_mask] = np.clip(img[1, plaque_mask] - 0.05, 0, 1)
+                img[2, plaque_mask] = np.clip(img[2, plaque_mask] - 0.05, 0, 1)
 
             # Add noise and normalize (ImageNet stats)
-            img += np.random.normal(0, 0.03, img.shape).astype(np.float32)
+            img += np.random.normal(0, 0.02, img.shape).astype(np.float32)
             img = np.clip(img, 0.0, 1.0)
             mean = np.array([0.485, 0.456, 0.406], dtype=np.float32).reshape(3, 1, 1)
             std = np.array([0.229, 0.224, 0.225], dtype=np.float32).reshape(3, 1, 1)
@@ -156,10 +166,11 @@ def train_skin_pallor_model():
 
     ce_criterion = nn.CrossEntropyLoss()
     mse_criterion = nn.MSELoss()
-    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3, weight_decay=1e-4)
+    mae_criterion = nn.L1Loss()
+    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1.5e-3, weight_decay=1e-4)
 
     model.train()
-    for epoch in range(3):
+    for epoch in range(6):
         total_loss = 0.0
         correct = 0
         total = 0
@@ -167,8 +178,9 @@ def train_skin_pallor_model():
             optimizer.zero_grad()
             skin_logits, pallor_preds = model(imgs)
             loss_skin = ce_criterion(skin_logits, lbls)
-            loss_pallor = mse_criterion(pallor_preds[:, 2], plrs[:, 2]) * 0.1 + mse_criterion(pallor_preds[:, :2], plrs[:, :2]) * 0.01
-            loss = loss_skin + loss_pallor
+            loss_hb = mse_criterion(pallor_preds[:, 2], plrs[:, 2]) * 0.20
+            loss_al = mse_criterion(pallor_preds[:, :2], plrs[:, :2]) * 0.02
+            loss = loss_skin + loss_hb + loss_al
             loss.backward()
             optimizer.step()
 
@@ -178,15 +190,19 @@ def train_skin_pallor_model():
             total += len(lbls)
 
         train_acc = correct / total
-        print(f"  Epoch {epoch+1}/5 - Loss: {total_loss/total:.4f} - Train Acc: {train_acc*100:.1f}%")
+        print(f"  Epoch {epoch+1}/6 - Loss: {total_loss/total:.4f} - Train Acc: {train_acc*100:.1f}%")
 
     model.eval()
     with torch.no_grad():
         val_logits, val_pallor = model(X_val)
         val_preds = torch.argmax(val_logits, dim=1)
         val_acc = (val_preds == y_val).sum().item() / len(y_val)
-        hb_rmse = torch.sqrt(mse_criterion(val_pallor[:, 2], p_val[:, 2])).item()
-        print(f"  ✓ Validation Accuracy: {val_acc*100:.1f}%, Hb RMSE: {hb_rmse:.2f} g/dL")
+        val_hb = val_pallor[:, 2].numpy()
+        true_hb = p_val[:, 2].numpy()
+        hb_rmse = float(np.sqrt(np.mean((val_hb - true_hb) ** 2)))
+        hb_mae = float(np.mean(np.abs(val_hb - true_hb)))
+        hb_corr = float(np.corrcoef(val_hb, true_hb)[0, 1])
+        print(f"  ✓ Validation Accuracy: {val_acc*100:.1f}%, Hb RMSE: {hb_rmse:.2f} g/dL, MAE: {hb_mae:.2f} g/dL, Pearson r: {hb_corr:.3f}")
 
     # Export to ONNX
     onnx_path = os.path.join(MODELS_DIR, "skin_pallor_mobilenetv3.onnx")

@@ -17,8 +17,8 @@ pinned: false
 [![ABDM FHIR R4](https://img.shields.io/badge/ABDM%20FHIR%20R4-ndhm.in%236.5.0-green.svg)](https://nrces.in)
 [![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Section%209%20Compliant-purple.svg)](https://meity.gov.in)
 [![CDSCO SaMD](https://img.shields.io/badge/CDSCO%20MDR--2017-Class%20B%20SaMD-teal.svg)](https://cdsco.gov.in)
-[![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passing-brightgreen.svg)](tests/)
-[![Edge Footprint](https://img.shields.io/badge/ONNX%20Edge%20Models-2.18%20MB%20Total-orange.svg)](models/)
+[![Tests](https://img.shields.io/badge/Tests-45%2F45%20Passing-brightgreen.svg)](tests/)
+[![Edge Footprint](https://img.shields.io/badge/ONNX%20Edge%20Models-4.65%20MB%20Total-orange.svg)](models/)
 [![Eval Benchmark](https://img.shields.io/badge/CDSCO%20Eval-Validated%20Benchmarks-teal.svg)](eval/)
 
 ---
@@ -39,7 +39,7 @@ An offline-first, edge-AI screening SDK and capacity-aware care orchestration la
 
 ---
 
-## 2. Bal-Setu's Multi-Modal Edge AI Engine (~2.18 MB Footprint)
+## 2. Bal-Setu's Multi-Modal Edge AI Engine (~4.65 MB Footprint)
 
 Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinical algorithms running 100% locally on CPU without GPU or cloud connectivity:
 
@@ -60,7 +60,7 @@ Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinic
 +-------------------+     +-------------------+     +-------------------+
 |   D1 & D3 VISION  |     |   D2 DEFICIENCY   |     |    D4 KINEMATICS  |
 |  MobileNetV3 ONNX |     |  CIELAB + LCD OCR |     |  MediaPipe + Spech|
-|    (1.21 MB)      |     |    (433.6 KB)     |     | (290.0 + 201.8 KB)|
+|    (3.97 MB)      |     |    (0.41 MB)      |     | (0.23 + 0.04 MB)  |
 +-------------------+     +-------------------+     +-------------------+
 | • Cleft/Clubfoot  |     | • Mucosal a*/L*   |     | • MediaPipe 33-pt |
 | • Hirschberg CLR  |     | • WHO LMS Z-Score |     | • 30-Frame Buffer |
@@ -195,7 +195,7 @@ upgovhack/
 │   └── app.py                         # FastAPI state health command server
 ├── scripts/                           # Engineering Utilities
 │   └── benchmark_edge.py              # Automated hardware latency, memory & size benchmark script
-├── tests/                             # Automated Test Suite (38 Tests, 100% Passing)
+├── tests/                             # Automated Test Suite (45 Tests, 100% Passing)
 │   ├── test_calibcard_cv.py
 │   ├── test_conformal_triage.py
 │   ├── test_fhir_bundles.py
@@ -222,7 +222,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 2: Run Automated Test Suite (43/43 Passing)
+### Step 2: Run Automated Test Suite (45/45 Passing)
 ```bash
 pytest tests/ -v
 ```
@@ -276,8 +276,8 @@ Bal-Setu is hardened for deployment to **Hugging Face Spaces (Docker SDK, Free C
 
 | Rubric Parameter | Weight | What Eliminates 90% of Rivals | Bal-Setu Winning Proof Point |
 | :--- | :--- | :--- | :--- |
-| **1. Innovation and Use of AI** | **20** | Wrapping GPT-4o around photo uploads and claiming "AI diagnoses 32 diseases." | Physical-digital co-design (₹2 CalibCard + Rejection-First Quality Gate) + Split Conformal Prediction ($1 - \alpha = 0.90$) with mathematical abstention + MediaPipe 30-frame temporal pose kinematics + dialect-invariant prosodic speech AI (<0.4 MB total edge weights). |
-| **2. Technical Approach & PoC** | **20** | Live demo crashes on venue Wi-Fi, relies on mock JSON, or uses real child photos. | Visibly enable Airplane Mode on a ₹9,000 Android phone live on stage. Real on-device LiteRT/ONNX inference (<3.5 ms CPU latency) + 38 passing unit tests + valid ABDM FHIR R4 bundles + verified offline HMAC-SHA256 referral QR token handshake. |
+| **1. Innovation and Use of AI** | **20** | Wrapping GPT-4o around photo uploads and claiming "AI diagnoses 32 diseases." | Physical-digital co-design (₹2 CalibCard + Rejection-First Quality Gate) + Split Conformal Prediction ($1 - \alpha = 0.90$) with mathematical abstention + MediaPipe 30-frame temporal pose kinematics + dialect-invariant prosodic speech AI (<4.65 MB total edge weights). |
+| **2. Technical Approach & PoC** | **20** | Live demo crashes on venue Wi-Fi, relies on mock JSON, or uses real child photos. | Visibly enable Airplane Mode on a ₹9,000 Android phone live on stage. Real on-device LiteRT/ONNX inference (<3.5 ms CPU latency) + 45 passing unit tests + valid ABDM FHIR R4 bundles + verified offline HMAC-SHA256 referral QR token handshake. |
 | **3. Scalability & Sustainability** | **20** | Missing Oct 2026 WhatsApp fees, assuming 75 fully staffed DEICs, or pitching separate apps. | **₹0.86/child/yr** modeled OpEx (91.6% savings), e-Kavach Intent SDK (zero double entry), MeghRaj/IndiaAI sovereign hosting, DPDP zero-raw-media architecture, CDSCO Class B SaMD roadmap, and UP Startup Procurement Scheme budget. |
 | **4. User Experience (UX)** | **20** | English-heavy forms, tiny text, midday maternal app assumptions, zero low-literacy design. | Dedicated **Frontline Worker PWA (`/worker/`)** with spoken Hindi/Bhojpuri voice prompts, large 3-button thumb bar, live camera HUD status pills, and interactive on-screen Tumbling-E & attention latency tests for children. |
 | **5. Team Capability & Presentation** | **20** | Defensive hand-waving when clinicians ask about accuracy, false positives, or licensing. | Radical clinical candor: lead with the 32-condition honesty matrix, cite Bihar/Aravind/NFHS-5 evidence, detail KGMU/JNMC Aligarh shadow trial, and clearly defend against the top 5 toughest jury questions. |
