@@ -2,7 +2,7 @@
 
 > **CDSCO Medical Device Rules (MDR-2017) Class B SaMD Investigational Protocol**  
 > *Stage-1 Clinical Architecture & Calibration Lock under the Uttar Pradesh Startup Procurement Scheme 2026*  
-> **Mandatory Regulatory Disclosure:** Evaluated under **"Synthetic Pipeline & Conformal Coverage Verification (Zero Real Children — Stage-1 Clinical Validation via KGMU/DEIC Pending)"** in strict adherence to the **DPDP Act 2023 Section 9(3)** prohibition on processing real children's biometric data prior to formal IRB / CDSCO approval.
+> **Mandatory Regulatory Disclosure:** Evaluated under **"Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)"** in strict adherence to the **DPDP Act 2023 Section 9(3)** prohibition on processing real children's biometric data prior to formal IRB / CDSCO approval.
 
 ---
 
@@ -12,8 +12,8 @@ In medical-grade public health AI, claiming unverified 99% accuracy on unrelease
 
 | Model Pipeline | Benchmark Architecture & Proxy Sources | Validation Sample Size | Validation Metric | Clinical Status & CDSCO Pathway |
 | :--- | :--- | :--- | :--- | :--- |
-| **`skin_pallor_mobilenetv3.onnx`** (D2/D3) | **DermaCon-IN & CP-AnemiC Synthetic Proxies** (Fitzpatrick IV–VI South Asian cohort) | $N = 642$ | **91.2% Pipeline Accuracy**, $0.62$ g/dL Hb RMSE | **Synthetic Pipeline Verification** (Clinical Weights Lock for KGMU Trial) |
-| **`field_lcd_caries_detector.onnx`** (D2/D3) | **Roboflow 7-Segment LCD** + **Zenodo 14827784 Caries** | $N = 518$ | **96.8% OCR Accuracy**, $93.2\%$ Caries Sensitivity | **Synthetic & Public Benchmark Validated** (Non-identifiable physical displays) |
+| **`skin_pallor_mobilenetv3.onnx`** (D2/D3) | **DermaCon-IN & CP-AnemiC Proxies** (Fitzpatrick IV–VI South Asian cohort) | $N = 642$ | **91.2% Pipeline Accuracy**, $0.62$ g/dL Hb RMSE | **Simulated Calibration Stress-Test** (Clinical Weights Lock for KGMU Trial) |
+| **`field_lcd_caries_detector.onnx`** (D2/D3) | **Roboflow 7-Segment LCD** + **Zenodo 14827784 Caries** | $N = 518$ | **96.8% OCR Accuracy**, $93.2\%$ Caries Sensitivity | **Simulated Calibration Stress-Test** (Non-identifiable physical displays) |
 | **`speech_acoustic_prosody.onnx`** (D4) | **LEST & Bhashini Acoustic Prosodic Bank** (Awadhi, Bhojpuri, Khari Boli) | $N = 315$ | **90.8% Classification**, $0.28$ syl/s MAE | **Stage-1 Clinical Architecture PoC** (Weights locked under CDSCO ACP) |
 | **`motor_kinematics_classifier.onnx`** (D4) | **MediaPipe 33-Keypoint Biomechanics** (30-frame temporal pose buffer) | $N = 420$ | **$R^2 = 0.884$ Gait Symmetry**, $89.5\%$ Sway AUC | **Stage-1 Clinical Architecture PoC** (Weights locked under CDSCO ACP) |
 

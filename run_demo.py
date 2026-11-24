@@ -40,7 +40,7 @@ def main():
         print("\n[2/4] Exporting sub-10 MB multi-modal ONNX edge models...")
         subprocess.run([sys.executable, os.path.join(base_dir, "models", "export_models.py")], check=True)
     else:
-        print("\n[2/4] Multi-modal ONNX edge AI models ready (Total footprint: 0.39 MB).")
+        print("\n[2/4] Multi-modal ONNX edge AI models ready (Total footprint: 2.18 MB).")
 
     # 3. Ensure Synthetic 50k cohort summary exists
     cohort_summary = os.path.join(base_dir, "synthetic", "synthetic_cohort_summary.json")
@@ -51,21 +51,23 @@ def main():
         print("\n[3/4] 50,000 UP synthetic cohort and ABDM FHIR R4 bundles ready.")
 
     # 4. Launch FastAPI Server
-    print("\n[4/4] Starting Bal-Setu State Health Command Server on port 8080...")
+    port = int(os.environ.get("PORT", "7860"))
+    print(f"\n[4/4] Starting Bal-Setu State Health Command Server on port {port}...")
     print("-" * 78)
-    print("  🖥️ State Command Dashboard       : http://localhost:8080/")
-    print("  📱 Frontline Worker Screener (UC-1/2/3) : http://localhost:8080/worker/")
-    print("  🏠 Parent Offline Mini-PWA (UC-5)       : http://localhost:8080/pwa/")
-    print("  🎴 CalibCard Specs & Assets Viewer      : http://localhost:8080/calibcard-assets/")
-    print("  📊 DEIC Policy Simulator API            : http://localhost:8080/api/policy/simulate")
-    print("  ⚖️ Subgroup Fairness & Drift API        : http://localhost:8080/api/fairness/metrics")
-    print("  🎴 CalibCard Front Vector SVG           : http://localhost:8080/calibcard-assets/calibcard_front.svg")
-    print("  🎴 CalibCard Back Tracing SVG           : http://localhost:8080/calibcard-assets/calibcard_back.svg")
+    print(f"  🖥️ State Command Dashboard       : http://localhost:{port}/")
+    print(f"  📱 Frontline Worker Screener (UC-1/2/3) : http://localhost:{port}/worker/")
+    print(f"  🏠 Parent Offline Mini-PWA (UC-5)       : http://localhost:{port}/pwa/")
+    print(f"  🏥 Facility Clinical Desk (UC-4)        : http://localhost:{port}/facility/")
+    print(f"  🎴 CalibCard Specs & Assets Viewer      : http://localhost:{port}/calibcard-assets/")
+    print(f"  📊 DEIC Policy Simulator API            : http://localhost:{port}/api/policy/simulate")
+    print(f"  ⚖️ Subgroup Fairness & Drift API        : http://localhost:{port}/api/fairness/metrics")
+    print(f"  🎴 CalibCard Front Vector SVG           : http://localhost:{port}/calibcard-assets/calibcard_front.svg")
+    print(f"  🎴 CalibCard Back Tracing SVG           : http://localhost:{port}/calibcard-assets/calibcard_back.svg")
     print("-" * 78)
     print("Press Ctrl+C to stop the server.\n")
 
     import uvicorn
-    uvicorn.run("dashboard.app:app", host="0.0.0.0", port=8080, reload=False)
+    uvicorn.run("dashboard.app:app", host="0.0.0.0", port=port, reload=False)
 
 
 if __name__ == "__main__":

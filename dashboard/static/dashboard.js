@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnNaive = document.getElementById("btnModeNaive");
 
   function updateSimulation() {
-    const screenings = 28433333;
+    const screenings = 37200000;
     const deicCeiling = simDeics * 7500;
     const deicCeilingLakh = (deicCeiling / 100000).toFixed(2);
 
@@ -393,13 +393,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const naiveTotalLakh = (naiveTotal / 100000).toFixed(2);
     const naiveOverload = (naiveTotal / Math.max(1, deicCeiling)).toFixed(1);
 
-    // Bal-Setu model
-    const balsetuDeicTrue = Math.round(screenings * 0.0028);
-    const balsetuDeicFp = Math.round(screenings * (simFpRate * 0.016));
+    // Bal-Setu model (matching app.py exactly)
+    const balsetuDeicTrue = Math.round(screenings * 0.009);
+    const balsetuDeicFp = Math.round(screenings * (simFpRate * 0.033));
     const balsetuDeicTotal = balsetuDeicTrue + balsetuDeicFp;
     const balsetuDeicLakh = (balsetuDeicTotal / 100000).toFixed(2);
     const balsetuOverload = (balsetuDeicTotal / Math.max(1, deicCeiling)).toFixed(2);
-    const balsetuAamLakh = ((screenings * 0.089) / 100000).toFixed(2);
+    const balsetuAamLakh = ((screenings * 0.068) / 100000).toFixed(2);
 
     const savingsCr = (((naiveFp - balsetuDeicFp) * 450) / 10000000).toFixed(1);
 

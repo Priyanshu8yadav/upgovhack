@@ -37,6 +37,7 @@ class FacilityArrivalRecord:
     is_overdue: bool
     escalation_tier: Optional[str]  # "None", "ASHA Sangini Alert", "Block MO Escalation"
     asha_incentive: Optional[ASHAIncentiveRecord]
+    clinical_lane: str = "Primary Care"
     notes: List[str] = field(default_factory=list)
 
 
@@ -72,6 +73,7 @@ class FacilityHandshakeManager:
             is_overdue=False,
             escalation_tier="None",
             asha_incentive=None,
+            clinical_lane=getattr(payload, "clinical_lane", "Primary Care"),
             notes=[f"Referral initiated by {payload.asha_id} for: {', '.join(payload.reason_findings)}"]
         )
         self.active_referrals[payload.referral_id] = record
@@ -107,6 +109,8 @@ class FacilityHandshakeManager:
         # Check existing or create record on the fly (for offline arrivals)
         if ref_id in self.active_referrals:
             record = self.active_referrals[ref_id]
+            if "clinical_lane" in payload_dict and (not getattr(record, "clinical_lane", None) or record.clinical_lane == "Primary Care"):
+                record.clinical_lane = payload_dict.get("clinical_lane", "Primary Care")
         else:
             record = FacilityArrivalRecord(
                 referral_id=ref_id,
@@ -117,7 +121,8 @@ class FacilityHandshakeManager:
                 arrival_timestamp_utc=None,
                 is_overdue=False,
                 escalation_tier="None",
-                asha_incentive=None
+                asha_incentive=None,
+                clinical_lane=payload_dict.get("clinical_lane", "Primary Care")
             )
             self.active_referrals[ref_id] = record
 

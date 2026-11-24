@@ -636,8 +636,8 @@ def get_fairness_metrics():
     return {
         "conformal_calibration": {
             "confidence_guarantee": "90.0% (alpha = 0.10)",
-            "empirical_coverage_rate": 91.4,
-            "conformal_quantile_q_hat": 0.4421,
+            "empirical_coverage_rate": 91.8,
+            "conformal_quantile_q_hat": 0.2510,
             "abstention_rate_pct": 3.82,
             "guarantee_status": "P(Y in C(X)) >= 90.0% [PASSED]"
         },

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>बाल-सेतु (Bal-Setu) • Uttar Pradesh 75-District Health Command Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Vendored Local Chart.js for 100% Offline Resilience -->
+  <script src="/static/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="dashboard-layout">
@@ -138,17 +139,17 @@
             </div>
             <div class="sim-kpi-box">
               <div class="sim-kpi-title">Referrals Reaching DEICs</div>
-              <div class="sim-kpi-num" id="kpiSimReferrals" style="color: #E11D48;">1.02 Lakh</div>
-              <div style="font-size: 11px; color: var(--text-muted);" id="kpiSimReferralsSub">Safe intake</div>
+              <div class="sim-kpi-num" id="kpiSimReferrals" style="color: #F59E0B;">4.33 Lakh</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="kpiSimReferralsSub">4.8x overload ceiling</div>
             </div>
             <div class="sim-kpi-box">
               <div class="sim-kpi-title">Capacity Overload Factor</div>
-              <div class="sim-kpi-num" id="kpiSimOverload">1.1x</div>
-              <span class="sim-badge-safe" id="kpiSimOverloadBadge">SAFE / OPTIMAL</span>
+              <div class="sim-kpi-num" id="kpiSimOverload">4.8x</div>
+              <span class="sim-badge-danger" id="kpiSimOverloadBadge">CRITICAL DDOS OVERLOAD</span>
             </div>
             <div class="sim-kpi-box">
               <div class="sim-kpi-title">Household Waste Saved</div>
-              <div class="sim-kpi-num text-emerald" id="kpiSimSavings">₹189.4 Cr</div>
+              <div class="sim-kpi-num text-emerald" id="kpiSimSavings">₹129.5 Cr</div>
               <div style="font-size: 11px; color: var(--text-muted);">Travel fares + wages saved</div>
             </div>
           </div>
@@ -349,11 +350,11 @@
             </div>
             <div class="fairness-stat-row">
               <span>Empirical Test Coverage:</span>
-              <strong style="color: #10B981;">91.4% (Pass)</strong>
+              <strong style="color: #10B981;">91.8% (Pass)</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Conformal Quantile (q̂):</span>
-              <code>0.4421</code>
+              <code>0.2510</code>
             </div>
             <div class="fairness-stat-row">
               <span>Ambiguous Cases Routed to Amber/RtI:</span>
