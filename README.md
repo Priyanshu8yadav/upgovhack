@@ -248,7 +248,16 @@ docker build -t balsetu .
 docker run --rm -p 7860:7860 balsetu
 ```
 
-### Demonstration & Evaluation URLs:
+### Live Production Cloud Deployment:
+The complete containerized Bal-Setu application is deployed live with full HTTPS (enabling camera, microphone, WebCrypto HMAC, and Service Worker caching):
+- **Live State Command Dashboard (UC-8):** [https://balsetu.onrender.com/](https://balsetu.onrender.com/)
+- **Live Frontline Worker Screener PWA (UC-1/2/3):** [https://balsetu.onrender.com/worker/](https://balsetu.onrender.com/worker/)
+- **Live Parent Offline Mini-PWA (UC-5/6):** [https://balsetu.onrender.com/parent/](https://balsetu.onrender.com/parent/) (or `/pwa/`)
+- **Live Facility Arrival Reception & QR Scanner (UC-4/7):** [https://balsetu.onrender.com/facility/](https://balsetu.onrender.com/facility/)
+- **Live System Health & Regulatory Lock API:** [https://balsetu.onrender.com/api/health](https://balsetu.onrender.com/api/health)
+- **Live Subgroup AI Fairness & Calibration API:** [https://balsetu.onrender.com/api/fairness/metrics](https://balsetu.onrender.com/api/fairness/metrics)
+
+### Local Demonstration & Evaluation URLs:
 - **State Health Command Dashboard (UC-8):** [http://localhost:7860/](http://localhost:7860/)
 - **Frontline Worker Screener PWA (UC-1/2/3):** [http://localhost:7860/worker/](http://localhost:7860/worker/)
 - **Parent Offline Mini-PWA (UC-5/6):** [http://localhost:7860/parent/](http://localhost:7860/parent/) (or `/pwa/`)
@@ -261,14 +270,14 @@ docker run --rm -p 7860:7860 balsetu
 
 ---
 
-### Hugging Face Spaces Docker Deployment Checklist
-Bal-Setu is hardened for deployment to **Hugging Face Spaces (Docker SDK, Free CPU Basic 2 vCPU / 16 GB RAM)**:
-1. **YAML Frontmatter Header**: `README.md` specifies `sdk: docker` and `app_port: 7860`.
+### Cloud & Container Deployment Specifications
+Bal-Setu is hardened for instant container deployment across standard Cloud & PaaS platforms (Render, Hugging Face Spaces, MeghRaj):
+1. **Container Port Portability**: `Dockerfile` binds to `--port ${PORT:-7860}` dynamically honoring cloud provider port injection.
 2. **Non-Root UID 1000 Execution**: `Dockerfile` creates `user` (UID 1000), runs `COPY --chown=user:user`, and switches to `USER user`.
 3. **OpenCV & Audio Runtime**: `Dockerfile` installs `libgl1`, `libglib2.0-0`, `libgomp1`, and `ffmpeg` with `opencv-python-headless`.
 4. **Auto-Seeding on Ephemeral Disk**: Upon fresh container spin-up or wake-from-sleep, `dashboard/app.py` auto-seeds 6 pre-linked UP referral records (Lucknow, Varanasi, Gorakhpur, Ayodhya, Kanpur, Bareilly) with active HMAC-SHA256 tokens.
 5. **Universal Audio Codecs**: Worker and Parent PWAs include optimized `.mp3` audio voice prompts with offline Web Speech API fallback.
-6. **Keep-Warm Automation**: `.github/workflows/keep_alive.yml` provides a scheduled 12-hour health ping workflow hitting `HF_SPACE_URL`.
+6. **Keep-Warm Automation**: `.github/workflows/keep_alive.yml` provides a scheduled 10-minute health ping workflow hitting `RENDER_SERVICE_URL`.
 
 ---
 
