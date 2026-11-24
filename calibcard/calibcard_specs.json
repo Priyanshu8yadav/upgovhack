@@ -1,0 +1,172 @@
+{
+  "standard": "ISO/IEC 7810 ID-1",
+  "dimensions_mm": {
+    "width": 85.6,
+    "height": 53.98,
+    "corner_radius": 3.18,
+    "thickness": 0.76
+  },
+  "aruco_fiducials": {
+    "dictionary": "DICT_4X4_50",
+    "marker_size_mm": 10.0,
+    "margin_mm": 3.0,
+    "corners": {
+      "top_left": {
+        "id": 0,
+        "x_mm": 3.0,
+        "y_mm": 3.0
+      },
+      "top_right": {
+        "id": 1,
+        "x_mm": 72.6,
+        "y_mm": 3.0
+      },
+      "bottom_right": {
+        "id": 2,
+        "x_mm": 72.6,
+        "y_mm": 40.98
+      },
+      "bottom_left": {
+        "id": 3,
+        "x_mm": 3.0,
+        "y_mm": 40.98
+      }
+    }
+  },
+  "color_constancy_strip": [
+    {
+      "name": "Neutral White",
+      "code": "WHT",
+      "rgb": [
+        245,
+        245,
+        245
+      ],
+      "lab": [
+        96.0,
+        0.0,
+        0.0
+      ],
+      "tolerance_de2000": 3.0
+    },
+    {
+      "name": "Mid-Gray 18%",
+      "code": "GRY",
+      "rgb": [
+        118,
+        118,
+        118
+      ],
+      "lab": [
+        49.5,
+        0.0,
+        0.0
+      ],
+      "tolerance_de2000": 3.0
+    },
+    {
+      "name": "Dark Gray",
+      "code": "BLK",
+      "rgb": [
+        45,
+        45,
+        45
+      ],
+      "lab": [
+        18.5,
+        0.0,
+        0.0
+      ],
+      "tolerance_de2000": 3.0
+    },
+    {
+      "name": "Calibrated Crimson Red",
+      "code": "RED",
+      "rgb": [
+        180,
+        20,
+        30
+      ],
+      "purpose": "Mucosal pallor / conjunctiva reference"
+    },
+    {
+      "name": "Warm Indian Skin",
+      "code": "SKN1",
+      "rgb": [
+        198,
+        134,
+        105
+      ],
+      "fitzpatrick": "Type IV",
+      "purpose": "Baseline melanin calibration"
+    },
+    {
+      "name": "Deep Indian Skin",
+      "code": "SKN2",
+      "rgb": [
+        120,
+        75,
+        55
+      ],
+      "fitzpatrick": "Type V/VI",
+      "purpose": "Deep skin melanin calibration"
+    }
+  ],
+  "metric_scale": {
+    "length_mm": 50.0,
+    "tick_divisions_mm": 1.0,
+    "major_ticks_mm": 10.0,
+    "position": {
+      "x_start_mm": 17.8,
+      "y_mm": 48.0
+    }
+  },
+  "fixation_target": {
+    "type": "High-contrast concentric cartoon eye with Hirschberg central pupil target",
+    "center_mm": {
+      "x": 42.8,
+      "y": 25.5
+    },
+    "outer_diameter_mm": 21.0,
+    "pupil_diameter_mm": 6.4,
+    "hirschberg_reflection_dot_mm": 2.0
+  },
+  "back_tracing_patterns": {
+    "pattern_1": {
+      "name": "Circle",
+      "age_range": "3-4 years",
+      "target_shape": "circle",
+      "radius_mm": 6.0,
+      "center_mm": [
+        23.0,
+        30.0
+      ]
+    },
+    "pattern_2": {
+      "name": "Cross",
+      "age_range": "4-5 years",
+      "target_shape": "plus",
+      "arm_length_mm": 12.0,
+      "center_mm": [
+        42.8,
+        30.0
+      ]
+    },
+    "pattern_3": {
+      "name": "Zigzag",
+      "age_range": "5-6 years",
+      "target_shape": "zigzag",
+      "span_mm": 12.0,
+      "peaks": 4,
+      "center_mm": [
+        62.6,
+        30.0
+      ]
+    }
+  },
+  "procurement_economics": {
+    "unit_cost_inr": 2.25,
+    "statewide_3_6_lakh_frontline_kits_inr": 810000.0,
+    "per_child_amortized_cost_inr": 9.5e-05
+  }
+}

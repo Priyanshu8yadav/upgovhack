@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0D9488">
+  <title>बाल-सेतु | Bal-Setu Parent Companion (Offline Mini-PWA)</title>
+  <link rel="manifest" href="/pwa/manifest.json">
+  <link rel="stylesheet" href="/pwa/styles.css">
+  <!-- Chart.js CDN for RtI Velocity Graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Quick Nav Bar -->
+    <div style="background: #0f172a; padding: 6px 12px; font-size: 0.72rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;">
+      <span style="color: #94a3b8;">बाल-सेतु पोर्टल नेविगेशन:</span>
+      <div>
+        <a href="/" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700; margin-right: 10px;">🖥️ डैशबोर्ड</a>
+        <a href="/worker/" target="_blank" style="color: #34d399; text-decoration: none; font-weight: 700;">📱 आशा स्क्रीनर</a>
+      </div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="app-badge">RBSK 2.0 • शून्य-डेटा ऑफलाइन</span>
+        <h1 class="app-title">बाल-सेतु (Bal-Setu)</h1>
+        <p class="app-subtitle">दैनिक बाल विकास एवं गृह गतिविधि साथी</p>
+      </div>
+      <div class="header-right">
+        <span class="offline-pill" id="offlinePill">● 100% ऑफलाइन सक्रिय</span>
+      </div>
+    </header>
+
+    <!-- Child Profile Card -->
+    <section class="child-card">
+      <div class="child-info">
+        <div class="avatar">👶</div>
+        <div>
+          <h2 class="child-name">आरव कुमार (Aarav Kumar)</h2>
+          <p class="child-meta">आयु: 3 वर्ष 4 माह • जिला: लखनऊ • श्रेणी: <span class="status-badge yellow">पीला (Yellow RtI)</span></p>
+        </div>
+      </div>
+      <div class="week-banner">
+        <span>सप्ताह 3 चल रहा है (Week 3 of 4)</span>
+        <span class="velocity-pill">+11.2 अंक/सप्ताह ↗</span>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-games">🎮 दैनिक खेल (Daily)</button>
+      <button class="tab-btn" data-tab="tab-rti">📈 प्रगति वक्र (RtI Slope)</button>
+      <button class="tab-btn" data-tab="tab-care">💊 देखभाल (Care/Meds)</button>
+      <button class="tab-btn" data-tab="tab-ivr">📞 बोली IVR (Dialect)</button>
+    </nav>
+
+    <!-- Tab 1: Games -->
+    <main class="tab-content active" id="tab-games">
+      <!-- Game 1: Speech & Naming -->
+      <div class="card game-card">
+        <div class="card-header">
+          <span class="game-tag speech">खेल 1 • भाषा एवं बोली (Speech)</span>
+          <span class="time-tag">⏱ 3 मिनट</span>
+        </div>
+        <h3 class="game-title">रसोई की चीजें पहचानें और नाम बोलें</h3>
+        <p class="game-desc">कटोरी, चम्मच या सेब दिखाकर बच्चे से पूछें कि यह क्या है। बच्चे को स्पष्ट बोलने के लिए कहें।</p>
+        
+        <div class="interactive-speech-box">
+          <div class="prompt-item" id="speechPromptItem">
+            <div class="item-icon">🍎</div>
+            <div class="item-name">"सेब" (Apple)</div>
+          </div>
+          <div class="speech-controls">
+            <button class="btn btn-primary" id="btnSpeakPrompt">🔊 ऑडियो सुनें (Listen)</button>
+            <button class="btn btn-accent" id="btnRecordVoice">🎙️ बच्चे की आवाज सुनें (Test Voice)</button>
+          </div>
+          <div class="speech-feedback" id="speechFeedback">
+            बटन दबाकर बच्चे से बुलवाएं...
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 2: Tracing Canvas -->
+      <div class="card game-card">
+        <div class="card-header">
+          <span class="game-tag motor">खेल 2 • फाइन-मोटर (Tracing)</span>
+          <span class="time-tag">⏱ 4 मिनट</span>
+        </div>
+        <h3 class="game-title">पेंसिल से वृत्त (Circle) बनाएं या स्क्रीन पर फेरें</h3>
+        <p class="game-desc">आरबीएसके-कैलिब्रेशन कार्ड के पीछे या नीचे स्क्रीन पर बिंदुकृत रेखाओं पर उंगली फेरें।</p>
+
+        <div class="canvas-wrapper">
+          <canvas id="tracingCanvas" width="320" height="200"></canvas>
+          <div class="canvas-controls">
+            <button class="btn btn-secondary btn-sm" id="btnClearCanvas">मिटाएं (Clear)</button>
+            <button class="btn btn-primary btn-sm" id="btnEvaluateTrace">जांचें (Grade Trace)</button>
+          </div>
+          <div class="trace-score-box" id="traceScoreBox" style="display:none;">
+            <div class="score-num" id="traceScoreNum">88/100</div>
+            <div class="score-desc" id="traceScoreDesc">शानदार समन्वय! विचलन मात्र 1.4 मिमी है।</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 3: Gross Motor with household objects -->
+      <div class="card game-card">
+        <div class="card-header">
+          <span class="game-tag gross">खेल 3 • शारीरिक संतुलन (Balance)</span>
+          <span class="time-tag">⏱ 3 मिनट</span>
+        </div>
+        <h3 class="game-title">एक पैर पर खड़ा होना और गेंद पकड़ना</h3>
+        <p class="game-desc">घर में किसी कपड़े की गेंद बनाकर बच्चे की ओर फेंकें और दोनों हाथों से पकड़ने को कहें। 5 बार ताली बजाएं।</p>
+        <button class="btn btn-outline" id="btnCompleteMovement">✓ आज का खेल पूरा हुआ (Mark Done)</button>
+      </div>
+    </main>
+
+    <!-- Tab 2: RtI Progress Velocity -->
+    <section class="tab-content" id="tab-rti">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">4-सप्ताह रिस्पॉन्स-टू-इंटरवेन्शन (RtI) प्रगति वक्र</h3>
+          <span class="badge badge-info">Δ प्रवणता विश्लेषक</span>
+        </div>
+        <p class="card-subtitle">यह वक्र दर्शाता है कि 4 सप्ताह के घरेलू अभ्यास से बच्चे के विकास में सुधार हो रहा है या विशेषज्ञ संदर्भ की जरूरत है।</p>
+
+        <div class="chart-container">
+          <canvas id="rtiChart"></canvas>
+        </div>
+
+        <div class="simulation-toggle-box">
+          <label class="toggle-label">डेमो परिदृश्य चुनें (Scenario Switcher):</label>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-success" id="btnScenarioResponder">सुधार हो रहा है (Responder: +12 pts/wk)</button>
+            <button class="btn btn-sm btn-danger" id="btnScenarioNonResponder">सुधार नहीं (Non-Responder: Flat)</button>
+          </div>
+        </div>
+
+        <div class="alert-box" id="rtiAlertBox">
+          <div class="alert-title" id="rtiAlertTitle">प्रगति की स्थिति: सुधार की ओर</div>
+          <div class="alert-desc" id="rtiAlertDesc">बच्चा तेजी से सीख रहा है। चौथे सप्ताह के बाद बच्चा सामान्य श्रेणी (Green) में आ जाएगा।</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Care and Medications (UC-7) -->
+    <section class="tab-content" id="tab-care">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">दवा, पोषण एवं थेरेपी अनुपालन (UC-7)</h3>
+          <span class="badge badge-warning">दैनिक चेकलिस्ट</span>
+        </div>
+
+        <div class="care-list">
+          <label class="care-item">
+            <input type="checkbox" checked id="chkIFA">
+            <div class="care-details">
+              <strong>आयरन (IFA) सिरप</strong>
+              <span>सप्ताह में दो बार (1 मिली) • भोजन के 1 घंटे बाद</span>
+            </div>
+          </label>
+
+          <label class="care-item">
+            <input type="checkbox" checked id="chkDiet">
+            <div class="care-details">
+              <strong>आंगनवाड़ी पूरक पोषाहार (THR)</strong>
+              <span>दलिया/खिचड़ी में हरी सब्जियां और दाल मिलाकर दें</span>
+            </div>
+          </label>
+
+          <label class="care-item">
+            <input type="checkbox" id="chkBrace">
+            <div class="care-details">
+              <strong>क्लबफुट ब्रेस (Ponseti Splint)</strong>
+              <span>रात में सोते समय जूते बंधे रखें (यदि क्लबफुट हो)</span>
+            </div>
+          </label>
+
+          <label class="care-item">
+            <input type="checkbox" id="chkScreen">
+            <div class="care-details">
+              <strong>स्क्रीन-टाइम शून्य रखना (No Phone/TV)</strong>
+              <span>2 वर्ष से बड़े बच्चों को स्क्रीन से दूर रखें</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="next-visit-box">
+          <div class="visit-icon">🏥</div>
+          <div>
+            <strong>अगली जांच: ब्लॉक प्राथमिक स्वास्थ्य केंद्र (PHC)</strong>
+            <p>12 दिसंबर 2026 • आशा दीदी: संगीता देवी (फोन: 98765-XXXXX)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Dialect IVR Simulator -->
+    <section class="tab-content" id="tab-ivr">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">मिस्ड-कॉल भाषा/बोली IVR सिम्युलेटर</h3>
+          <span class="badge badge-info">बिना इंटरनेट / कीपैड फोन</span>
+        </div>
+        <p class="card-subtitle">उत्तर प्रदेश के उन 35% ग्रामीण परिवारों के लिए जिनके पास स्मार्टफ़ोन नहीं है। 1800-XXX टोल-फ्री मिस्ड कॉल से अपनी बोली में कॉल प्राप्त करें।</p>
+
+        <div class="ivr-form">
+          <label for="dialectSelect">अपनी क्षेत्रीय बोली चुनें (Select Dialect):</label>
+          <select id="dialectSelect" class="form-select">
+            <option value="bho">भोजपुरी (Bhojpuri - पूर्वांचल: गोरखपुर, वाराणसी, देवरिया, आजमगढ़)</option>
+            <option value="hi" selected>हिंदी (Hindi - खड़ी बोली: प्रदेश स्तरीय)</option>
+            <option value="awa">अवधी (Awadhi - मध्य यूपी: अयोध्या, लखनऊ, बाराबंकी)</option>
+            <option value="bnd">बुंदेली (Bundeli - बुंदेलखंड: झांसी, बांदा, चित्रकूट)</option>
+            <option value="braj">ब्रजभाषा (Braj - पश्चिमी यूपी: मथुरा, आगरा, अलीगढ़)</option>
+          </select>
+
+          <button class="btn btn-primary btn-block" id="btnSimulateIVRCall">📞 मिस्ड-कॉल दें और कॉल सुनें (Simulate Call)</button>
+        </div>
+
+        <!-- Simulated Call Screen -->
+        <div class="simulated-call-box" id="callBox" style="display:none;">
+          <div class="call-header">
+            <div class="calling-indicator">कॉल सक्रिय है (0:48)</div>
+            <div class="call-number">1800-BALSETU (उत्तर प्रदेश सरकार)</div>
+          </div>
+          
+          <div class="transcript-box">
+            <p id="callTranscript">प्रणाम! बाल-सेतु सेवा में राउर स्वागत बा...</p>
+          </div>
+
+          <div class="keypad-simulation">
+            <p class="keypad-prompt">कीपैड से बटन दबाएं:</p>
+            <div class="keypad-btns">
+              <button class="btn-num" data-key="1">1<br><span>(खेल खेला)</span></button>
+              <button class="btn-num" data-key="2">2<br><span>(आशा दीदी)</span></button>
+              <button class="btn-num" data-key="3">3<br><span>(दोहराएं)</span></button>
+            </div>
+          </div>
+
+          <div class="call-footer" id="callResult" style="display:none;">
+            सफलतापूर्वक दर्ज हुआ! e-Kavach में सिंक हो गया।
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div style="margin-bottom: 6px;">
+        <a href="/" target="_blank" style="color: #0d9488; text-decoration: none; font-weight: 600; margin-right: 10px;">डैशबोर्ड खोलें</a> •
+        <a href="/worker/" target="_blank" style="color: #0d9488; text-decoration: none; font-weight: 600; margin-left: 10px;">आशा स्क्रीनर खोलें</a>
+      </div>
+      <p>बाल-सेतु • राष्ट्रीय स्वास्थ्य मिशन, उत्तर प्रदेश शासन • DPDP Act 2023 अनुपालित</p>
+    </footer>
+  </div>
+
+  <script src="/pwa/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1986 @@
+{
+  "metadata": {
+    "cohort_size": 5000,
+    "districts_covered": 75,
+    "generation_time_sec": 0.08,
+    "zero_real_children_compliance": true
+  },
+  "four_d_distribution": {
+    "d1_defects_flagged": 22,
+    "d2_deficiencies_flagged": 2807,
+    "d3_diseases_flagged": 1538,
+    "d4_developmental_delays_flagged": 178
+  },
+  "balsetu_clinical_lanes": {
+    "Green (Routine)": 818,
+    "Yellow (4-Wk RtI)": 636,
+    "Primary Red (AAM/CHC/NRC)": 3346,
+    "Internal Amber (Tele-Verify)": 137,
+    "Complex Red (DEIC)": 63
+  },
+  "capacity_bottleneck_comparison": {
+    "simulated_cohort": {
+      "naive_deic_referrals": 3619,
+      "naive_false_positives": 73,
+      "balsetu_deic_referrals": 63,
+      "balsetu_local_aam_nrc_diverted": 3346,
+      "deic_referral_reduction_pct": 98.3,
+      "local_diversion_pct": 98.2
+    },
+    "statewide_up_extrapolated_annual": {
+      "state_target_children": 37200000,
+      "naive_annual_deic_referrals": 4834000,
+      "naive_deic_overload_ratio": "53.7x clinical ceiling (CRASH)",
+      "balsetu_annual_deic_referrals": 434000,
+      "balsetu_annual_local_aam_nrc_resolved": 2529000,
+      "balsetu_reduction_in_deic_referrals_pct": 91.0,
+      "balsetu_deic_false_positive_reduction_pct": 98.4,
+      "wage_loss_trips_prevented_families": 2529000
+    }
+  },
+  "district_breakdown": {
+    "Lucknow": {
+      "name": "Lucknow",
+      "division": "Lucknow",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 11
+    },
+    "Hardoi": {
+      "name": "Hardoi",
+      "division": "Lucknow",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 52,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 49,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 10
+    },
+    "Lakhimpur Kheri": {
+      "name": "Lakhimpur Kheri",
+      "division": "Lucknow",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 54,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 50,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 5
+    },
+    "Raebareli": {
+      "name": "Raebareli",
+      "division": "Lucknow",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 40,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 15
+    },
+    "Sitapur": {
+      "name": "Sitapur",
+      "division": "Lucknow",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 55,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 51,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 7
+    },
+    "Unnao": {
+      "name": "Unnao",
+      "division": "Lucknow",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 51,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 10
+    },
+    "Varanasi": {
+      "name": "Varanasi",
+      "division": "Varanasi",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 46,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 12
+    },
+    "Chandauli": {
+      "name": "Chandauli",
+      "division": "Varanasi",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 54,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 51,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 7
+    },
+    "Ghazipur": {
+      "name": "Ghazipur",
+      "division": "Varanasi",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 48,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 10
+    },
+    "Jaunpur": {
+      "name": "Jaunpur",
+      "division": "Varanasi",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 7
+    },
+    "Gorakhpur": {
+      "name": "Gorakhpur",
+      "division": "Gorakhpur",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 14
+    },
+    "Deoria": {
+      "name": "Deoria",
+      "division": "Gorakhpur",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 44,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 10
+    },
+    "Kushinagar": {
+      "name": "Kushinagar",
+      "division": "Gorakhpur",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 54,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 51,
+      "balsetu_yellow_rti": 5,
+      "green_routine": 8
+    },
+    "Maharajganj": {
+      "name": "Maharajganj",
+      "division": "Gorakhpur",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 9
+    },
+    "Meerut": {
+      "name": "Meerut",
+      "division": "Meerut",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 50,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 10
+    },
+    "Baghpat": {
+      "name": "Baghpat",
+      "division": "Meerut",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 40,
+      "balsetu_yellow_rti": 12,
+      "green_routine": 11
+    },
+    "Bulandshahr": {
+      "name": "Bulandshahr",
+      "division": "Meerut",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 46,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 14
+    },
+    "Gautam Buddha Nagar": {
+      "name": "Gautam Buddha Nagar",
+      "division": "Meerut",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 36,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 18
+    },
+    "Ghaziabad": {
+      "name": "Ghaziabad",
+      "division": "Meerut",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 17
+    },
+    "Hapur": {
+      "name": "Hapur",
+      "division": "Meerut",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 52,
+      "balsetu_deic_referrals": 3,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 3,
+      "green_routine": 12
+    },
+    "Agra": {
+      "name": "Agra",
+      "division": "Agra",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 43,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 13
+    },
+    "Firozabad": {
+      "name": "Firozabad",
+      "division": "Agra",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 10
+    },
+    "Mainpuri": {
+      "name": "Mainpuri",
+      "division": "Agra",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 13
+    },
+    "Mathura": {
+      "name": "Mathura",
+      "division": "Agra",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 12
+    },
+    "Prayagraj": {
+      "name": "Prayagraj",
+      "division": "Prayagraj",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 42,
+      "balsetu_deic_referrals": 3,
+      "balsetu_local_aam_nrc": 37,
+      "balsetu_yellow_rti": 13,
+      "green_routine": 12
+    },
+    "Fatehpur": {
+      "name": "Fatehpur",
+      "division": "Prayagraj",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 12
+    },
+    "Kaushambi": {
+      "name": "Kaushambi",
+      "division": "Prayagraj",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 44,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 13
+    },
+    "Pratapgarh": {
+      "name": "Pratapgarh",
+      "division": "Prayagraj",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 53,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 48,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 6
+    },
+    "Bareilly": {
+      "name": "Bareilly",
+      "division": "Bareilly",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 3,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 12,
+      "green_routine": 10
+    },
+    "Budaun": {
+      "name": "Budaun",
+      "division": "Bareilly",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 8
+    },
+    "Pilibhit": {
+      "name": "Pilibhit",
+      "division": "Bareilly",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 14
+    },
+    "Shahjahanpur": {
+      "name": "Shahjahanpur",
+      "division": "Bareilly",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 14
+    },
+    "Aligarh": {
+      "name": "Aligarh",
+      "division": "Aligarh",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 48,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 44,
+      "balsetu_yellow_rti": 4,
+      "green_routine": 16
+    },
+    "Etah": {
+      "name": "Etah",
+      "division": "Aligarh",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 14
+    },
+    "Hathras": {
+      "name": "Hathras",
+      "division": "Aligarh",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 17
+    },
+    "Kasganj": {
+      "name": "Kasganj",
+      "division": "Aligarh",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 12,
+      "green_routine": 10
+    },
+    "Moradabad": {
+      "name": "Moradabad",
+      "division": "Moradabad",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 14,
+      "green_routine": 9
+    },
+    "Bijnor": {
+      "name": "Bijnor",
+      "division": "Moradabad",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 46,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 13
+    },
+    "Amroha": {
+      "name": "Amroha",
+      "division": "Moradabad",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 53,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 48,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 8
+    },
+    "Rampur": {
+      "name": "Rampur",
+      "division": "Moradabad",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 51,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 5,
+      "green_routine": 11
+    },
+    "Sambhal": {
+      "name": "Sambhal",
+      "division": "Moradabad",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 42,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 16
+    },
+    "Jhansi": {
+      "name": "Jhansi",
+      "division": "Jhansi",
+      "has_deic": true,
+      "screened": 67,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 3,
+      "balsetu_local_aam_nrc": 40,
+      "balsetu_yellow_rti": 12,
+      "green_routine": 11
+    },
+    "Jalaun": {
+      "name": "Jalaun",
+      "division": "Jhansi",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 13
+    },
+    "Lalitpur": {
+      "name": "Lalitpur",
+      "division": "Jhansi",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 57,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 52,
+      "balsetu_yellow_rti": 4,
+      "green_routine": 7
+    },
+    "Banda": {
+      "name": "Banda",
+      "division": "Chitrakoot",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 12
+    },
+    "Chitrakoot": {
+      "name": "Chitrakoot",
+      "division": "Chitrakoot",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 12
+    },
+    "Hamirpur": {
+      "name": "Hamirpur",
+      "division": "Chitrakoot",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 52,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 50,
+      "balsetu_yellow_rti": 12,
+      "green_routine": 4
+    },
+    "Mahoba": {
+      "name": "Mahoba",
+      "division": "Chitrakoot",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 40,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 12
+    },
+    "Gonda": {
+      "name": "Gonda",
+      "division": "Devipatan",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 56,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 50,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 3
+    },
+    "Bahraich": {
+      "name": "Bahraich",
+      "division": "Devipatan",
+      "has_deic": false,
+      "screened": 67,
+      "naive_deic_referrals": 48,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 15,
+      "green_routine": 5
+    },
+    "Balrampur": {
+      "name": "Balrampur",
+      "division": "Devipatan",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 54,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 5,
+      "green_routine": 10
+    },
+    "Shravasti": {
+      "name": "Shravasti",
+      "division": "Devipatan",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 54,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 52,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 6
+    },
+    "Ayodhya": {
+      "name": "Ayodhya",
+      "division": "Ayodhya",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 51,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 8
+    },
+    "Ambedkar Nagar": {
+      "name": "Ambedkar Nagar",
+      "division": "Ayodhya",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 5,
+      "green_routine": 13
+    },
+    "Barabanki": {
+      "name": "Barabanki",
+      "division": "Ayodhya",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 48,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 14
+    },
+    "Sultanpur": {
+      "name": "Sultanpur",
+      "division": "Ayodhya",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 11
+    },
+    "Amethi": {
+      "name": "Amethi",
+      "division": "Ayodhya",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 13
+    },
+    "Azamgarh": {
+      "name": "Azamgarh",
+      "division": "Azamgarh",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 8
+    },
+    "Ballia": {
+      "name": "Ballia",
+      "division": "Azamgarh",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 47,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 43,
+      "balsetu_yellow_rti": 10,
+      "green_routine": 12
+    },
+    "Mau": {
+      "name": "Mau",
+      "division": "Azamgarh",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 46,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 13
+    },
+    "Basti": {
+      "name": "Basti",
+      "division": "Basti",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 48,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 6
+    },
+    "Sant Kabir Nagar": {
+      "name": "Sant Kabir Nagar",
+      "division": "Basti",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 57,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 55,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 4
+    },
+    "Siddharthnagar": {
+      "name": "Siddharthnagar",
+      "division": "Basti",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 44,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 10
+    },
+    "Kanpur Nagar": {
+      "name": "Kanpur Nagar",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 43,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 41,
+      "balsetu_yellow_rti": 14,
+      "green_routine": 11
+    },
+    "Kanpur Dehat": {
+      "name": "Kanpur Dehat",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 48,
+      "balsetu_yellow_rti": 9,
+      "green_routine": 7
+    },
+    "Auraiya": {
+      "name": "Auraiya",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 5,
+      "green_routine": 12
+    },
+    "Etawah": {
+      "name": "Etawah",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 41,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 39,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 15
+    },
+    "Farrukhabad": {
+      "name": "Farrukhabad",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 41,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 36,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 15
+    },
+    "Kannauj": {
+      "name": "Kannauj",
+      "division": "Kanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 50,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 45,
+      "balsetu_yellow_rti": 7,
+      "green_routine": 11
+    },
+    "Mirzapur": {
+      "name": "Mirzapur",
+      "division": "Mirzapur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 48,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 47,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 10
+    },
+    "Bhadohi": {
+      "name": "Bhadohi",
+      "division": "Mirzapur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 49,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 46,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 7
+    },
+    "Sonbhadra": {
+      "name": "Sonbhadra",
+      "division": "Mirzapur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 55,
+      "balsetu_deic_referrals": 0,
+      "balsetu_local_aam_nrc": 50,
+      "balsetu_yellow_rti": 2,
+      "green_routine": 10
+    },
+    "Saharanpur": {
+      "name": "Saharanpur",
+      "division": "Saharanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 44,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 11,
+      "green_routine": 11
+    },
+    "Muzaffarnagar": {
+      "name": "Muzaffarnagar",
+      "division": "Saharanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 42,
+      "balsetu_deic_referrals": 2,
+      "balsetu_local_aam_nrc": 38,
+      "balsetu_yellow_rti": 8,
+      "green_routine": 18
+    },
+    "Shamli": {
+      "name": "Shamli",
+      "division": "Saharanpur",
+      "has_deic": false,
+      "screened": 66,
+      "naive_deic_referrals": 45,
+      "balsetu_deic_referrals": 1,
+      "balsetu_local_aam_nrc": 42,
+      "balsetu_yellow_rti": 6,
+      "green_routine": 16
+    }
+  },
+  "sample_fhir_bundles": [
+    {
+      "resourceType": "Bundle",
+      "id": "bundle-4f7b7d33-19cd-4cd0-aa96-29295b54aea8",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2026-11-23T18:53:12.209352+00:00",
+        "profile": [
+          "https://nrces.in/ndhm/fhir/r4/StructureDefinition/DocumentBundle"
+        ]
+      },
+      "identifier": {
+        "system": "https://rbsk.up.gov.in/fhir/bundles",
+        "value": "bundle-4f7b7d33-19cd-4cd0-aa96-29295b54aea8"
+      },
+      "type": "document",
+      "timestamp": "2026-11-23T18:53:12.209352+00:00",
+      "entry": [
+        {
+          "fullUrl": "urn:uuid:comp-cf528fa6-9afb-4e43-ab91-00466f132d7d",
+          "resource": {
+            "resourceType": "Composition",
+            "id": "comp-cf528fa6-9afb-4e43-ab91-00466f132d7d",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Composition"
+              ]
+            },
+            "status": "final",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8652-3",
+                  "display": "Hospital Consultation Note"
+                }
+              ],
+              "text": "Bal-Setu RBSK 2.0 Screening and Care Orchestration Summary"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "date": "2026-11-23T18:53:12.209352+00:00",
+            "author": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "title": "Pediatric 4D Screening Record (बाल-सेतु)",
+            "custodian": {
+              "reference": "Organization/org-nhm-up"
+            },
+            "section": [
+              {
+                "title": "Screening Results and Clinical Triage",
+                "code": {
+                  "coding": [
+                    {
+                      "system": "http://loinc.org",
+                      "code": "11450-4",
+                      "display": "Problem list - Reported"
+                    }
+                  ]
+                },
+                "entry": [
+                  {
+                    "reference": "Observation/obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66"
+                  },
+                  {
+                    "reference": "Observation/obs-fd161039-fdc6-4851-8eb9-7051fe72953c"
+                  },
+                  {
+                    "reference": "Observation/obs-2e5a2d70-201d-499e-bfcb-13837db648cc"
+                  },
+                  {
+                    "reference": "Observation/obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7"
+                  },
+                  {
+                    "reference": "ServiceRequest/sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:pat-UP-LUC-00001",
+          "resource": {
+            "resourceType": "Patient",
+            "id": "pat-UP-LUC-00001",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Patient"
+              ]
+            },
+            "identifier": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                      "code": "MR",
+                      "display": "Medical Record Number"
+                    }
+                  ]
+                },
+                "system": "https://healthid.ndhm.gov.in",
+                "value": "91-3861-XXXX-XXXX"
+              }
+            ],
+            "gender": "male",
+            "address": [
+              {
+                "use": "home",
+                "state": "Uttar Pradesh",
+                "district": "Lucknow",
+                "city": "Sarojini Nagar",
+                "extension": [
+                  {
+                    "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/LGDCode",
+                    "valueInteger": 157
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:prac-ASHA-UP-LKO-4421",
+          "resource": {
+            "resourceType": "Practitioner",
+            "id": "prac-ASHA-UP-LKO-4421",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Practitioner"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://uphealth.up.gov.in/frontline-registry",
+                "value": "ASHA-UP-LKO-4421"
+              }
+            ],
+            "name": [
+              {
+                "text": "Frontline Health Screener (ASHA / MHT)"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:org-nhm-up",
+          "resource": {
+            "resourceType": "Organization",
+            "id": "org-nhm-up",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Organization"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://nhm.up.gov.in",
+                "value": "NHM-UP-RBSK"
+              }
+            ],
+            "name": "National Health Mission - Uttar Pradesh (RBSK 2.0 Directorate)"
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                    "code": "exam",
+                    "display": "Exam"
+                  }
+                ]
+              }
+            ],
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Screening procedure (procedure)"
+                }
+              ],
+              "text": "RBSK 2.0 4D Comprehensive Child Health Screening"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+            "performer": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "valueString": "Overall: Red | Clinical Lane: Primary Red (AAM/CHC/NRC)",
+            "component": [
+              {
+                "code": {
+                  "text": "D1 Defects at Birth"
+                },
+                "valueString": "Green"
+              },
+              {
+                "code": {
+                  "text": "D2 Deficiencies"
+                },
+                "valueString": "Red"
+              },
+              {
+                "code": {
+                  "text": "D3 Diseases"
+                },
+                "valueString": "Red"
+              },
+              {
+                "code": {
+                  "text": "D4 Developmental Delays"
+                },
+                "valueString": "Green"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-fd161039-fdc6-4851-8eb9-7051fe72953c",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-fd161039-fdc6-4851-8eb9-7051fe72953c",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Severe Anaemia"
+                }
+              ],
+              "text": "Deficiencies: Severe Anaemia"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+            "valueString": "गंभीर एनीमिया (Hb: 5.6 g/dL < 7.0)। तत्काल सामुदायिक स्वास्थ्य केंद्र या जिला अस्पताल ले जाएं।",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "A",
+                    "display": "Abnormal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-2e5a2d70-201d-499e-bfcb-13837db648cc",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-2e5a2d70-201d-499e-bfcb-13837db648cc",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Dental Caries"
+                }
+              ],
+              "text": "Diseases: Dental Caries"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+            "valueString": "दांतों में सड़न या कीड़ा लगना (Dark intraoral caries lesions)",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "A",
+                    "display": "Abnormal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Otitis Media (Ear Discharge)"
+                }
+              ],
+              "text": "Diseases: Otitis Media (Ear Discharge)"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+            "valueString": "कान से मवाद या पानी बहना (Otitis media discharge)",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "A",
+                    "display": "Abnormal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3",
+          "resource": {
+            "resourceType": "ServiceRequest",
+            "id": "sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/ServiceRequest"
+              ]
+            },
+            "status": "active",
+            "intent": "order",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "306206005",
+                    "display": "Referral to service"
+                  }
+                ]
+              }
+            ],
+            "priority": "routine",
+            "code": {
+              "text": "RBSK Referral to Ayushman Arogya Mandir (AAM) / NRC / CHC"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00001"
+            },
+            "requester": {
+              "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+            },
+            "performer": [
+              {
+                "display": "Ayushman Arogya Mandir (AAM) / NRC / CHC"
+              }
+            ],
+            "authoredOn": "2026-11-23T18:53:12.209352+00:00",
+            "reasonCode": [
+              {
+                "text": "Severe Anaemia"
+              },
+              {
+                "text": "Dental Caries"
+              },
+              {
+                "text": "Otitis Media (Ear Discharge)"
+              }
+            ],
+            "note": [
+              {
+                "text": "Ambulance 102 Required: False"
+              },
+              {
+                "text": "Tele-verification: False"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Bundle",
+      "id": "bundle-e300d3a3-3e4e-4c5d-81b7-bb9696a9ede6",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2026-11-23T18:53:12.209575+00:00",
+        "profile": [
+          "https://nrces.in/ndhm/fhir/r4/StructureDefinition/DocumentBundle"
+        ]
+      },
+      "identifier": {
+        "system": "https://rbsk.up.gov.in/fhir/bundles",
+        "value": "bundle-e300d3a3-3e4e-4c5d-81b7-bb9696a9ede6"
+      },
+      "type": "document",
+      "timestamp": "2026-11-23T18:53:12.209575+00:00",
+      "entry": [
+        {
+          "fullUrl": "urn:uuid:comp-79ca9b0a-14f5-4a06-9368-dc17af87832c",
+          "resource": {
+            "resourceType": "Composition",
+            "id": "comp-79ca9b0a-14f5-4a06-9368-dc17af87832c",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Composition"
+              ]
+            },
+            "status": "final",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8652-3",
+                  "display": "Hospital Consultation Note"
+                }
+              ],
+              "text": "Bal-Setu RBSK 2.0 Screening and Care Orchestration Summary"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00002"
+            },
+            "date": "2026-11-23T18:53:12.209575+00:00",
+            "author": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "title": "Pediatric 4D Screening Record (बाल-सेतु)",
+            "custodian": {
+              "reference": "Organization/org-nhm-up"
+            },
+            "section": [
+              {
+                "title": "Screening Results and Clinical Triage",
+                "code": {
+                  "coding": [
+                    {
+                      "system": "http://loinc.org",
+                      "code": "11450-4",
+                      "display": "Problem list - Reported"
+                    }
+                  ]
+                },
+                "entry": [
+                  {
+                    "reference": "Observation/obs-4d-862ec3e2-db5d-43a9-8ce2-c0d59b0f118e"
+                  },
+                  {
+                    "reference": "Observation/obs-14728112-4fbd-416e-b579-ac6403ea5e8f"
+                  },
+                  {
+                    "reference": "ServiceRequest/sr-cc6cf209-a324-4c4a-b63a-b166da6823c6"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:pat-UP-LUC-00002",
+          "resource": {
+            "resourceType": "Patient",
+            "id": "pat-UP-LUC-00002",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Patient"
+              ]
+            },
+            "identifier": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                      "code": "MR",
+                      "display": "Medical Record Number"
+                    }
+                  ]
+                },
+                "system": "https://healthid.ndhm.gov.in",
+                "value": "91-4944-XXXX-XXXX"
+              }
+            ],
+            "gender": "male",
+            "address": [
+              {
+                "use": "home",
+                "state": "Uttar Pradesh",
+                "district": "Lucknow",
+                "city": "Sarojini Nagar",
+                "extension": [
+                  {
+                    "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/LGDCode",
+                    "valueInteger": 157
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:prac-ASHA-UP-LKO-4421",
+          "resource": {
+            "resourceType": "Practitioner",
+            "id": "prac-ASHA-UP-LKO-4421",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Practitioner"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://uphealth.up.gov.in/frontline-registry",
+                "value": "ASHA-UP-LKO-4421"
+              }
+            ],
+            "name": [
+              {
+                "text": "Frontline Health Screener (ASHA / MHT)"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:org-nhm-up",
+          "resource": {
+            "resourceType": "Organization",
+            "id": "org-nhm-up",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Organization"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://nhm.up.gov.in",
+                "value": "NHM-UP-RBSK"
+              }
+            ],
+            "name": "National Health Mission - Uttar Pradesh (RBSK 2.0 Directorate)"
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-4d-862ec3e2-db5d-43a9-8ce2-c0d59b0f118e",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-4d-862ec3e2-db5d-43a9-8ce2-c0d59b0f118e",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                    "code": "exam",
+                    "display": "Exam"
+                  }
+                ]
+              }
+            ],
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Screening procedure (procedure)"
+                }
+              ],
+              "text": "RBSK 2.0 4D Comprehensive Child Health Screening"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00002"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209575+00:00",
+            "performer": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "valueString": "Overall: Red | Clinical Lane: Primary Red (AAM/CHC/NRC)",
+            "component": [
+              {
+                "code": {
+                  "text": "D1 Defects at Birth"
+                },
+                "valueString": "Green"
+              },
+              {
+                "code": {
+                  "text": "D2 Deficiencies"
+                },
+                "valueString": "Red"
+              },
+              {
+                "code": {
+                  "text": "D3 Diseases"
+                },
+                "valueString": "Green"
+              },
+              {
+                "code": {
+                  "text": "D4 Developmental Delays"
+                },
+                "valueString": "Green"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-14728112-4fbd-416e-b579-ac6403ea5e8f",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-14728112-4fbd-416e-b579-ac6403ea5e8f",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Moderate Anaemia"
+                }
+              ],
+              "text": "Deficiencies: Moderate Anaemia"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00002"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209575+00:00",
+            "valueString": "मध्यम एनीमिया (Hb: 7.4 g/dL)। निकटतम आयुष्मान आरोग्य मंदिर (AAM) में आईएफए सिरप और जांच कराएं।",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "A",
+                    "display": "Abnormal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:sr-cc6cf209-a324-4c4a-b63a-b166da6823c6",
+          "resource": {
+            "resourceType": "ServiceRequest",
+            "id": "sr-cc6cf209-a324-4c4a-b63a-b166da6823c6",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/ServiceRequest"
+              ]
+            },
+            "status": "active",
+            "intent": "order",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "306206005",
+                    "display": "Referral to service"
+                  }
+                ]
+              }
+            ],
+            "priority": "routine",
+            "code": {
+              "text": "RBSK Referral to Ayushman Arogya Mandir (AAM) / NRC / CHC"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00002"
+            },
+            "requester": {
+              "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+            },
+            "performer": [
+              {
+                "display": "Ayushman Arogya Mandir (AAM) / NRC / CHC"
+              }
+            ],
+            "authoredOn": "2026-11-23T18:53:12.209575+00:00",
+            "reasonCode": [
+              {
+                "text": "Moderate Anaemia"
+              }
+            ],
+            "note": [
+              {
+                "text": "Ambulance 102 Required: False"
+              },
+              {
+                "text": "Tele-verification: False"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Bundle",
+      "id": "bundle-d049fb7d-c9b6-47f6-8915-a1dc6dee1d2d",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2026-11-23T18:53:12.209636+00:00",
+        "profile": [
+          "https://nrces.in/ndhm/fhir/r4/StructureDefinition/DocumentBundle"
+        ]
+      },
+      "identifier": {
+        "system": "https://rbsk.up.gov.in/fhir/bundles",
+        "value": "bundle-d049fb7d-c9b6-47f6-8915-a1dc6dee1d2d"
+      },
+      "type": "document",
+      "timestamp": "2026-11-23T18:53:12.209636+00:00",
+      "entry": [
+        {
+          "fullUrl": "urn:uuid:comp-ce63b2ac-1a95-4aa3-a8c1-b81e71c7199c",
+          "resource": {
+            "resourceType": "Composition",
+            "id": "comp-ce63b2ac-1a95-4aa3-a8c1-b81e71c7199c",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Composition"
+              ]
+            },
+            "status": "final",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8652-3",
+                  "display": "Hospital Consultation Note"
+                }
+              ],
+              "text": "Bal-Setu RBSK 2.0 Screening and Care Orchestration Summary"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00003"
+            },
+            "date": "2026-11-23T18:53:12.209636+00:00",
+            "author": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "title": "Pediatric 4D Screening Record (बाल-सेतु)",
+            "custodian": {
+              "reference": "Organization/org-nhm-up"
+            },
+            "section": [
+              {
+                "title": "Screening Results and Clinical Triage",
+                "code": {
+                  "coding": [
+                    {
+                      "system": "http://loinc.org",
+                      "code": "11450-4",
+                      "display": "Problem list - Reported"
+                    }
+                  ]
+                },
+                "entry": [
+                  {
+                    "reference": "Observation/obs-4d-c471486e-484e-49a9-9e31-8cd26cb6768f"
+                  },
+                  {
+                    "reference": "Observation/obs-9beea089-33cb-403e-b3d7-10d0da8ad412"
+                  },
+                  {
+                    "reference": "Observation/obs-9f974b79-fd66-4143-819e-ab3d626bbb4e"
+                  },
+                  {
+                    "reference": "ServiceRequest/sr-f8376b8a-04d5-41e8-a5b8-fbd38d65ef26"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:pat-UP-LUC-00003",
+          "resource": {
+            "resourceType": "Patient",
+            "id": "pat-UP-LUC-00003",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Patient"
+              ]
+            },
+            "identifier": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                      "code": "MR",
+                      "display": "Medical Record Number"
+                    }
+                  ]
+                },
+                "system": "https://healthid.ndhm.gov.in",
+                "value": "91-8467-XXXX-XXXX"
+              }
+            ],
+            "gender": "male",
+            "address": [
+              {
+                "use": "home",
+                "state": "Uttar Pradesh",
+                "district": "Lucknow",
+                "city": "Sarojini Nagar",
+                "extension": [
+                  {
+                    "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/LGDCode",
+                    "valueInteger": 157
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:prac-ASHA-UP-LKO-4421",
+          "resource": {
+            "resourceType": "Practitioner",
+            "id": "prac-ASHA-UP-LKO-4421",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Practitioner"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://uphealth.up.gov.in/frontline-registry",
+                "value": "ASHA-UP-LKO-4421"
+              }
+            ],
+            "name": [
+              {
+                "text": "Frontline Health Screener (ASHA / MHT)"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:org-nhm-up",
+          "resource": {
+            "resourceType": "Organization",
+            "id": "org-nhm-up",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Organization"
+              ]
+            },
+            "identifier": [
+              {
+                "system": "https://nhm.up.gov.in",
+                "value": "NHM-UP-RBSK"
+              }
+            ],
+            "name": "National Health Mission - Uttar Pradesh (RBSK 2.0 Directorate)"
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-4d-c471486e-484e-49a9-9e31-8cd26cb6768f",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-4d-c471486e-484e-49a9-9e31-8cd26cb6768f",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                    "code": "exam",
+                    "display": "Exam"
+                  }
+                ]
+              }
+            ],
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Screening procedure (procedure)"
+                }
+              ],
+              "text": "RBSK 2.0 4D Comprehensive Child Health Screening"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00003"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209636+00:00",
+            "performer": [
+              {
+                "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+              }
+            ],
+            "valueString": "Overall: Red | Clinical Lane: Primary Red (AAM/CHC/NRC)",
+            "component": [
+              {
+                "code": {
+                  "text": "D1 Defects at Birth"
+                },
+                "valueString": "Green"
+              },
+              {
+                "code": {
+                  "text": "D2 Deficiencies"
+                },
+                "valueString": "Red"
+              },
+              {
+                "code": {
+                  "text": "D3 Diseases"
+                },
+                "valueString": "Green"
+              },
+              {
+                "code": {
+                  "text": "D4 Developmental Delays"
+                },
+                "valueString": "Green"
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-9beea089-33cb-403e-b3d7-10d0da8ad412",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-9beea089-33cb-403e-b3d7-10d0da8ad412",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "248326004",
+                  "display": "Severe Acute Malnutrition (SAM)"
+                }
+              ],
+              "text": "Deficiencies: Severe Acute Malnutrition (SAM)"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00003"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209636+00:00",
+            "valueString": "गंभीर कुपोषण (WHZ: 2.57 SD, MUAC: 11.0 cm)",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "A",
+                    "display": "Abnormal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:obs-9f974b79-fd66-4143-819e-ab3d626bbb4e",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "obs-9f974b79-fd66-4143-819e-ab3d626bbb4e",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+              ]
+            },
+            "status": "final",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "410605003",
+                  "display": "Mild Anaemia"
+                }
+              ],
+              "text": "Deficiencies: Mild Anaemia"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00003"
+            },
+            "effectiveDateTime": "2026-11-23T18:53:12.209636+00:00",
+            "valueString": "हल्का एनीमिया (Hb: 11.4 g/dL)। घर पर हरी पत्तेदार सब्जियां और संतुलित आहार दें।",
+            "interpretation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                    "code": "N",
+                    "display": "Normal"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "fullUrl": "urn:uuid:sr-f8376b8a-04d5-41e8-a5b8-fbd38d65ef26",
+          "resource": {
+            "resourceType": "ServiceRequest",
+            "id": "sr-f8376b8a-04d5-41e8-a5b8-fbd38d65ef26",
+            "meta": {
+              "profile": [
+                "https://nrces.in/ndhm/fhir/r4/StructureDefinition/ServiceRequest"
+              ]
+            },
+            "status": "active",
+            "intent": "order",
+            "category": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "306206005",
+                    "display": "Referral to service"
+                  }
+                ]
+              }
+            ],
+            "priority": "routine",
+            "code": {
+              "text": "RBSK Referral to Ayushman Arogya Mandir (AAM) / NRC / CHC"
+            },
+            "subject": {
+              "reference": "Patient/pat-UP-LUC-00003"
+            },
+            "requester": {
+              "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+            },
+            "performer": [
+              {
+                "display": "Ayushman Arogya Mandir (AAM) / NRC / CHC"
+              }
+            ],
+            "authoredOn": "2026-11-23T18:53:12.209636+00:00",
+            "reasonCode": [
+              {
+                "text": "Severe Acute Malnutrition (SAM)"
+              },
+              {
+                "text": "Mild Anaemia"
+              }
+            ],
+            "note": [
+              {
+                "text": "Ambulance 102 Required: False"
+              },
+              {
+                "text": "Tele-verification: False"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

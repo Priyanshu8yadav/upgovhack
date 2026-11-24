@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>₹2 RBSK-CalibCard Optical Specifications & Assets | Bal-Setu</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+    header {
+      border-bottom: 2px solid #334155;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    h1 { font-size: 1.5rem; margin: 0; color: #38bdf8; }
+    p.sub { color: #94a3b8; font-size: 0.88rem; margin: 4px 0 0 0; }
+    .nav-links a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-left: 12px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .card-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #f59e0b;
+      display: flex;
+      justify-content: space-between;
+    }
+    .card-img {
+      width: 100%;
+      height: 240px;
+      object-fit: contain;
+      background: #020617;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      margin-bottom: 12px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: #2563eb;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .btn-sec {
+      background: #334155;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+    }
+    th { background: #0f172a; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>₹2 RBSK-CalibCard Optical Specifications</h1>
+        <p class="sub">Physical-Digital Calibration Standard (Standard ISO/IEC 7810 ID-1: 85.60 × 53.98 mm)</p>
+      </div>
+      <div class="nav-links">
+        <a href="/">🖥️ स्टेट डैशबोर्ड</a>
+        <a href="/worker/">📱 आशा स्क्रीनर</a>
+        <a href="/pwa/">🏠 अभिभावक PWA</a>
+      </div>
+    </header>
+
+    <div class="card-grid">
+      <!-- Front Side -->
+      <div class="card-box">
+        <div class="card-title">
+          <span>मुख भाग (Card Front - Optical Calibration)</span>
+          <span style="font-size: 0.75rem; color: #10b981;">ISO ID-1 Standard</span>
+        </div>
+        <img src="/calibcard-assets/calibcard_front.png" class="card-img" alt="CalibCard Front">
+        <div class="btn-row">
+          <a href="/calibcard-assets/calibcard_front.svg" target="_blank" class="btn">Vector SVG</a>
+          <a href="/calibcard-assets/calibcard_front.png" target="_blank" class="btn btn-sec">Raster PNG</a>
+        </div>
+      </div>
+
+      <!-- Back Side -->
+      <div class="card-box">
+        <div class="card-title">
+          <span>पृष्ठ भाग (Card Back - Motor Tracing)</span>
+          <span style="font-size: 0.75rem; color: #38bdf8;">Hausdorff Metric</span>
+        </div>
+        <img src="/calibcard-assets/calibcard_back.png" class="card-img" alt="CalibCard Back">
+        <div class="btn-row">
+          <a href="/calibcard-assets/calibcard_back.svg" target="_blank" class="btn">Vector SVG</a>
+          <a href="/calibcard-assets/calibcard_back.png" target="_blank" class="btn btn-sec">Raster PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specifications Table -->
+    <div class="card-box">
+      <div class="card-title">
+        <span>Optical & Colorimetric Specifications</span>
+        <a href="/calibcard-assets/calibcard_specs.json" target="_blank" style="color: #38bdf8; font-size: 0.8rem; text-decoration: none;">Download specs.json ➔</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Specification</th>
+            <th>Public Health Function</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Physical Dimensions</strong></td>
+            <td>85.60 mm × 53.98 mm (Standard Aadhaar/ATM format)</td>
+            <td>True 1:1 metric scale reference for eye Hirschberg CLR and head circumference</td>
+          </tr>
+          <tr>
+            <td><strong>Fiducial Markers</strong></td>
+            <td>4 × ArUco 4x4_50 Markers (IDs #42, #43, #44, #45)</td>
+            <td>Real-time perspective unwarping to 10 pixels/mm canonical grid</td>
+          </tr>
+          <tr>
+            <td><strong>Color Constancy Strip</strong></td>
+            <td>6 Standardized Patches (White, 50% Gray, Black, Red, Green, Blue)</td>
+            <td>Von Kries chromatic adaptation (D65 standard) eliminating camera ISP yellow drift</td>
+          </tr>
+          <tr>
+            <td><strong>Manufacturing Cost</strong></td>
+            <td>₹1.85 to ₹2.10 per laminated card in 10,000 batches</td>
+            <td>Fits in ASHA aprons; washable, durable, and universally distributed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bal-Setu (बाल-सेतु) | Frontline Screener</title>
+  <link rel="manifest" href="/worker/manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="description" content="Offline-first 4D child screening app for ASHA, ANM, and RBSK MHT in Uttar Pradesh">
+  <link rel="stylesheet" href="/worker/styles.css">
+  <link rel="icon" type="image/png" href="/calibcard-assets/calibcard_front.png">
+</head>
+<body>
+
+<div class="mobile-frame">
+  <!-- Quick Portal Nav Bar -->
+  <div style="background: #020617; padding: 6px 14px; font-size: 0.72rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+    <span style="color: #64748b;">बाल-सेतु पोर्टल:</span>
+    <div>
+      <a href="/" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700; margin-right: 12px;">🖥️ स्टेट डैशबोर्ड</a>
+      <a href="/pwa/" target="_blank" style="color: #f59e0b; text-decoration: none; font-weight: 700;">🏠 अभिभावक PWA</a>
+    </div>
+  </div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-badge">
+        <div class="brand-logo-icon">ब</div>
+        <div class="brand-title">
+          <h1>बाल-सेतु (Bal-Setu)</h1>
+          <div class="brand-subtitle">राष्ट्रीय बाल स्वास्थ्य कार्यक्रम (RBSK 2.0) • e-Kavach</div>
+        </div>
+      </div>
+      <div class="header-controls">
+        <select id="dialectSelect" class="form-select" style="padding: 4px 6px; font-size: 0.72rem; width: auto; background: #1e293b;">
+          <option value="hi-IN" selected>हिन्दी</option>
+          <option value="bho">भोजपुरी</option>
+          <option value="awa">अवधी</option>
+          <option value="en-IN">English</option>
+        </select>
+        <button id="voiceToggleBtn" class="voice-toggle-btn active" title="आवाज सहायता">
+          🔊 <span id="voiceStatusText">आवाज चालू</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="system-status-ribbon">
+      <span class="badge-tag tag-green">⚡ e-Kavach ऑफ़लाइन सिंक</span>
+      <span class="badge-tag tag-green">🛡️ DPDP 2023: ज़ीरो क्लाउड फ़ोटो</span>
+      <span class="badge-tag" id="networkStatusTag">📡 100% ऑफ़लाइन सक्षम</span>
+    </div>
+  </header>
+
+  <!-- Step Navigation Tabs -->
+  <nav class="step-progress-bar">
+    <div class="step-tab active" data-step="1">1. पंजीकरण</div>
+    <div class="step-tab" data-step="2">2. कैमरा HUD</div>
+    <div class="step-tab" data-step="3">3. 4D जांच</div>
+    <div class="step-tab" data-step="4">4. बाल टेस्ट</div>
+    <div class="step-tab" data-step="5">5. परिणाम/QR</div>
+  </nav>
+
+  <!-- Wizard Content Container -->
+  <main class="wizard-content">
+
+    <!-- STEP 1: Registration & Identification -->
+    <section id="step1" class="step-section active">
+      <div class="voice-instruction-banner">
+        <span class="voice-pulse-icon"></span>
+        <span id="voicePromptStep1">नमस्ते आशा दीदी! बच्चे का e-Kavach नंबर या नाम दर्ज करें।</span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📋 बच्चे का विवरण (Child Profile)</span>
+          <span style="font-size: 0.72rem; color: var(--accent);">RBSK ID</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">e-Kavach / पोषण ट्रैकर आईडी</label>
+          <input type="text" id="childId" class="form-input" value="UP-LKO-2026-0842" placeholder="e.g. UP-LKO-2026-001">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">बच्चे का नाम</label>
+            <input type="text" id="childName" class="form-input" value="आरव शर्मा">
+          </div>
+          <div class="form-group">
+            <label class="form-label">आयु (महीने)</label>
+            <input type="number" id="childAge" class="form-input" value="28" min="0" max="216">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">लिंग (Gender)</label>
+            <select id="childGender" class="form-select">
+              <option value="M" selected>बालक (M)</option>
+              <option value="F">बालिका (F)</option>
+              <option value="O">अन्य (O)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">जनपद (District)</label>
+            <select id="childDistrict" class="form-select">
+              <option value="Lucknow|157" selected>Lucknow (लखनऊ)</option>
+              <option value="Varanasi|196">Varanasi (वाराणसी)</option>
+              <option value="Gorakhpur|187">Gorakhpur (गोरखपुर)</option>
+              <option value="Bahraich|178">Bahraich (बहराइच)</option>
+              <option value="Shravasti|179">Shravasti (श्रावस्ती)</option>
+              <option value="Agra|146">Agra (आगरा)</option>
+              <option value="Kanpur Nagar|164">Kanpur Nagar (कानपुर)</option>
+              <option value="Prayagraj|175">Prayagraj (प्रयागराज)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">माता / अभिभावक का नाम</label>
+            <input type="text" id="motherName" class="form-input" value="सुनीता देवी">
+          </div>
+          <div class="form-group">
+            <label class="form-label">मोबाइल नंबर</label>
+            <input type="tel" id="parentPhone" class="form-input" value="9876543210">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Rejection-First Camera HUD & CalibCard (UC-2) -->
+    <section id="step2" class="step-section">
+      <div class="voice-instruction-banner">
+        <span class="voice-pulse-icon"></span>
+        <span id="voicePromptStep2">कैलिबकार्ड को बच्चे के कंधे के पास रखें। हरा घेरा बनने पर ही फोटो ली जाएगी।</span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📷 अस्वीकृति-प्रथम गुणवत्ता गेट (Quality Gate HUD)</span>
+          <span style="font-size: 0.72rem; color: var(--green);">100% On-Device</span>
+        </div>
+
+        <!-- Camera Viewfinder -->
+        <div class="camera-viewfinder-container">
+          <!-- Viewfinder image simulation -->
+          <div style="position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1e293b;">
+            <div style="font-size: 3rem;">👶</div>
+          </div>
+          <!-- CalibCard Target Reticle -->
+          <div class="camera-reticle"></div>
+          <div class="card-target-outline" id="hudCardBadge">
+            ₹2 CalibCard<br>यहाँ रखें
+          </div>
+        </div>
+
+        <!-- Quality HUD Status Pills -->
+        <div class="hud-pills-row">
+          <div class="hud-pill ok" id="pillLighting">
+            <span class="hud-label">Lighting (रोशनी)</span>
+            <span class="hud-status" id="valLighting">142 cd/m² ✓</span>
+          </div>
+          <div class="hud-pill ok" id="pillFocus">
+            <span class="hud-label">Focus (स्पष्टता)</span>
+            <span class="hud-status" id="valFocus">Var: 118 ✓</span>
+          </div>
+          <div class="hud-pill ok" id="pillCard">
+            <span class="hud-label">CalibCard (कार्ड)</span>
+            <span class="hud-status" id="valCard">ArUco #42 ✓</span>
+          </div>
+          <div class="hud-pill ok" id="pillDistance">
+            <span class="hud-label">Distance (दूरी)</span>
+            <span class="hud-status" id="valDistance">26% फ़्रेम ✓</span>
+          </div>
+          <div class="hud-pill ok" id="pillTilt">
+            <span class="hud-label">Tilt (झुकाव)</span>
+            <span class="hud-status" id="valTilt">3.2° ✓</span>
+          </div>
+          <div class="hud-pill ok" id="pillNoise">
+            <span class="hud-label">Noise (शोर)</span>
+            <span class="hud-status" id="valNoise">48 dB ✓</span>
+          </div>
+        </div>
+
+        <!-- Test Quality Gate Toggles for Jury Demo -->
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+          <button type="button" class="form-input" style="padding: 6px; font-size: 0.72rem; cursor: pointer;" onclick="window.workerApp.simulateQualityFail('blur')">
+            ⚠️ ब्लर का अनुकरण करें
+          </button>
+          <button type="button" class="form-input" style="padding: 6px; font-size: 0.72rem; cursor: pointer;" onclick="window.workerApp.simulateQualityFail('lighting')">
+            ⚠️ कम रोशनी का अनुकरण
+          </button>
+          <button type="button" class="form-input" style="padding: 6px; font-size: 0.72rem; cursor: pointer; color: var(--green);" onclick="window.workerApp.resetQualityOk()">
+            ✅ उत्तम गुणवत्ता (Ready)
+          </button>
+        </div>
+
+        <!-- CalibCard Color Constancy Split-Screen Inspector -->
+        <div class="split-screen-box">
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700;">
+            <span>🔬 रंग-स्थिरता सुधार (Von Kries Color Constancy)</span>
+            <span style="color: var(--green);">ISP Drift Rectified</span>
+          </div>
+          <div class="split-screen-viewports">
+            <div class="split-half split-raw">
+              कच्चा कैमरा (ISP Drift)
+            </div>
+            <div class="split-half split-rectified">
+              कैलिबकार्ड सुधारा गया (D65)
+            </div>
+          </div>
+          <div class="delta-e-readout">
+            <span>रंग त्रुटि (Color Error): <b style="color: #ef4444;">ΔE = 17.4</b></span>
+            <span>सुधार के बाद: <b style="color: #10b981;">ΔE = 1.9 (-89%)</b></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 3: 4D Multi-Modal Clinical Screening -->
+    <section id="step3" class="step-section">
+      <div class="voice-instruction-banner">
+        <span class="voice-pulse-icon"></span>
+        <span id="voicePromptStep3">बच्चे के विकास, पोषण और शारीरिक लक्षणों की पुष्टि करें।</span>
+      </div>
+
+      <!-- D1: Defects at Birth & Eyes -->
+      <div class="card">
+        <div class="card-title">
+          <span>D1: जन्मजात विकार व नेत्र संरेखण</span>
+          <span style="font-size: 0.72rem; color: var(--blue);">Hirschberg AI</span>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+          <label style="font-size: 0.78rem; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" id="chkCleft"> कटा होंठ / तालु (Cleft)
+          </label>
+          <label style="font-size: 0.78rem; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" id="chkClubfoot"> मुड़ा पैर (Clubfoot)
+          </label>
+          <label style="font-size: 0.78rem; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" id="chkCataract"> मोतियाबिंद / श्वेत पुतली
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            हर्षबर्ग कॉर्नियल रिफ्लेक्स विस्थापन (Hirschberg CLR): <b id="valHirschberg" style="color: var(--accent);">0.0 mm (सामान्य)</b>
+          </label>
+          <input type="range" id="sliderHirschberg" min="0" max="3.0" step="0.2" value="0" class="form-input" style="padding: 0;">
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+            प्रिज़्म डायोप्टर: <span id="valPrismDiopter">0.0 Δ</span> • अंतर: <span id="valStrabismusType" style="color: var(--green);">सामान्य नेत्र संरेखण</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- D2: Deficiencies (Growth & Mucosal Pallor) -->
+      <div class="card">
+        <div class="card-title">
+          <span>D2: कमियां व पोषण (Growth & Pallor AI)</span>
+          <span style="font-size: 0.72rem; color: var(--green);">WHO LMS Z-Scores</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">वजन (kg)</label>
+            <input type="number" id="valWeight" class="form-input" value="9.2" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ऊंचाई (cm)</label>
+            <input type="number" id="valHeight" class="form-input" value="82.0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">MUAC (cm)</label>
+            <input type="number" id="valMuac" class="form-input" value="12.2" step="0.1">
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; font-size: 0.75rem; margin-bottom: 8px;">
+          <span>पोषण स्तर: </span>
+          <b id="valNutritionStatus" style="color: var(--yellow);">MAM (मध्यम कुपोषण) - Z: -2.2 SD</b>
+        </div>
+
+        <div class="form-row" style="align-items: center;">
+          <div class="form-group">
+            <label class="form-label">म्यूकोसल पेलोर (CIELAB a*/L* Anemia)</label>
+            <input type="number" id="valHb" class="form-input" value="9.6" step="0.1" placeholder="Hb g/dL">
+          </div>
+          <div class="form-group" style="margin-top: 18px;">
+            <button type="button" class="btn-secondary" style="padding: 8px; font-size: 0.75rem; width: 100%; border-radius: 6px;" onclick="window.workerApp.simulateLcdOcr()">
+              📟 7-Segment LCD OCR पढ़ें
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- D3: Diseases & D4: Developmental Delays -->
+      <div class="card">
+        <div class="card-title">
+          <span>D3: बाल रोग व D4: विकासात्मक विलंब</span>
+          <span style="font-size: 0.72rem; color: var(--purple);">Edge MobileNetV3</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">त्वचा रोग (Skin Condition AI)</label>
+            <select id="selSkin" class="form-select">
+              <option value="normal" selected>सामान्य (No Lesion)</option>
+              <option value="scabies">खुजली (Scabies)</option>
+              <option value="impetigo">फुंसी/मवाद (Impetigo)</option>
+              <option value="eczema">एक्जिमा (Eczema)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">दंत क्षय / कान रिसाव</label>
+            <div style="margin-top: 6px; font-size: 0.78rem;">
+              <label style="margin-right: 8px;"><input type="checkbox" id="chkCaries"> दंत क्षय (Caries)</label>
+              <label><input type="checkbox" id="chkOtitis"> कान रिसाव (Otitis)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">दैनिक स्क्रीन समय (मोबाइल/टीवी): <b id="valScreenHours">1.5 घंटे</b></label>
+          <input type="range" id="sliderScreen" min="0" max="6" step="0.5" value="1.5" class="form-input" style="padding: 0;">
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+            WHO दिशा-निर्देश: 2 वर्ष से कम = 0 घंटा, 2-5 वर्ष = अधिकतम 1 घंटा।
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Interactive D4 Child Mini-Tests -->
+    <section id="step4" class="step-section">
+      <div class="voice-instruction-banner">
+        <span class="voice-pulse-icon"></span>
+        <span id="voicePromptStep4">अब बच्चे को फोन दें। ई (E) की दिशा बताएं और चमकते सितारे को छूएं।</span>
+      </div>
+
+      <!-- Tumbling-E Visual Acuity Test -->
+      <div class="card">
+        <div class="card-title">
+          <span>👁️ टम्बलिंग-ई दृष्टि परीक्षण (Visual Acuity)</span>
+          <span style="font-size: 0.72rem; color: var(--accent);" id="scoreTumblingE">स्कोर: 0/4</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">
+          बच्चे से पूछें कि 'E' की उंगलियां किधर खुली हैं:
+        </p>
+
+        <div class="test-arena" style="min-height: 140px; padding: 10px;">
+          <div class="tumbling-e-glyph" id="eGlyph">E</div>
+          <div class="direction-buttons-grid">
+            <button class="dir-btn" onclick="window.workerApp.checkTumblingE('up')">⬆️ ऊपर</button>
+            <button class="dir-btn" onclick="window.workerApp.checkTumblingE('right')">➡️ दायें</button>
+            <button class="dir-btn" onclick="window.workerApp.checkTumblingE('down')">⬇️ नीचे</button>
+            <button class="dir-btn" onclick="window.workerApp.checkTumblingE('left')">⬅️ बायें</button>
+          </div>
+        </div>
+        <div style="margin-top: 6px; font-size: 0.75rem; text-align: center;">
+          अनुमानित दृष्टि: <b id="valAcuity" style="color: var(--green);">20/30 (सामान्य)</b>
+        </div>
+      </div>
+
+      <!-- Tap-the-Target Attention & Motor Latency Test -->
+      <div class="card">
+        <div class="card-title">
+          <span>⭐ ध्यान व प्रतिक्रिया गति (Attention & Motor Latency)</span>
+          <span style="font-size: 0.72rem; color: var(--green);" id="tapScore">टैप: 0/5</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">
+          स्क्रीन पर चमकते तारे को छूने को कहें (प्रतिक्रिया समय की गणना):
+        </p>
+
+        <div class="test-arena" id="tapArena" style="height: 180px; overflow: hidden; cursor: crosshair;">
+          <div class="target-ball" id="targetBall" style="display: none;" onclick="window.workerApp.onTargetTapped()">⭐</div>
+          <div id="tapInstructions" style="color: #94a3b8; font-size: 0.85rem;">
+            परीक्षण शुरू करने के लिए 'शुरू करें' दबाएं
+          </div>
+        </div>
+
+        <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+          <button class="btn-primary" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 6px;" onclick="window.workerApp.startTapTest()">
+            ▶️ टेस्ट शुरू करें
+          </button>
+          <div style="font-size: 0.75rem;">
+            प्रतिक्रिया समय: <b id="valLatency" style="color: var(--green);">420 ms (तीव्र)</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialect-Invariant Acoustic Speech Test -->
+      <div class="card">
+        <div class="card-title">
+          <span>🗣️ भाषा व स्वर बायोमार्कर (Acoustic Speech AI)</span>
+          <span style="font-size: 0.72rem; color: var(--blue);">Zero-Cloud Dialect AI</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">
+          बच्चे को कोई कहानी सुनाने या बोलने को कहें (ऊर्जा शिखर व ध्वनि अनुपात):
+        </p>
+
+        <div class="speech-visualizer" id="speechVisualizer">
+          <div class="sound-bar" style="height: 15px;"></div>
+          <div class="sound-bar" style="height: 30px;"></div>
+          <div class="sound-bar" style="height: 45px;"></div>
+          <div class="sound-bar" style="height: 20px;"></div>
+          <div class="sound-bar" style="height: 38px;"></div>
+          <div class="sound-bar" style="height: 25px;"></div>
+          <div class="sound-bar" style="height: 12px;"></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 6px;" onclick="window.workerApp.simulateSpeechCapture()">
+            🎙️ 5-सेकंड आवाज विश्लेषण
+          </button>
+          <div style="font-size: 0.75rem;">
+            स्थिति: <b id="valSpeechStatus" style="color: var(--green);">सामान्य भाषण लय</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: Instant 3-Color Result & Referral QR (UC-3) -->
+    <section id="step5" class="step-section">
+      <div class="voice-instruction-banner">
+        <span class="voice-pulse-icon"></span>
+        <span id="voicePromptStep5">जांच पूरी हुई। अभिभावक को रंग का अर्थ समझाएं व टोकन सौंपें।</span>
+      </div>
+
+      <!-- Result Banner (3-Color Parent UI) -->
+      <div class="result-banner green" id="resultBanner">
+        <div class="result-badge" id="resultBadge">GREEN: सामान्य स्वास्थ्य</div>
+        <div class="result-title" id="resultTitle">बालक स्वस्थ है</div>
+        <div class="result-desc" id="resultDesc">
+          सभी 4D संकेत सामान्य हैं। नियमित टीकाकरण व पोषण जारी रखें।
+        </div>
+      </div>
+
+      <!-- Clinical Routing Lane Details -->
+      <div class="card">
+        <div class="card-title">
+          <span>🏥 स्वास्थ्य प्रणाली रूटिंग (Capacity-Aware Routing)</span>
+          <span style="font-size: 0.72rem; color: var(--accent);">DEIC भार नियंत्रण</span>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">निर्दिष्ट स्वास्थ्य केंद्र (Destination):</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: #fff; margin-top: 2px;" id="valDestinationFacility">
+            आयुष्मान आरोग्य मंदिर / प्राथमिक स्वास्थ्य केंद्र (AAM/PHC)
+          </div>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">क्लिनिकल श्रेणी (Clinical Routing Lane):</div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--green);" id="valClinicalLane">
+            Green: Routine Community Care
+          </div>
+        </div>
+
+        <div id="findingsContainer" style="margin-bottom: 8px;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">पहचाने गए लक्षण (Findings):</div>
+          <div id="findingsPillsList">
+            <span style="font-size: 0.75rem; color: var(--green);">कोई गंभीर असामान्यता नहीं पाई गई।</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Referral QR Token Card -->
+      <div class="card" id="referralQrCard" style="display: none;">
+        <div class="card-title">
+          <span>🎟️ RBSK 2.0 डिजिटल रेफरल टोकन</span>
+          <span style="font-size: 0.72rem; color: var(--green);">HMAC-SHA256 Signed</span>
+        </div>
+
+        <div class="qr-display-container">
+          <img id="referralQrImg" class="qr-image" src="" alt="Referral QR">
+          <div class="qr-caption" id="qrCaptionText">
+            टोकन आईडी: BST-2026-LKO-XXXX<br>
+            <span style="font-size: 0.68rem; color: #64748b;">अस्पताल आगमन पर स्कैन कराएं</span>
+          </div>
+        </div>
+
+        <!-- 1-Tap 102 Ambulance Dispatch Button -->
+        <button class="btn-full btn-102" id="btn102" onclick="window.workerApp.call102Ambulance()">
+          🚑 1-टैप 102 निःशुल्क एम्बुलेंस बुलाएं (Emergency Call)
+        </button>
+
+        <div class="action-row">
+          <button class="btn-full btn-secondary" onclick="window.workerApp.printSlip()">
+            🖨️ पर्ची प्रिंट / सुरक्षित करें
+          </button>
+          <button class="btn-full btn-primary" onclick="window.workerApp.syncToEkavach()">
+            ☁️ e-Kavach में सहेजें
+          </button>
+        </div>
+      </div>
+
+      <!-- ABDM FHIR Stamp -->
+      <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 10px;">
+        🔒 ABDM FHIR R4 Bundle (Profile: <code>ndhm.in#6.5.0</code>) तैयार है।<br>
+        DPDP Act 2023 धारा 9(3) बाल गोपनीयता मानकों के अनुरूप।
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Thumb-Friendly 3-Button Action Bar (UC-1) -->
+  <footer class="thumb-action-bar">
+    <button class="thumb-btn thumb-btn-repeat" id="btnThumbRepeat" onclick="window.workerApp.speakCurrentStep()">
+      <span>दोबारा सुनें</span>
+      <span class="thumb-btn-sub">Repeat Audio</span>
+    </button>
+    <button class="thumb-btn thumb-btn-no" id="btnThumbBack" onclick="window.workerApp.prevStep()">
+      <span>नहीं / पीछे</span>
+      <span class="thumb-btn-sub">Back / No</span>
+    </button>
+    <button class="thumb-btn thumb-btn-yes" id="btnThumbNext" onclick="window.workerApp.nextStep()">
+      <span>हाँ / आगे</span>
+      <span class="thumb-btn-sub">Next / Yes</span>
+    </button>
+  </footer>
+</div>
+
+<script src="/worker/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+
+pytorch2.15.0:ÀŸ
+…
+field_image
+backbone.0.weight
+backbone.0.biasgetitemnode_Conv_36"Conv*
+group *
+pads@@@@ *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ Jê
+	namespaceÜ: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.1: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÎ
+pkg.torch.onnx.class_hierarchy«['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J°
+pkg.torch.onnx.fx_node•%_native_batch_norm_legit_no_training : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d, %p_backbone_1_weight, %p_backbone_1_bias, %b_backbone_1_running_mean, %b_backbone_1_running_var, 0.1, 1e-05), kwargs = {})Jd
+pkg.torch.onnx.name_scopesF['', 'backbone', 'backbone.1', '_native_batch_norm_legit_no_training']J¬
+pkg.torch.onnx.stack_traceFile "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/batchnorm.py", line 210, in forward
+    return F.batch_norm(
+Ù
+getitem
+min_val_cast
+max_val_casthardtanhn4"ClipJ­
+	namespaceŸ: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.2: torch.nn.modules.activation.ReLU6/hardtanh: aten.hardtanh.defaultJ­
+pkg.torch.onnx.class_hierarchyŠ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU6', 'aten.hardtanh.default']J•
+pkg.torch.onnx.fx_node{%hardtanh : [num_users=1] = call_function[target=torch.ops.aten.hardtanh.default](args = (%getitem, 0.0, 6.0), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'backbone', 'backbone.2', 'hardtanh']JÛ
+pkg.torch.onnx.stack_trace¼File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/activation.py", line 294, in forward
+    return F.hardtanh(input, self.min_val, self.max_val, self.inplace)
+Œ
+hardtanh
+backbone.3.weight
+backbone.3.bias	getitem_3node_Conv_37"Conv*
+group *
+pads@@@@ *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ Jì
+	namespaceŞ: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.4: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training_1: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÎ
+pkg.torch.onnx.class_hierarchy«['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J´
+pkg.torch.onnx.fx_node™%_native_batch_norm_legit_no_training_1 : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d_1, %p_backbone_4_weight, %p_backbone_4_bias, %b_backbone_4_running_mean, %b_backbone_4_running_var, 0.1, 1e-05), kwargs = {})Jf
+pkg.torch.onnx.name_scopesH['', 'backbone', 'backbone.4', '_native_batch_norm_legit_no_training_1']J¬
+pkg.torch.onnx.stack_traceFile "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/batchnorm.py", line 210, in forward
+    return F.batch_norm(
+ç
+	getitem_3
+min_val_cast
+max_val_cast
+hardtanh_1n4_2"ClipJ¯
+	namespace¡: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.5: torch.nn.modules.activation.ReLU6/hardtanh_1: aten.hardtanh.defaultJ­
+pkg.torch.onnx.class_hierarchyŠ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU6', 'aten.hardtanh.default']J™
+pkg.torch.onnx.fx_node%hardtanh_1 : [num_users=1] = call_function[target=torch.ops.aten.hardtanh.default](args = (%getitem_3, 0.0, 6.0), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'backbone', 'backbone.5', 'hardtanh_1']JÛ
+pkg.torch.onnx.stack_trace¼File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/activation.py", line 294, in forward
+    return F.hardtanh(input, self.min_val, self.max_val, self.inplace)
+
+
+hardtanh_1
+backbone.6.weight
+backbone.6.bias	getitem_6node_Conv_38"Conv*
+group *
+pads@@@@ *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ Jì
+	namespaceŞ: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.7: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training_2: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÎ
+pkg.torch.onnx.class_hierarchy«['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J´
+pkg.torch.onnx.fx_node™%_native_batch_norm_legit_no_training_2 : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d_2, %p_backbone_7_weight, %p_backbone_7_bias, %b_backbone_7_running_mean, %b_backbone_7_running_var, 0.1, 1e-05), kwargs = {})Jf
+pkg.torch.onnx.name_scopesH['', 'backbone', 'backbone.7', '_native_batch_norm_legit_no_training_2']J¬
+pkg.torch.onnx.stack_traceFile "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/batchnorm.py", line 210, in forward
+    return F.batch_norm(
+ç
+	getitem_6
+min_val_cast
+max_val_cast
+hardtanh_2n4_3"ClipJ¯
+	namespace¡: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.8: torch.nn.modules.activation.ReLU6/hardtanh_2: aten.hardtanh.defaultJ­
+pkg.torch.onnx.class_hierarchyŠ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU6', 'aten.hardtanh.default']J™
+pkg.torch.onnx.fx_node%hardtanh_2 : [num_users=1] = call_function[target=torch.ops.aten.hardtanh.default](args = (%getitem_6, 0.0, 6.0), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'backbone', 'backbone.8', 'hardtanh_2']JÛ
+pkg.torch.onnx.stack_trace¼File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/activation.py", line 294, in forward
+    return F.hardtanh(input, self.min_val, self.max_val, self.inplace)
+”
+
+hardtanh_2
+backbone.9.weight
+backbone.9.bias	getitem_9node_Conv_39"Conv*
+group *
+pads@@@@ *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ Jí
+	namespaceß: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.10: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training_3: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÎ
+pkg.torch.onnx.class_hierarchy«['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J¸
+pkg.torch.onnx.fx_node%_native_batch_norm_legit_no_training_3 : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d_3, %p_backbone_10_weight, %p_backbone_10_bias, %b_backbone_10_running_mean, %b_backbone_10_running_var, 0.1, 1e-05), kwargs = {})Jg
+pkg.torch.onnx.name_scopesI['', 'backbone', 'backbone.10', '_native_batch_norm_legit_no_training_3']J¬
+pkg.torch.onnx.stack_traceFile "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/batchnorm.py", line 210, in forward
+    return F.batch_norm(
+é
+	getitem_9
+min_val_cast
+max_val_cast
+hardtanh_3n4_4"ClipJ°
+	namespace¢: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.11: torch.nn.modules.activation.ReLU6/hardtanh_3: aten.hardtanh.defaultJ­
+pkg.torch.onnx.class_hierarchyŠ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU6', 'aten.hardtanh.default']J™
+pkg.torch.onnx.fx_node%hardtanh_3 : [num_users=1] = call_function[target=torch.ops.aten.hardtanh.default](args = (%getitem_9, 0.0, 6.0), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'backbone', 'backbone.11', 'hardtanh_3']JÛ
+pkg.torch.onnx.stack_trace¼File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/activation.py", line 294, in forward
+    return F.hardtanh(input, self.min_val, self.max_val, self.inplace)
+î	
+
+hardtanh_3
+backbone.12.weight
+backbone.12.biasconv2d_4node_conv2d_4"Conv*
+group *
+pads@ @ @ @  *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ J§
+	namespace™: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.12: torch.nn.modules.conv.Conv2d/conv2d_4: aten.conv2d.defaultJ¦
+pkg.torch.onnx.class_hierarchyƒ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.conv.Conv2d', 'aten.conv2d.default']J¹
+pkg.torch.onnx.fx_node%conv2d_4 : [num_users=1] = call_function[target=torch.ops.aten.conv2d.default](args = (%hardtanh_3, %p_backbone_12_weight, %p_backbone_12_bias), kwargs = {})JI
+pkg.torch.onnx.name_scopes+['', 'backbone', 'backbone.12', 'conv2d_4']JË
+pkg.torch.onnx.stack_trace¬File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+ç
+conv2d_4
+min_val_cast
+max_val_cast
+hardtanh_4n4_5"ClipJ°
+	namespace¢: __main__.FieldLCDCariesDetector/backbone: torch.nn.modules.container.Sequential/backbone.13: torch.nn.modules.activation.ReLU6/hardtanh_4: aten.hardtanh.defaultJ­
+pkg.torch.onnx.class_hierarchyŠ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU6', 'aten.hardtanh.default']J˜
+pkg.torch.onnx.fx_node~%hardtanh_4 : [num_users=1] = call_function[target=torch.ops.aten.hardtanh.default](args = (%conv2d_4, 0.0, 6.0), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'backbone', 'backbone.13', 'hardtanh_4']JÛ
+pkg.torch.onnx.stack_trace¼File "/Users/riyansh/upgovhack/models/export_models.py", line 86, in forward
+    feat = self.backbone(x)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/container.py", line 259, in forward
+    input = module(input)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/activation.py", line 294, in forward
+    return F.hardtanh(input, self.min_val, self.max_val, self.inplace)
+ñ
+
+hardtanh_4
+pred_head.weight
+pred_head.biasdetection_gridnode_conv2d_5"Conv*
+group *
+pads@ @ @ @  *
+kernel_shape@@ *
+strides@@ *
+auto_pad"NOTSET *
+	dilations@@ Jt
+	namespaceg: __main__.FieldLCDCariesDetector/pred_head: torch.nn.modules.conv.Conv2d/conv2d_5: aten.conv2d.defaultJ|
+pkg.torch.onnx.class_hierarchyZ['__main__.FieldLCDCariesDetector', 'torch.nn.modules.conv.Conv2d', 'aten.conv2d.default']Jµ
+pkg.torch.onnx.fx_nodeš%conv2d_5 : [num_users=1] = call_function[target=torch.ops.aten.conv2d.default](args = (%hardtanh_4, %p_pred_head_weight, %p_pred_head_bias), kwargs = {})J;
+pkg.torch.onnx.name_scopes['', 'pred_head', 'conv2d_5']J½
+pkg.torch.onnx.stack_traceFile "/Users/riyansh/upgovhack/models/export_models.py", line 87, in forward
+    preds = self.pred_head(feat)
+  File "/Users/riyansh/upgovhack/.venv/lib/python3.14/site-packages/torch/nn/modules/conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+main_graph*mBbackbone.0.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset0j
+length1728p*WBbackbone.0.biasJ@Y” ½Y¨ß½ğ—:>ğõ<o>¬p>§å=ÓC>ÙS¡½©àG=p‰½>¨¾V\¾I.]½ÇEİ½Á«)¾*˜ Bbackbone.3.biasJ€°g˜=Ûz½ÍŒ =1/ˆ=Š"%½$Àb=[)½ª=wˆ½·×¦=|½P*<ì¿x½â\=éú&<Qı™½7½üÉ›½
+.è<t0‹=nñ‰¼â=F½æjª=Íƒ=&"=ŒM¿¼eV„¼€UC=¬c½¬ƒ1½ >K=*˜@Bbackbone.6.biasJ€ÛŠf½•(=ÎS°¼6Cn=×“W=C<®Ñ<şTk½É5=Ì¶-=Å÷µ<ùP¼iäâ»àí>½²pÀ¼k»ĞtE=¸šh=¯È <p†¼ó&Õ<Øé­<Šâ0=Œ“<äV<wFú<¾/Ğ</Q½Ø(½Yx¹<ït¬;ñIk<Bğl==NtÔ<˜¦<Õo'¼Bw¹¼’¸M½Dpœ¼uŸK½°¤j<k~<Ã':˜İ8=ù¡\=VCb<\ÏP½7h´¹;½©-í»5/İ<¬8Á¼˜s>»ºx±¼íŠ:<{Ô	<oùX;–´¾;UÉ=#Nå<ë•;ŞN=ci:*h€Bbackbone.9.biasj/
+location#field_lcd_caries_detector.onnx.dataj
+offset1728j
+length512p*™@Bbackbone.12.biasJ€¢£=Õ½_C±=&ŒH¼zN¼è§=œ\¤=7£§=¯»*:œ‚¡¼]§=‚â®½K®=î˜…=˜›½ô]Y=1½œá@½Š<L»ñB‰½àZÔ¼õÑ·:`Ç¤=8.é¼ŠQJ¼e	½^®½·£h<P©=fMé< |Y=+<ld‘<–¼	½Ë&½³.w½ß=”H‰¼¯1½_)»»Öi½ÿUq¼\hù¼=Hÿõ:˜ª½Ìn½œ½&XÒ¼*Áv=s°†½,ğ$<LD=ZfU½—˜=İü<@¼ø=°g—=—k1ºÙ¼£^õ<iÊü7*o@Bpred_head.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset2240j
+length2048p*6Bpred_head.biasJ BéÄ½ ”p=º@ª=Ş3·½ĞÁ•½Öòõ½X©˜¼<Ô=*q Bbackbone.3.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset4288j
+length18432p*r@ Bbackbone.6.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset22720j
+length73728p*t€@Bbackbone.9.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset96448j
+length294912p*u@€Bbackbone.12.weightj/
+location#field_lcd_caries_detector.onnx.dataj
+offset391360j
+length32768p*Bmin_val_castJ    *Bmax_val_castJ  À@Z×
+field_image"
+ 
+
+batch_size
+
+À
+À"=
+/pkg.torch.export.graph_signature.InputSpec.kind
+USER_INPUT"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"&
+!pkg.torch.onnx.original_node_namexb¢
+detection_grid 
+
+
+batch_size
+
+
+"?
+0pkg.torch.export.graph_signature.OutputSpec.kindUSER_OUTPUT"-
+!pkg.torch.onnx.original_node_nameconv2d_5j+
+backbone.0.weight
+
+
+
+
+j
+backbone.0.bias
+
+
+j
+backbone.3.bias
+
+
+ j
+backbone.6.bias
+
+
+@j
+backbone.9.bias
+	
+€jÔ
+backbone.12.bias
+
+
+@"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"7
+!pkg.torch.onnx.original_node_namep_backbone_12_biasjà
+pred_head.weight
+
+
+@
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"7
+!pkg.torch.onnx.original_node_namep_pred_head_weightjĞ
+pred_head.bias
+
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"5
+!pkg.torch.onnx.original_node_namep_pred_head_biasj+
+backbone.3.weight
+
+ 
+
+
+j+
+backbone.6.weight
+
+@
+ 
+
+j,
+backbone.9.weight
+
+€
+@
+
+jå
+backbone.12.weight
+
+@
+€
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"9
+!pkg.torch.onnx.original_node_namep_backbone_12_weightjK
+min_val_cast
+ "3
+$pkg.onnxscript.optimizer.folded_from['min_val']jK
+max_val_cast
+ "3
+$pkg.onnxscript.optimizer.folded_from['max_val']j-
+getitem"
+ 
+
+batch_size
+
+ 
+ j.
+hardtanh"
+ 
+
+batch_size
+
+ 
+ j-
+	getitem_3 
+
+
+batch_size
+ 
+P
+Pj.
+
+hardtanh_1 
+
+
+batch_size
+ 
+P
+Pj-
+	getitem_6 
+
+
+batch_size
+@
+(
+(j.
+
+hardtanh_2 
+
+
+batch_size
+@
+(
+(j.
+	getitem_9!
+
+
+batch_size
+€
+
+j/
+
+hardtanh_3!
+
+
+batch_size
+€
+
+j,
+conv2d_4 
+
+
+batch_size
+@
+
+j.
+
+hardtanh_4 
+
+
+batch_size
+@
+
+‚ì
+0pkg.torch.export.ExportedProgram.graph_signature·
+# inputs
+p_backbone_0_weight: PARAMETER target='backbone.0.weight'
+p_backbone_0_bias: PARAMETER target='backbone.0.bias'
+p_backbone_1_weight: PARAMETER target='backbone.1.weight'
+p_backbone_1_bias: PARAMETER target='backbone.1.bias'
+p_backbone_3_weight: PARAMETER target='backbone.3.weight'
+p_backbone_3_bias: PARAMETER target='backbone.3.bias'
+p_backbone_4_weight: PARAMETER target='backbone.4.weight'
+p_backbone_4_bias: PARAMETER target='backbone.4.bias'
+p_backbone_6_weight: PARAMETER target='backbone.6.weight'
+p_backbone_6_bias: PARAMETER target='backbone.6.bias'
+p_backbone_7_weight: PARAMETER target='backbone.7.weight'
+p_backbone_7_bias: PARAMETER target='backbone.7.bias'
+p_backbone_9_weight: PARAMETER target='backbone.9.weight'
+p_backbone_9_bias: PARAMETER target='backbone.9.bias'
+p_backbone_10_weight: PARAMETER target='backbone.10.weight'
+p_backbone_10_bias: PARAMETER target='backbone.10.bias'
+p_backbone_12_weight: PARAMETER target='backbone.12.weight'
+p_backbone_12_bias: PARAMETER target='backbone.12.bias'
+p_pred_head_weight: PARAMETER target='pred_head.weight'
+p_pred_head_bias: PARAMETER target='pred_head.bias'
+b_backbone_1_running_mean: BUFFER target='backbone.1.running_mean' persistent=True
+b_backbone_1_running_var: BUFFER target='backbone.1.running_var' persistent=True
+b_backbone_1_num_batches_tracked: BUFFER target='backbone.1.num_batches_tracked' persistent=True
+b_backbone_4_running_mean: BUFFER target='backbone.4.running_mean' persistent=True
+b_backbone_4_running_var: BUFFER target='backbone.4.running_var' persistent=True
+b_backbone_4_num_batches_tracked: BUFFER target='backbone.4.num_batches_tracked' persistent=True
+b_backbone_7_running_mean: BUFFER target='backbone.7.running_mean' persistent=True
+b_backbone_7_running_var: BUFFER target='backbone.7.running_var' persistent=True
+b_backbone_7_num_batches_tracked: BUFFER target='backbone.7.num_batches_tracked' persistent=True
+b_backbone_10_running_mean: BUFFER target='backbone.10.running_mean' persistent=True
+b_backbone_10_running_var: BUFFER target='backbone.10.running_var' persistent=True
+b_backbone_10_num_batches_tracked: BUFFER target='backbone.10.num_batches_tracked' persistent=True
+x: USER_INPUT
+
+# outputs
+conv2d_5: USER_OUTPUT
+‚J
+2pkg.torch.export.ExportedProgram.range_constraints{s77: VR[0, int_oo]}B
+ 

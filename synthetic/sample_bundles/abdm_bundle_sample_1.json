@@ -1,0 +1,417 @@
+{
+  "resourceType": "Bundle",
+  "id": "bundle-4f7b7d33-19cd-4cd0-aa96-29295b54aea8",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2026-11-23T18:53:12.209352+00:00",
+    "profile": [
+      "https://nrces.in/ndhm/fhir/r4/StructureDefinition/DocumentBundle"
+    ]
+  },
+  "identifier": {
+    "system": "https://rbsk.up.gov.in/fhir/bundles",
+    "value": "bundle-4f7b7d33-19cd-4cd0-aa96-29295b54aea8"
+  },
+  "type": "document",
+  "timestamp": "2026-11-23T18:53:12.209352+00:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:comp-cf528fa6-9afb-4e43-ab91-00466f132d7d",
+      "resource": {
+        "resourceType": "Composition",
+        "id": "comp-cf528fa6-9afb-4e43-ab91-00466f132d7d",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Composition"
+          ]
+        },
+        "status": "final",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8652-3",
+              "display": "Hospital Consultation Note"
+            }
+          ],
+          "text": "Bal-Setu RBSK 2.0 Screening and Care Orchestration Summary"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "date": "2026-11-23T18:53:12.209352+00:00",
+        "author": [
+          {
+            "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+          }
+        ],
+        "title": "Pediatric 4D Screening Record (बाल-सेतु)",
+        "custodian": {
+          "reference": "Organization/org-nhm-up"
+        },
+        "section": [
+          {
+            "title": "Screening Results and Clinical Triage",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "11450-4",
+                  "display": "Problem list - Reported"
+                }
+              ]
+            },
+            "entry": [
+              {
+                "reference": "Observation/obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66"
+              },
+              {
+                "reference": "Observation/obs-fd161039-fdc6-4851-8eb9-7051fe72953c"
+              },
+              {
+                "reference": "Observation/obs-2e5a2d70-201d-499e-bfcb-13837db648cc"
+              },
+              {
+                "reference": "Observation/obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7"
+              },
+              {
+                "reference": "ServiceRequest/sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pat-UP-LUC-00001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-UP-LUC-00001",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Patient"
+          ]
+        },
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ]
+            },
+            "system": "https://healthid.ndhm.gov.in",
+            "value": "91-3861-XXXX-XXXX"
+          }
+        ],
+        "gender": "male",
+        "address": [
+          {
+            "use": "home",
+            "state": "Uttar Pradesh",
+            "district": "Lucknow",
+            "city": "Sarojini Nagar",
+            "extension": [
+              {
+                "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/LGDCode",
+                "valueInteger": 157
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:prac-ASHA-UP-LKO-4421",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "prac-ASHA-UP-LKO-4421",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Practitioner"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://uphealth.up.gov.in/frontline-registry",
+            "value": "ASHA-UP-LKO-4421"
+          }
+        ],
+        "name": [
+          {
+            "text": "Frontline Health Screener (ASHA / MHT)"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:org-nhm-up",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "org-nhm-up",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Organization"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://nhm.up.gov.in",
+            "value": "NHM-UP-RBSK"
+          }
+        ],
+        "name": "National Health Mission - Uttar Pradesh (RBSK 2.0 Directorate)"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-4d-7a15f725-6aac-4b33-9a11-a40493a51d66",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "exam",
+                "display": "Exam"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "410605003",
+              "display": "Screening procedure (procedure)"
+            }
+          ],
+          "text": "RBSK 2.0 4D Comprehensive Child Health Screening"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+        "performer": [
+          {
+            "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+          }
+        ],
+        "valueString": "Overall: Red | Clinical Lane: Primary Red (AAM/CHC/NRC)",
+        "component": [
+          {
+            "code": {
+              "text": "D1 Defects at Birth"
+            },
+            "valueString": "Green"
+          },
+          {
+            "code": {
+              "text": "D2 Deficiencies"
+            },
+            "valueString": "Red"
+          },
+          {
+            "code": {
+              "text": "D3 Diseases"
+            },
+            "valueString": "Red"
+          },
+          {
+            "code": {
+              "text": "D4 Developmental Delays"
+            },
+            "valueString": "Green"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-fd161039-fdc6-4851-8eb9-7051fe72953c",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-fd161039-fdc6-4851-8eb9-7051fe72953c",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+          ]
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "410605003",
+              "display": "Severe Anaemia"
+            }
+          ],
+          "text": "Deficiencies: Severe Anaemia"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+        "valueString": "गंभीर एनीमिया (Hb: 5.6 g/dL < 7.0)। तत्काल सामुदायिक स्वास्थ्य केंद्र या जिला अस्पताल ले जाएं।",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "A",
+                "display": "Abnormal"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-2e5a2d70-201d-499e-bfcb-13837db648cc",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-2e5a2d70-201d-499e-bfcb-13837db648cc",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+          ]
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "410605003",
+              "display": "Dental Caries"
+            }
+          ],
+          "text": "Diseases: Dental Caries"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+        "valueString": "दांतों में सड़न या कीड़ा लगना (Dark intraoral caries lesions)",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "A",
+                "display": "Abnormal"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-b1c08536-23e6-4886-a1f7-e5e0856d31c7",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Observation"
+          ]
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "410605003",
+              "display": "Otitis Media (Ear Discharge)"
+            }
+          ],
+          "text": "Diseases: Otitis Media (Ear Discharge)"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "effectiveDateTime": "2026-11-23T18:53:12.209352+00:00",
+        "valueString": "कान से मवाद या पानी बहना (Otitis media discharge)",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "A",
+                "display": "Abnormal"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3",
+      "resource": {
+        "resourceType": "ServiceRequest",
+        "id": "sr-e8e63371-c9a4-4a98-a4dc-4f6c660634f3",
+        "meta": {
+          "profile": [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/ServiceRequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "306206005",
+                "display": "Referral to service"
+              }
+            ]
+          }
+        ],
+        "priority": "routine",
+        "code": {
+          "text": "RBSK Referral to Ayushman Arogya Mandir (AAM) / NRC / CHC"
+        },
+        "subject": {
+          "reference": "Patient/pat-UP-LUC-00001"
+        },
+        "requester": {
+          "reference": "Practitioner/prac-ASHA-UP-LKO-4421"
+        },
+        "performer": [
+          {
+            "display": "Ayushman Arogya Mandir (AAM) / NRC / CHC"
+          }
+        ],
+        "authoredOn": "2026-11-23T18:53:12.209352+00:00",
+        "reasonCode": [
+          {
+            "text": "Severe Anaemia"
+          },
+          {
+            "text": "Dental Caries"
+          },
+          {
+            "text": "Otitis Media (Ear Discharge)"
+          }
+        ],
+        "note": [
+          {
+            "text": "Ambulance 102 Required: False"
+          },
+          {
+            "text": "Tele-verification: False"
+          }
+        ]
+      }
+    }
+  ]
+}

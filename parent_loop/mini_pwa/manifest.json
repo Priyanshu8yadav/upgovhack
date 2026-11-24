@@ -1,0 +1,16 @@
+{
+  "short_name": "BalSetu",
+  "name": "बाल-सेतु | Bal-Setu Parent Companion",
+  "icons": [
+    {
+      "src": "../../calibcard/calibcard_front.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#0F766E",
+  "theme_color": "#0D9488",
+  "display": "standalone",
+  "orientation": "portrait"
+}

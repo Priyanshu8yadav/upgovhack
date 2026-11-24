@@ -1,0 +1,22 @@
+{
+  "name": "Bal-Setu Frontline Worker Screener (बाल-सेतु)",
+  "short_name": "Bal-Setu Screener",
+  "description": "Offline-First Edge-AI 4D Child Screening App for ASHA, ANM, and RBSK MHTs in Uttar Pradesh",
+  "start_url": "/worker/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/calibcard-assets/calibcard_front.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/calibcard-assets/calibcard_front.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

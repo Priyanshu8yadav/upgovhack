@@ -1,0 +1,13 @@
+{
+  "alpha": 0.1,
+  "target_coverage_pct": 90.0,
+  "calibration_sample_size": 500,
+  "q_hat": 0.9573,
+  "calibrated_classes": [
+    "Normal",
+    "Mild Delay / Borderline",
+    "Primary Acute",
+    "Complex Specialty"
+  ],
+  "calibration_date": "2026-11-24"
+}

@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 85.6 53.98" width="85.6mm" height="53.98mm">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: bold; font-size: 2.0px; fill: #1E293B; }
+      .sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 1.4px; fill: #475569; }
+      .hindi { font-family: "Noto Sans Devanagari", "Kohinoor Devanagari", sans-serif; font-weight: bold; font-size: 1.8px; fill: #0F172A; }
+      .micro { font-family: monospace; font-size: 1.1px; fill: #64748B; }
+      .pattern-label { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: bold; font-size: 1.5px; fill: #2563EB; }
+    </style>
+  </defs>
+
+  <!-- Card Body -->
+  <rect x="0" y="0" width="85.6" height="53.98" rx="3.0" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="0.5" />
+
+  <!-- ArUco Corner Markers -->
+  <!-- ID 0: Top-Left -->
+  <g id="aruco-0">
+    <rect x="3.00" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="11.33" width="1.67" height="1.67" fill="#000000" />
+  </g>
+  <!-- ID 1: Top-Right -->
+  <g id="aruco-1">
+    <rect x="72.60" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="3.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="4.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="6.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="8.00" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="9.67" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="11.33" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="11.33" width="1.67" height="1.67" fill="#000000" />
+  </g>
+  <!-- ID 2: Bottom-Right -->
+  <g id="aruco-2">
+    <rect x="72.60" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="72.60" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="74.27" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="75.93" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="77.60" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="79.27" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="80.93" y="49.31" width="1.67" height="1.67" fill="#000000" />
+  </g>
+  <!-- ID 3: Bottom-Left -->
+  <g id="aruco-3">
+    <rect x="3.00" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="40.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="42.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="44.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="45.98" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="47.65" width="1.67" height="1.67" fill="#000000" />
+      <rect x="3.00" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="4.67" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="6.33" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="8.00" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="9.67" y="49.31" width="1.67" height="1.67" fill="#000000" />
+      <rect x="11.33" y="49.31" width="1.67" height="1.67" fill="#000000" />
+  </g>
+
+  <!-- Header Banner -->
+  <text x="16" y="5.8" class="hindi">बाल-सेतु | फाइन-मोटर ट्रेसिंग कार्ड (Fine-Motor Template)</text>
+  <text x="16" y="8.0" class="sub">UC-5 Daily Home Activity & Frontline Assessment • Ages 3-6</text>
+  <text x="16" y="10.0" class="micro">Pencil Trace → Phone Snap → On-Device Homography & Hausdorff Evaluation</text>
+
+  <!-- Pattern 1: Circle (Ages 3-4, Diameter 18 mm) -->
+  <g id="pattern-circle" transform="translate(23, 27)">
+    <rect x="-8.5" y="-14" width="17" height="27" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.3" rx="1.0" />
+    <text x="0" y="-10.5" text-anchor="middle" class="pattern-label">1. वृत्त (Circle)</text>
+    <text x="0" y="-8.5" text-anchor="middle" class="micro">Age 3-4 yrs</text>
+    <!-- Start arrow & dot -->
+    <circle cx="0" cy="-6" r="0.6" fill="#16A34A" />
+    <circle cx="0" cy="3" r="6.0" fill="none" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="1.2, 0.8" />
+    <text x="0" y="11.5" text-anchor="middle" class="micro">Ø 12mm</text>
+  </g>
+
+  <!-- Pattern 2: Cross (Ages 4-5, 14 mm x 14 mm) -->
+  <g id="pattern-cross" transform="translate(42.8, 27)">
+    <rect x="-8.5" y="-14" width="17" height="27" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.3" rx="1.0" />
+    <text x="0" y="-10.5" text-anchor="middle" class="pattern-label">2. धन (Cross)</text>
+    <text x="0" y="-8.5" text-anchor="middle" class="micro">Age 4-5 yrs</text>
+    <!-- Vertical line -->
+    <line x1="0" y1="-3" x2="0" y2="9" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="1.2, 0.8" />
+    <!-- Horizontal line -->
+    <line x1="-6" y1="3" x2="6" y2="3" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="1.2, 0.8" />
+    <!-- Green start points -->
+    <circle cx="0" cy="-3" r="0.6" fill="#16A34A" />
+    <circle cx="-6" cy="3" r="0.6" fill="#16A34A" />
+    <text x="0" y="11.5" text-anchor="middle" class="micro">12×12mm</text>
+  </g>
+
+  <!-- Pattern 3: Zigzag Wave (Ages 5-6, Span 18 mm) -->
+  <g id="pattern-zigzag" transform="translate(62.6, 27)">
+    <rect x="-8.5" y="-14" width="17" height="27" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.3" rx="1.0" />
+    <text x="0" y="-10.5" text-anchor="middle" class="pattern-label">3. तरंग (Zigzag)</text>
+    <text x="0" y="-8.5" text-anchor="middle" class="micro">Age 5-6 yrs</text>
+    <!-- Zigzag Path -->
+    <path d="M -6 5 L -3 1 L 0 5 L 3 1 L 6 5" fill="none" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="1.2, 0.8" />
+    <!-- Green start dot -->
+    <circle cx="-6" cy="5" r="0.6" fill="#16A34A" />
+    <text x="0" y="11.5" text-anchor="middle" class="micro">4 peaks / 12mm</text>
+  </g>
+
+  <!-- Footer Instructions -->
+  <g id="instructions" transform="translate(16, 44.5)">
+    <text x="0" y="2.0" class="hindi">निर्देश: पेंसिल से बिंदुकृत रेखाओं पर फेरें। फोन से फोटो खींचें।</text>
+    <text x="0" y="4.5" class="sub">Rule: Follow dotted lines with pencil. Offline AI measures deviation &amp; tremor score.</text>
+  </g>
+</svg>
