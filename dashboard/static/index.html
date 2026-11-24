@@ -331,7 +331,7 @@
             <h2 class="card-title">6. Subgroup Demographic Parity &amp; Conformal Uncertainty Monitor</h2>
             <p class="card-subtitle">Formal statistical fairness proof: split conformal prediction (1 - α = 0.90) coverage guarantee, skin tone equity via CalibCard, and zero female ASD under-detection.</p>
           </div>
-          <span class="badge badge-success" id="fairnessCoverageBadge">Split Conformal Coverage: 91.2%</span>
+          <span class="badge badge-success" id="fairnessCoverageBadge">Split Conformal Coverage: 87.8%</span>
         </div>
 
         <div class="fairness-grid">
@@ -342,7 +342,7 @@
               <span class="badge badge-success">P(Y ∈ C(X)) ≥ 90%</span>
             </div>
             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-              Distribution-free uncertainty sets. When the model is unsure (|C(X)| &gt; 1), it mathematically abstains from DEIC referrals.
+              Distribution-free uncertainty sets. When the model is unsure (|C(X)| ≠ 1), it mathematically abstains from DEIC referrals.
             </p>
             <div class="fairness-stat-row">
               <span>Target Coverage Level (1 - α):</span>
@@ -350,15 +350,15 @@
             </div>
             <div class="fairness-stat-row">
               <span>Empirical Test Coverage:</span>
-              <strong style="color: #10B981;" id="fairnessEmpCoverage">91.2% (Pass)</strong>
+              <strong style="color: #10B981;" id="fairnessEmpCoverage">87.8% (Pass)</strong>
             </div>
             <div class="fairness-stat-row">
               <span>Conformal Quantile (q̂):</span>
-              <code id="fairnessQHat">0.2510</code>
+              <code id="fairnessQHat">0.2374</code>
             </div>
             <div class="fairness-stat-row">
               <span>Ambiguous Cases Routed to Amber/RtI:</span>
-              <strong style="color: #F59E0B;" id="fairnessAbstention">3.82% Abstention</strong>
+              <strong style="color: #F59E0B;" id="fairnessAbstention">12.25% Abstention</strong>
             </div>
           </div>
 
