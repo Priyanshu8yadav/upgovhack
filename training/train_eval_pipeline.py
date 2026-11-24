@@ -143,7 +143,7 @@ def run_empirical_validation():
             pallor = outs[1]
             for j in range(len(cur_batch)):
                 idx = b_start + j
-                lg = logits[j] / 4.8  # Temperature scaling for calibrated conformal probabilities
+                lg = logits[j] / 4.86  # Temperature scaling (T=4.86 calibrated on calibration split per Guo et al. 2017)
                 exp_lg = np.exp(lg - np.max(lg))
                 y_prob_skin[idx] = exp_lg / np.sum(exp_lg)
                 hb_pred[idx] = float(pallor[j, 2])
@@ -347,9 +347,8 @@ def run_empirical_validation():
     syllable_rate_mae = float(np.mean(np.abs(y_speech_tgt[:, 0] - speech_preds[:, 0])))
     pitch_f0_var_mae = float(np.mean(np.abs(y_speech_tgt[:, 2] - speech_preds[:, 2])))
 
-    # Dynamic thresholding based on class medians
-    delayed_mask = (np.array(speech_delayed_labels) == 1)
-    speech_thresh = float((np.median(speech_preds[~delayed_mask, 3]) + np.median(speech_preds[delayed_mask, 3])) / 2.0)
+    # Fixed pre-declared clinical cutoff threshold (matching core/speech_biomarkers.py, zero test-set data leakage)
+    speech_thresh = 50.0
     pred_delay_flags = (speech_preds[:, 3] > speech_thresh).astype(int)
     speech_accuracy = float(np.mean(pred_delay_flags == np.array(speech_delayed_labels)))
     speech_auc = compute_roc_auc(speech_delayed_labels, speech_preds[:, 3])
@@ -412,9 +411,8 @@ def run_empirical_validation():
     corr_sym = float(np.corrcoef(y_true_sym, y_pred_sym)[0, 1])
     gait_symmetry_r2 = float(np.clip(corr_sym ** 2, 0.0, 1.0))
 
-    # Dynamic thresholding based on class medians
-    motor_delayed_mask = (np.array(motor_delayed_labels) == 1)
-    motor_thresh = float((np.median(motor_preds[~motor_delayed_mask, 3]) + np.median(motor_preds[motor_delayed_mask, 3])) / 2.0)
+    # Fixed pre-declared clinical cutoff threshold (matching core/motor_kinematics.py, zero test-set data leakage)
+    motor_thresh = 0.50
     motor_accuracy = float(np.mean((motor_preds[:, 3] > motor_thresh) == np.array(motor_delayed_labels)))
     balance_sway_auc = compute_roc_auc(motor_delayed_labels, motor_preds[:, 3])
 
@@ -439,9 +437,9 @@ def run_empirical_validation():
     cal_scores = 1.0 - cal_probs[np.arange(n_cal), cal_labels]
     test_scores = 1.0 - test_probs[np.arange(len(test_labels)), test_labels]
 
-    # Vovk finite-sample conformal quantile: k = ceil((n + 1) * (1 - alpha))
-    p_level = min(1.0, float(np.ceil((n_cal + 1) * (1.0 - alpha)) / n_cal) + 0.035)
-    q_hat = round(float(np.quantile(cal_scores, p_level)), 4)
+    # Vovk finite-sample conformal quantile: k = ceil((n_cal + 1) * (1 - alpha)) / n_cal
+    p_level = min(1.0, float(np.ceil((n_cal + 1) * (1.0 - alpha)) / n_cal))
+    q_hat = round(float(np.quantile(cal_scores, p_level, method="higher")), 4)
 
     # Test empirical coverage on held-out test split
     covered = (test_scores <= q_hat)
@@ -450,7 +448,8 @@ def run_empirical_validation():
     # Multi-class prediction sets: C(x) = {c: hat_p(c|x) >= 1 - q_hat}
     pred_sets = (test_probs >= (1.0 - q_hat))
     set_sizes = np.sum(pred_sets, axis=1)
-    abstention_rate = round(float(np.mean(set_sizes > 1) * 100.0), 2)
+    # Mathematical abstention on both empty sets |C(X)| = 0 and multi-class ambiguous sets |C(X)| > 1
+    abstention_rate = round(float(np.mean(set_sizes != 1) * 100.0), 2)
 
     # Demographic Subgroup Parity (Fitzpatrick IV: tone >= 0.55 vs V/VI: tone < 0.55)
     mask_iv = (test_tones >= 0.55)

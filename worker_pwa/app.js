@@ -665,17 +665,30 @@ class BalSetuWorkerApp {
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioCtxClass();
       const source = audioCtx.createMediaStreamSource(stream);
       const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 256;
+      analyser.fftSize = 512;
       source.connect(analyser);
 
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-      const timeData = new Float32Array(analyser.fftSize);
+      // Continuous 16kHz PCM audio buffer capture via ScriptProcessor (downsampling to 16kHz)
       const pcmBuffer = new Float32Array(16000);
       let pcmOffset = 0;
+      const sampleRateRatio = audioCtx.sampleRate / 16000.0;
 
+      const scriptNode = (audioCtx.createScriptProcessor || audioCtx.createJavaScriptNode).call(audioCtx, 2048, 1, 1);
+      scriptNode.onaudioprocess = (e) => {
+        const input = e.inputBuffer.getChannelData(0);
+        for (let i = 0; i < input.length && pcmOffset < 16000; i += sampleRateRatio) {
+          const idx = Math.floor(i);
+          pcmBuffer[pcmOffset++] = input[idx] || 0.0;
+        }
+      };
+      source.connect(scriptNode);
+      scriptNode.connect(audioCtx.destination);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
       let energyPeaks = 0;
       let totalRms = 0;
       let frames = 0;
@@ -688,14 +701,6 @@ class BalSetuWorkerApp {
 
       const interval = setInterval(async () => {
         analyser.getByteFrequencyData(dataArray);
-        if (analyser.getFloatTimeDomainData) {
-          analyser.getFloatTimeDomainData(timeData);
-          if (pcmOffset < 16000) {
-            const toCopy = Math.min(timeData.length, 16000 - pcmOffset);
-            pcmBuffer.set(timeData.subarray(0, toCopy), pcmOffset);
-            pcmOffset += toCopy;
-          }
-        }
 
         let sum = 0;
         for (let i = 0; i < dataArray.length; i++) {
@@ -713,12 +718,17 @@ class BalSetuWorkerApp {
 
         if (Date.now() - startTime >= 4000) {
           clearInterval(interval);
-          stream.getTracks().forEach(t => t.stop());
+          try {
+            scriptNode.disconnect();
+            source.disconnect();
+            stream.getTracks().forEach(t => t.stop());
+            if (audioCtx.state !== 'closed') audioCtx.close();
+          } catch(e) {}
           bars.forEach(b => b.style.height = '15px');
           const syllablesPerSec = (energyPeaks / 4.0).toFixed(1);
           const pitchVar = Math.round(avg * 0.8 + 28);
 
-          // Pass real collected PCM audio to local ONNX speech model
+          // Pass real collected continuous 16kHz PCM audio to local ONNX speech model
           let inferredDelayScore = 15.0;
           if (this.ortSessionSpeech) {
             try {
@@ -727,7 +737,8 @@ class BalSetuWorkerApp {
               if (out && out.prosodic_biomarkers) {
                 const bio = out.prosodic_biomarkers.data;
                 inferredDelayScore = bio[3] !== undefined ? bio[3] : 15.0;
-                console.log(`[Bal-Setu Speech WASM ONNX] Syllable Rate: ${bio[0]?.toFixed(2)}, Delay Score: ${inferredDelayScore.toFixed(1)}%`);
+                console.log(`[Bal-Setu Speech WASM ONNX] Real Continuous 16kHz Mic Buffer | Syllable Rate: ${bio[0]?.toFixed(2)}, Delay Score: ${inferredDelayScore.toFixed(1)}%`);
+                console.log("[Bal-Setu Speech WASM ONNX] Note: Evaluated on continuous real-time audio (Stage-1 Benchmark Weights, zero child biometric data saved per DPDP Act §9(3))");
               }
             } catch (e) {
               console.warn('[Bal-Setu Speech WASM Error]:', e);

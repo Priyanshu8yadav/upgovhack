@@ -70,9 +70,9 @@ Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinic
                                     v
 +-----------------------------------------------------------------------------------------+
 |                  SPLIT CONFORMAL UNCERTAINTY GATING (1 - α = 0.90)                      |
-|    P(Y ∈ C(X)) >= 90.0% • Non-Conformity Scoring: s_i = 1 - p(y_i|x_i) • q̂ = 0.2510     |
+|    P(Y ∈ C(X)) >= 90.0% • Non-Conformity Scoring: s_i = 1 - p(y_i|x_i) • q̂ = 0.2374     |
 |      • |C(X)| == 1 : Autonomous Lane Routing Permitted                                   |
-|      • |C(X)| >  1 : Mathematical Abstention -> Route to Amber Tele-Verify or Yellow RtI|
+|      • |C(X)| != 1 : Mathematical Abstention (|C(X)|=0 or >1) -> Route to Amber / RtI    |
 +-----------------------------------------------------------------------------------------+
                                     |
                                     v
@@ -98,7 +98,7 @@ Tested on macOS arm64 CPU (representative of midrange Dimensity 700 / Snapdragon
 
 ## 3. Dedicated User Interfaces
 
-Bal-Setu provides three purpose-built interfaces tailored to distinct user roles in Uttar Pradesh:
+Bal-Setu provides four purpose-built interfaces tailored to distinct user roles in Uttar Pradesh:
 
 ### 1. Frontline Worker Mobile Screener (UC-1, UC-2, UC-3)
 - **URL:** [http://localhost:8080/worker/](http://localhost:8080/worker/)
@@ -119,7 +119,7 @@ Bal-Setu provides three purpose-built interfaces tailored to distinct user roles
 - **Target Users:** Mission Director NHM UP, DG Medical Health, IAS Evaluators.
 - **Key Features:**
   - **Interactive DEIC Capacity Policy Simulator:** Live interactive sliders adjusting operational DEICs ($12 \rightarrow 75$), frontline AI false-positive rate ($1\% \rightarrow 15\%$), and comparing Naive Binary vs. Bal-Setu 4-Tier routing in real time.
-  - **Live Subgroup AI Fairness & Calibration Monitor:** Live audits of Conformal Coverage ($91.4\%$), Fitzpatrick Skin Tone Parity ($98.8\%$), Gender Parity ($1.03$), and regional chromaticity drift across all UP divisions.
+  - **Live Subgroup AI Fairness & Calibration Monitor:** Live audits of Conformal Coverage ($87.8\%$, $\hat{q} = 0.2374$), Fitzpatrick Skin Tone Parity ($95.3\%$), Gender Parity ($1.03$), and regional chromaticity drift across all UP divisions.
   - **75-District Master Health Table:** Searchable LGD-coded district database tracking 4D morbidity, DEIC capacity stress, and local AAM diversions.
 
 ### 3. Parent Offline Mini-PWA (UC-5, UC-6, UC-7)
@@ -267,7 +267,7 @@ Bal-Setu is hardened for deployment to **Hugging Face Spaces (Docker SDK, Free C
 2. **Non-Root UID 1000 Execution**: `Dockerfile` creates `user` (UID 1000), runs `COPY --chown=user:user`, and switches to `USER user`.
 3. **OpenCV & Audio Runtime**: `Dockerfile` installs `libgl1`, `libglib2.0-0`, `libgomp1`, and `ffmpeg` with `opencv-python-headless`.
 4. **Auto-Seeding on Ephemeral Disk**: Upon fresh container spin-up or wake-from-sleep, `dashboard/app.py` auto-seeds 6 pre-linked UP referral records (Lucknow, Varanasi, Gorakhpur, Ayodhya, Kanpur, Bareilly) with active HMAC-SHA256 tokens.
-5. **Universal Audio Codecs**: Worker and Parent PWAs include dual `.mp3` and `.m4a` codecs with offline Web Speech API fallback.
+5. **Universal Audio Codecs**: Worker and Parent PWAs include optimized `.mp3` audio voice prompts with offline Web Speech API fallback.
 6. **Keep-Warm Automation**: `.github/workflows/keep_alive.yml` provides a scheduled 12-hour health ping workflow hitting `HF_SPACE_URL`.
 
 ---

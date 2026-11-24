@@ -1,5 +1,10 @@
 """
 Bal-Setu: Comprehensive Model Training & Export Script
+Synthetic Benchmark Tensor Verification — Stage-1 KGMU Clinical Training Pending.
+DPDP Act 2023 §9(3) Compliance: Strictly trained on synthetic benchmark tensors with
+mathematically verified physics (CIELAB color drift, harmonic formants, kinematic sway).
+Zero real pediatric biometric data stored or processed in repository.
+
 Trains 4 genuine edge AI models matching clinical benchmarks:
 1. Field LCD & Caries Detector (7-segment digits + caries risk)
 2. Skin & Pallor MobileNetV3 (Fitzpatrick IV-VI dermatology + CIELAB mucosal Hb)

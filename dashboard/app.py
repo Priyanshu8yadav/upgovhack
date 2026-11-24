@@ -680,12 +680,12 @@ def get_fairness_metrics():
     fitz_iv = subgroups.get("type_iv_wheatish", {})
     fitz_v = subgroups.get("type_v_vi_deep_brown", {})
 
-    q_hat = conformal_audit.get("calibrated_quantile_q_hat", calib_data.get("q_hat", 0.2510))
-    emp_cov = conformal_audit.get("held_out_empirical_coverage_pct", calib_data.get("empirical_held_out_coverage_pct", 91.8))
-    abstention = conformal_audit.get("abstention_rate_pct", 3.82)
-    err_iv = fitz_iv.get("error_rate_pct", 4.1)
-    err_v = fitz_v.get("error_rate_pct", 4.3)
-    parity_ratio = subgroups.get("parity_ratio", 0.988)
+    q_hat = conformal_audit.get("calibrated_quantile_q_hat", calib_data.get("q_hat", 0.2374))
+    emp_cov = conformal_audit.get("held_out_empirical_coverage_pct", calib_data.get("empirical_held_out_coverage_pct", 87.75))
+    abstention = conformal_audit.get("abstention_rate_pct", 12.25)
+    err_iv = fitz_iv.get("error_rate_pct", 14.43)
+    err_v = fitz_v.get("error_rate_pct", 10.19)
+    parity_ratio = subgroups.get("parity_ratio", 0.953)
 
     skin_metrics = val_data.get("models", {}).get("skin_pallor_mobilenetv3", {}).get("mucosal_pallor_hb_regression", {})
     hb_corr = skin_metrics.get("correlation_r", 0.94)
