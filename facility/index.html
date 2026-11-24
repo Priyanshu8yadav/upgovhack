@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bal-Setu (बाल-सेतु) | RBSK 2.0 Facility Arrival Reception Desk</title>
+  <link rel="stylesheet" href="/worker/styles.css">
+  <link rel="icon" type="image/png" href="/calibcard-assets/calibcard_front.png">
+  <!-- jsQR for in-browser client-side camera QR barcode decoding -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <style>
+    .facility-frame {
+      max-width: 600px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 2px dashed var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #cameraStreamVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .scan-reticle {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border: 2px solid var(--green);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      pointer-events: none;
+      animation: pulse-reticle 2s infinite ease-in-out;
+    }
+    @keyframes pulse-reticle {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.05); opacity: 0.6; }
+    }
+    .reception-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .badge-arrived { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+    .badge-incentive { background: #451a03; color: #fbbf24; border: 1px solid #d97706; }
+  </style>
+</head>
+<body>
+
+<div class="facility-frame">
+  <!-- Top Portal Navigation -->
+  <div style="background: #020617; padding: 6px 14px; font-size: 0.72rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+    <span style="color: #64748b;">RBSK 2.0 अस्पताल डेस्क:</span>
+    <div>
+      <a href="/" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700; margin-right: 12px;">🖥️ स्टेट डैशबोर्ड</a>
+      <a href="/worker/" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">📱 आशा स्क्रीनर</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-badge">
+        <div class="brand-logo-icon" style="background: var(--red);">🏥</div>
+        <div class="brand-title">
+          <h1>अस्पताल / DEIC आगमन डेस्क</h1>
+          <div class="brand-subtitle">Facility Arrival Handshake & PFMS ASHA Incentive Lock</div>
+        </div>
+      </div>
+      <div>
+        <span class="badge-tag tag-green">ऑनलाइन डेस्क सक्रिय</span>
+      </div>
+    </div>
+    <div class="system-status-ribbon">
+      <span class="badge-tag tag-green">🛡️ HMAC-SHA256 प्रमाणित</span>
+      <span class="badge-tag">📍 DEIC / CHC रिसेप्शन</span>
+      <span class="badge-tag tag-green">⚡ ऑटो-PFMS लिंक</span>
+    </div>
+  </header>
+
+  <main style="padding: 16px; flex: 1;">
+    <!-- Live Camera Scanner Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>📷 रेफरल QR कोड स्कैन करें (Live Camera Scanner)</span>
+        <span class="reception-badge badge-arrived" id="scannerStatusBadge">कैमरा तैयार</span>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+        आशा कार्यकर्ता या अभिभावक द्वारा लाए गए RBSK 2.0 डिजिटल रेफरल टोकन को कैमरे के सामने रखें।
+      </p>
+
+      <!-- Viewport -->
+      <div class="video-viewport" id="viewportContainer">
+        <video id="cameraStreamVideo" playsinline autoplay muted></video>
+        <div class="scan-reticle"></div>
+        <canvas id="qrScanCanvas" style="display: none;"></canvas>
+      </div>
+
+      <!-- Controls -->
+      <div class="action-row" style="margin-bottom: 10px;">
+        <button class="btn-full btn-primary" id="btnStartCamera" onclick="startCameraScanner()">
+          🎥 कैमरा ऑन करें (Start Camera)
+        </button>
+        <button class="btn-full btn-secondary" id="btnStopCamera" onclick="stopCameraScanner()" style="display: none;">
+          ⏹️ कैमरा बंद करें
+        </button>
+      </div>
+
+      <!-- Upload / Fallback options -->
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <label class="btn-full btn-secondary" style="margin: 0; text-align: center; cursor: pointer; font-size: 0.78rem; padding: 8px;">
+          📁 QR फोटो अपलोड करें
+          <input type="file" id="qrFileInput" accept="image/*" style="display: none;" onchange="handleFileScan(event)">
+        </label>
+        <button class="btn-full btn-secondary" style="font-size: 0.78rem; padding: 8px;" onclick="loadRecentActiveToken()">
+          ⚡ हालिया टोकन से टेस्ट करें
+        </button>
+      </div>
+
+      <!-- Manual Raw String Input (Fallback) -->
+      <div style="background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">
+          टोकन आईडी या कच्चा डेटा पेस्ट करें (Manual Token Entry):
+        </label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="manualTokenInput" class="form-input" placeholder="e.g. REF-20261124-XXXX" style="font-size: 0.75rem; padding: 6px;">
+          <button class="btn btn-primary" onclick="submitManualToken()" style="white-space: nowrap; font-size: 0.75rem; padding: 6px 12px;">
+            सत्यापित करें
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrival Verification Result Dossier (Initially Hidden) -->
+    <div class="card" id="arrivalDossierCard" style="display: none; border: 1px solid #10b981;">
+      <div class="card-title">
+        <span style="color: #10b981;">✅ आगमन सत्यापन पूर्ण (Arrival Verified)</span>
+        <span class="reception-badge badge-arrived">उपचार प्रारंभ</span>
+      </div>
+
+      <div style="background: rgba(16, 185, 129, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">बाल आईडी (Child ID):</span>
+          <strong id="dossierChildId" style="font-size: 0.85rem; color: #fff;">UP-LKO-2026-LIVE-101</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">टोकन संदर्भ:</span>
+          <code id="dossierTokenId" style="color: #38bdf8;">REF-20261124-XXXX</code>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">क्लिनिकल श्रेणी:</span>
+          <strong id="dossierLane" style="color: var(--red);">Complex Red: Fast-Track DEIC</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">निर्दिष्ट केंद्र:</span>
+          <span id="dossierFacility" style="font-size: 0.78rem; color: #e2e8f0;">जिला शीघ्र हस्तक्षेप केंद्र (DEIC)</span>
+        </div>
+      </div>
+
+      <!-- ASHA PFMS Incentive Stamp -->
+      <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid #d97706; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+        <div style="font-size: 1.6rem;">💰</div>
+        <div>
+          <div style="font-size: 0.82rem; font-weight: 700; color: #fbbf24;">
+            ASHA प्रोत्साहन राशि: ₹<span id="dossierIncentiveAmount">250</span> PFMS में स्वीकृत
+          </div>
+          <div style="font-size: 0.72rem; color: #94a3b8;" id="dossierAshaId">
+            आशा कार्यकर्ता: ASHA-UP-LKO-4421 • भौतिक कागजी सत्यापन समाप्त
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-full btn-secondary" onclick="window.print()">
+          🖨️ क्लिनिकल पर्ची प्रिंट करें
+        </button>
+        <button class="btn-full btn-primary" onclick="resetScannerForNext()">
+          ➕ अगला बच्चा स्कैन करें
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let videoStream = null;
+let scanAnimationId = null;
+
+async function startCameraScanner() {
+  const video = document.getElementById('cameraStreamVideo');
+  const btnStart = document.getElementById('btnStartCamera');
+  const btnStop = document.getElementById('btnStopCamera');
+  const badge = document.getElementById('scannerStatusBadge');
+
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
+    video.srcObject = videoStream;
+    btnStart.style.display = 'none';
+    btnStop.style.display = 'block';
+    badge.innerText = 'स्कैनिंग जारी...';
+    badge.className = 'reception-badge badge-incentive';
+    requestAnimationFrame(tickScan);
+  } catch (err) {
+    alert("कैमरा चालू करने में असमर्थ: " + err.message + "\nकृपया नीचे 'हालिया टोकन से टेस्ट करें' बटन का उपयोग करें।");
+  }
+}
+
+function stopCameraScanner() {
+  if (videoStream) {
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
+  }
+  if (scanAnimationId) {
+    cancelAnimationFrame(scanAnimationId);
+  }
+  document.getElementById('btnStartCamera').style.display = 'block';
+  document.getElementById('btnStopCamera').style.display = 'none';
+  document.getElementById('scannerStatusBadge').innerText = 'कैमरा बंद';
+  document.getElementById('scannerStatusBadge').className = 'reception-badge';
+}
+
+function tickScan() {
+  const video = document.getElementById('cameraStreamVideo');
+  const canvas = document.getElementById('qrScanCanvas');
+  const ctx = canvas.getContext('2d');
+
+  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    if (typeof jsQR !== 'undefined') {
+      const code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: 'dontInvert'
+      });
+      if (code && code.data) {
+        stopCameraScanner();
+        processArrivalQRData(code.data);
+        return;
+      }
+    }
+  }
+  scanAnimationId = requestAnimationFrame(tickScan);
+}
+
+function handleFileScan(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.getElementById('qrScanCanvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      if (typeof jsQR !== 'undefined') {
+        const code = jsQR(imgData.data, imgData.width, imgData.height);
+        if (code && code.data) {
+          processArrivalQRData(code.data);
+          return;
+        }
+      }
+      alert("चित्र में कोई QR कोड नहीं मिला। कृपया स्पष्ट चित्र अपलोड करें।");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function loadRecentActiveToken() {
+  try {
+    const res = await fetch('/api/referrals/live');
+    const data = await res.json();
+    if (data.recent_referrals && data.recent_referrals.length > 0) {
+      const pending = data.recent_referrals.find(r => r.status === 'REFERRED') || data.recent_referrals[0];
+      const payload = pending.raw_token_data || pending.token_id;
+      document.getElementById('manualTokenInput').value = payload;
+      processArrivalQRData(payload);
+    } else {
+      alert("कोई लंबित रेफरल टोकन नहीं मिला। कृपया पहले आशा स्क्रीनर में जांच पूरी करें।");
+    }
+  } catch (err) {
+    alert("डेटा प्राप्त करने में त्रुटि: " + err);
+  }
+}
+
+function submitManualToken() {
+  const val = document.getElementById('manualTokenInput').value.trim();
+  if (!val) {
+    alert("कृपया मान्य टोकन दर्ज करें।");
+    return;
+  }
+  processArrivalQRData(val);
+}
+
+async function processArrivalQRData(rawPayload) {
+  try {
+    const resp = await fetch('/api/referral/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        raw_qr_data: rawPayload,
+        clerk_id: 'CLERK-LKO-DEIC-01'
+      })
+    });
+
+    const res = await resp.json();
+    if (res.success) {
+      renderArrivalDossier(res.record);
+    } else {
+      alert("❌ सत्यापन विफल: " + (res.detail || res.message));
+    }
+  } catch (err) {
+    alert("सर्वर त्रुटि: " + err);
+  }
+}
+
+function renderArrivalDossier(record) {
+  document.getElementById('arrivalDossierCard').style.display = 'block';
+  document.getElementById('dossierChildId').innerText = record.child_id_hash || "UP-LKO-2026-LIVE-101";
+  document.getElementById('dossierTokenId').innerText = record.referral_id || "REF-VERIFIED";
+  document.getElementById('dossierFacility').innerText = record.facility_name || "जिला शीघ्र हस्तक्षेप केंद्र (DEIC)";
+  document.getElementById('dossierIncentiveAmount').innerText = record.asha_incentive?.amount_inr || "250";
+  document.getElementById('dossierAshaId').innerText = `आशा आईडी: ${record.asha_incentive?.asha_id || 'ASHA-LKO-4421'} • PFMS संदर्भ: ${record.asha_incentive?.transaction_ref || 'TXN-PFMS-9941'}`;
+  document.getElementById('arrivalDossierCard').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetScannerForNext() {
+  document.getElementById('arrivalDossierCard').style.display = 'none';
+  document.getElementById('manualTokenInput').value = '';
+}
+</script>
+</body>
+</html>

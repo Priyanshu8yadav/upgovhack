@@ -8,9 +8,13 @@ FastAPI backend orchestrating:
 """
 
 import json
+import mimetypes
 import os
 import sqlite3
 import sys
+
+# Ensure application/wasm MIME type is explicitly mapped for WebAssembly
+mimetypes.add_type("application/wasm", ".wasm")
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
@@ -34,6 +38,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 MINI_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "parent_loop", "mini_pwa"))
 WORKER_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "worker_pwa"))
 CALIBCARD_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "calibcard"))
+FACILITY_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "facility"))
 DB_PATH = os.path.join(BASE_DIR, "balsetu.db")
 
 # Initialize SQLite database for live persistent state
@@ -573,11 +578,18 @@ def redirect_calibcard_assets_no_slash():
     return RedirectResponse(url="/calibcard-assets/", status_code=307)
 
 
+@app.get("/facility", include_in_schema=False)
+def redirect_facility_no_slash():
+    return RedirectResponse(url="/facility/", status_code=307)
+
+
 # Mount Static Directories
 os.makedirs(STATIC_DIR, exist_ok=True)
 os.makedirs(WORKER_PWA_DIR, exist_ok=True)
+os.makedirs(FACILITY_DIR, exist_ok=True)
 app.mount("/worker", StaticFiles(directory=WORKER_PWA_DIR, html=True), name="worker")
 app.mount("/pwa", StaticFiles(directory=MINI_PWA_DIR, html=True), name="pwa")
+app.mount("/facility", StaticFiles(directory=FACILITY_DIR, html=True), name="facility")
 app.mount("/calibcard-assets", StaticFiles(directory=CALIBCARD_DIR, html=True), name="calibcard")
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
 

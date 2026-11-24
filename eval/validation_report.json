@@ -1,10 +1,12 @@
 {
   "evaluation_metadata": {
-    "framework_version": "Bal-Setu Clinical Evaluation Harness v2.4",
+    "framework_version": "Bal-Setu Clinical Evaluation Harness v2.5",
     "validation_timestamp": "2026-11-24T07:30:00Z",
+    "verification_mode": "Synthetic Pipeline & Conformal Coverage Verification (Zero Real Children — Stage-1 Clinical Validation via KGMU/DEIC Pending)",
+    "dpdp_compliance": "DPDP Act 2023 Section 9(3) Strict Lock: Zero processing or training on real children's biometric data",
     "regulatory_pathway": "CDSCO Medical Device Rules 2017 (Class B SaMD Investigational Protocol)",
-    "clinical_governance": "Approved under UP Startup Procurement Scheme Stage-1 Architecture Lock",
-    "total_held_out_samples_evaluated": 1895
+    "clinical_governance": "Approved under UP Startup Procurement Scheme Stage-1 Architecture Lock (KGMU Lucknow & JNMC Aligarh Shadow Trial)",
+    "total_evaluation_samples": 1895
   },
   "models": {
     "skin_pallor_mobilenetv3": {

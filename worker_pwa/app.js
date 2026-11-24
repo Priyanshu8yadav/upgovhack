@@ -56,16 +56,23 @@ class BalSetuWorkerApp {
   async initOnnxWasm() {
     if (typeof ort !== 'undefined') {
       try {
-        console.log('[Bal-Setu WASM] Pre-loading onnxruntime-web sessions...');
+        console.log('[Bal-Setu WASM] Pre-loading onnxruntime-web sessions from local /worker/libs/ ...');
+        // Explicitly set local wasm paths and single-thread execution to avoid CDN fetches or COOP/COEP headers
+        ort.env.wasm.wasmPaths = '/worker/libs/';
+        ort.env.wasm.numThreads = 1;
+
+        this.ortSessionSkin = await ort.InferenceSession.create('/worker/models/skin_pallor_mobilenetv3.onnx', {
+          executionProviders: ['wasm']
+        });
         this.ortSessionLcd = await ort.InferenceSession.create('/worker/models/field_lcd_caries_detector.onnx', {
           executionProviders: ['wasm']
         });
         this.ortSessionSpeech = await ort.InferenceSession.create('/worker/models/speech_acoustic_prosody.onnx', {
           executionProviders: ['wasm']
         });
-        console.log('[Bal-Setu WASM] 100% Offline Neural WASM Sessions Initialized Successfully!');
+        console.log('[Bal-Setu WASM] 100% Offline Neural WASM Sessions Initialized Successfully (3 Models Loaded Locally)!');
         const tag = document.getElementById('networkStatusTag');
-        if (tag) tag.innerHTML = '🧠 ONNX WASM एज AI सक्रिय';
+        if (tag) tag.innerHTML = '🧠 3 ONNX WASM मॉडल सक्रिय (100% ऑफ़लाइन)';
       } catch (e) {
         console.log('[Bal-Setu WASM] ONNX runtime web load note:', e);
       }
