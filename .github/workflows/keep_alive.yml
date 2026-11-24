@@ -1,0 +1,27 @@
+name: Keep Hugging Face Space Warm
+
+on:
+  schedule:
+    # Runs every 12 hours (00:00 and 12:00 UTC) to prevent Hugging Face Spaces 48-hour idle sleep
+    - cron: '0 0,12 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-space:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Bal-Setu Hugging Face Space
+        run: |
+          TARGET_URL="${{ secrets.HF_SPACE_URL }}"
+          if [ -z "$TARGET_URL" ]; then
+            echo "HF_SPACE_URL secret not set. Testing default public Space endpoint if available."
+            TARGET_URL="https://priyanshu8yadav-balsetu.hf.space"
+          fi
+          echo "Pinging Bal-Setu Space at $TARGET_URL..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 30 -L "$TARGET_URL/api/health" || echo "000")
+          echo "HTTP Response Code: $HTTP_CODE"
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Bal-Setu Space is awake and healthy!"
+          else
+            echo "⚠️ Non-200 or Cold-start wakeup triggered (Code: $HTTP_CODE)."
+          fi

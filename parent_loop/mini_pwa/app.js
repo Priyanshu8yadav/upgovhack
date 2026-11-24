@@ -36,10 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (activeAudio) {
       try { activeAudio.pause(); } catch(e){}
     }
-    const audio = new Audio(`/pwa/audio/${key}.m4a`);
-    activeAudio = audio;
-    audio.play().catch(err => {
-      speakHindi(fallbackText);
+    const mp3 = new Audio(`/pwa/audio/${key}.mp3`);
+    activeAudio = mp3;
+    mp3.play().catch(() => {
+      const m4a = new Audio(`/pwa/audio/${key}.m4a`);
+      activeAudio = m4a;
+      m4a.play().catch(() => {
+        speakHindi(fallbackText);
+      });
     });
   }
 

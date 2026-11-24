@@ -13,8 +13,10 @@ import os
 import sqlite3
 import sys
 
-# Ensure application/wasm MIME type is explicitly mapped for WebAssembly
+# Ensure application/wasm and audio MIME types are explicitly mapped
 mimetypes.add_type("application/wasm", ".wasm")
+mimetypes.add_type("audio/mpeg", ".mp3")
+mimetypes.add_type("audio/mp4", ".m4a")
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
@@ -40,6 +42,182 @@ WORKER_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "worker_pwa"))
 CALIBCARD_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "calibcard"))
 FACILITY_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "facility"))
 DB_PATH = os.path.join(BASE_DIR, "balsetu.db")
+
+# Initialize engines
+triage_engine = BalSetuTriageEngine()
+conformal_calibrator = SplitConformalCalibrator(alpha=0.10)
+fhir_generator = ABDMFHIRBundleGenerator()
+qr_generator = OfflineReferralQRGenerator()
+facility_manager = FacilityHandshakeManager()
+
+
+def seed_initial_demo_data(conn):
+    """
+    Auto-seeds realistic pre-linked synthetic referral records on container startup or after ephemeral disk reset.
+    Guarantees that Hugging Face Spaces cold starts, restarts, or demo evaluations immediately display active records.
+    """
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM referrals")
+    if c.fetchone()[0] > 0:
+        return
+
+    demo_cases = [
+        {
+            "child_id": "UP-LKO-2026-08142",
+            "district_name": "Lucknow",
+            "district_lgd": 157,
+            "age_months": 14.5,
+            "gender": "Female",
+            "parent_color": "Red",
+            "clinical_lane": "Tier-1: Complex Defect -> Immediate Tertiary DEIC Referral",
+            "destination_facility": "District Early Intervention Centre (DEIC)",
+            "findings": ["Congenital Cleft Lip / Palate", "Severe Developmental Delay"],
+            "requires_102": True,
+            "status": "REFERRED",
+            "asha_id": "ASHA-LKO-4421"
+        },
+        {
+            "child_id": "UP-VAR-2026-04291",
+            "district_name": "Varanasi",
+            "district_lgd": 198,
+            "age_months": 22.0,
+            "gender": "Male",
+            "parent_color": "Red",
+            "clinical_lane": "Tier-2: Primary Medical Morbidity -> Local NRC Inpatient Care",
+            "destination_facility": "Nutrition Rehabilitation Centre (NRC)",
+            "findings": ["Severe Acute Malnutrition (WHZ < -3)", "Bilateral Pitting Edema"],
+            "requires_102": True,
+            "status": "REFERRED",
+            "asha_id": "ASHA-VAR-1082"
+        },
+        {
+            "child_id": "UP-GKP-2026-01938",
+            "district_name": "Gorakhpur",
+            "district_lgd": 164,
+            "age_months": 36.2,
+            "gender": "Female",
+            "parent_color": "Amber",
+            "clinical_lane": "Tier-3: Internal Specialty -> Specialist Tele-Consultation Queue",
+            "destination_facility": "District Early Intervention Centre (DEIC)",
+            "findings": ["Hirschberg Pupillary Asymmetry > 15 deg", "Infantile Esotropia"],
+            "requires_102": False,
+            "status": "REFERRED",
+            "asha_id": "ASHA-GKP-3104"
+        },
+        {
+            "child_id": "UP-AYO-2026-09214",
+            "district_name": "Ayodhya",
+            "district_lgd": 142,
+            "age_months": 9.0,
+            "gender": "Male",
+            "parent_color": "Yellow",
+            "clinical_lane": "Tier-4: Borderline / Low Severity -> Anganwadi Routine Track",
+            "destination_facility": "Ayushman Arogya Mandir (AAM)",
+            "findings": ["Mild Receptive Speech Delay (RTI Micro-Intervention)"],
+            "requires_102": False,
+            "status": "REFERRED",
+            "asha_id": "ASHA-AYO-7719"
+        },
+        {
+            "child_id": "UP-KAN-2026-03117",
+            "district_name": "Kanpur Nagar",
+            "district_lgd": 150,
+            "age_months": 18.0,
+            "gender": "Female",
+            "parent_color": "Red",
+            "clinical_lane": "Tier-2: Primary Medical Morbidity -> Local NRC Inpatient Care",
+            "destination_facility": "Nutrition Rehabilitation Centre (NRC)",
+            "findings": ["Severe Acute Malnutrition (MUAC 11.2 cm)"],
+            "requires_102": False,
+            "status": "ARRIVED",
+            "arrived_at": "2026-11-24 07:15:00",
+            "verified_by": "CLERK-KAN-NRC-01",
+            "asha_id": "ASHA-KAN-2201"
+        },
+        {
+            "child_id": "UP-BLY-2026-05672",
+            "district_name": "Bareilly",
+            "district_lgd": 133,
+            "age_months": 28.5,
+            "gender": "Male",
+            "parent_color": "Amber",
+            "clinical_lane": "Tier-3: Internal Specialty -> Specialist Tele-Consultation Queue",
+            "destination_facility": "District Early Intervention Centre (DEIC)",
+            "findings": ["Motor Kinematic Asymmetry (>35% Gait Variance)"],
+            "requires_102": False,
+            "status": "ARRIVED",
+            "arrived_at": "2026-11-24 08:02:14",
+            "verified_by": "CLERK-BLY-DEIC-02",
+            "asha_id": "ASHA-BLY-9031"
+        }
+    ]
+
+    for item in demo_cases:
+        token = qr_generator.generate_token(
+            child_id=item["child_id"],
+            clinical_lane=item["clinical_lane"],
+            destination_facility=item["destination_facility"],
+            destination_facility_code=f"FAC-UP-{item['district_lgd']:03d}",
+            reason_findings=item["findings"],
+            requires_102_ambulance=item["requires_102"],
+            asha_id=item["asha_id"]
+        )
+        facility_manager.register_new_referral(token)
+        raw_token_serialized = json.dumps(token.__dict__)
+
+        # Insert into screenings
+        c.execute("""
+            INSERT INTO screenings 
+            (child_id, district_name, district_lgd, age_months, gender, parent_color, clinical_lane, destination_facility, findings_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            item["child_id"], item["district_name"], item["district_lgd"], item["age_months"], item["gender"],
+            item["parent_color"], item["clinical_lane"], item["destination_facility"], json.dumps(item["findings"])
+        ))
+
+        # Insert into referrals
+        c.execute("""
+            INSERT INTO referrals
+            (token_id, child_id, clinical_lane, destination_facility, destination_code, status, requires_102, raw_token_data, arrived_at, verified_by)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            token.referral_id, item["child_id"], item["clinical_lane"],
+            item["destination_facility"], f"FAC-UP-{item['district_lgd']:03d}",
+            item["status"], 1 if item["requires_102"] else 0, raw_token_serialized,
+            item.get("arrived_at"), item.get("verified_by")
+        ))
+
+        if item["status"] == "ARRIVED":
+            rec = facility_manager.active_referrals.get(token.referral_id)
+            if rec:
+                rec.current_status = "Reached"
+
+    conn.commit()
+
+
+def sync_facility_manager_from_db():
+    """Syncs existing referrals from SQLite into the in-memory FacilityHandshakeManager."""
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            c.execute("SELECT raw_token_data, status, verified_by, arrived_at FROM referrals")
+            for r in c.fetchall():
+                raw = r["raw_token_data"]
+                if raw:
+                    try:
+                        p_dict = json.loads(raw)
+                        from referral.qr_token import ReferralPayload
+                        p = ReferralPayload(**p_dict)
+                        rec = facility_manager.register_new_referral(p)
+                        if r["status"] == "ARRIVED":
+                            rec.current_status = "Reached"
+                            rec.arrival_timestamp_utc = r["arrived_at"]
+                    except Exception:
+                        pass
+    except Exception as e:
+        print(f"[Facility Sync Note]: {e}")
+
 
 # Initialize SQLite database for live persistent state
 def init_db():
@@ -76,6 +254,9 @@ def init_db():
             )
         """)
         conn.commit()
+        seed_initial_demo_data(conn)
+
+    sync_facility_manager_from_db()
 
 init_db()
 
@@ -92,19 +273,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Initialize engines
-triage_engine = BalSetuTriageEngine()
-conformal_calibrator = SplitConformalCalibrator(alpha=0.10)
-fhir_generator = ABDMFHIRBundleGenerator()
-qr_generator = OfflineReferralQRGenerator()
-facility_manager = FacilityHandshakeManager()
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.join(BASE_DIR, "static")
-MINI_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "parent_loop", "mini_pwa"))
-WORKER_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "worker_pwa"))
-CALIBCARD_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "calibcard"))
 
 # Load precomputed synthetic summary
 SYNTHETIC_SUMMARY_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "synthetic", "synthetic_cohort_summary.json"))
@@ -596,7 +764,8 @@ app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
 
 def main():
     import uvicorn
-    uvicorn.run("dashboard.app:app", host="0.0.0.0", port=8080, reload=True)
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("dashboard.app:app", host="0.0.0.0", port=port, reload=True)
 
 
 if __name__ == "__main__":

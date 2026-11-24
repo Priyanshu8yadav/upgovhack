@@ -155,17 +155,22 @@ class BalSetuWorkerApp {
     if (!this.voiceActive) return;
     const dialect = document.getElementById('dialectSelect')?.value || 'hi-IN';
     const langKey = (dialect === 'bho') ? 'bho' : 'hi';
-    const audioPath = `/worker/audio/${key}_${langKey}.m4a`;
+    const mp3Path = `/worker/audio/${key}_${langKey}.mp3`;
+    const m4aPath = `/worker/audio/${key}_${langKey}.m4a`;
 
     if (this.currentAudio) {
       try { this.currentAudio.pause(); } catch(e){}
     }
 
-    const audio = new Audio(audioPath);
+    // Dual-codec universal playback: try MP3 first (cross-device/Android WebViews/Linux Firefox), then M4A, then Web Speech
+    const audio = new Audio(mp3Path);
     this.currentAudio = audio;
-    audio.play().catch(err => {
-      // Offline fallback to Web Speech Synthesis if audio tag blocked
-      this.speakFallback(fallbackText || this.speechPrompts[key] || "");
+    audio.play().catch(() => {
+      const fallbackAudio = new Audio(m4aPath);
+      this.currentAudio = fallbackAudio;
+      fallbackAudio.play().catch(() => {
+        this.speakFallback(fallbackText || this.speechPrompts[key] || "");
+      });
     });
   }
 

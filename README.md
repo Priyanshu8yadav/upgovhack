@@ -1,3 +1,13 @@
+---
+title: Bal-Setu 4D Child Screening
+emoji: 🩺
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # बाल-सेतु (Bal-Setu): Offline-First Edge AI Child Health Screening SDK & Capacity-Aware Care Orchestration Layer
 
 > **A Blunt Blueprint to Win the UP AI Samadhan Hackathon 2026 and Fix 4D Child Health Screening Across Uttar Pradesh**  
@@ -219,21 +229,38 @@ python scripts/benchmark_edge.py
 python training/train_eval_pipeline.py
 ```
 
-### Step 5: Launch Demonstration Server
+### Step 5: Launch Demonstration Server (Local or Hugging Face Spaces)
 ```bash
 python run_demo.py
+# Or run with custom port:
+# PORT=7860 python run_demo.py
+
 # Or via Docker:
-# docker compose up --build
+docker build -t balsetu .
+docker run --rm -p 7860:7860 balsetu
 ```
 
-### Demonstration URLs:
-- **State Health Command Dashboard:** [http://localhost:8080/](http://localhost:8080/)
-- **Frontline Worker Mobile Screener (UC-1/2/3):** [http://localhost:8080/worker/](http://localhost:8080/worker/)
+### Demonstration & Evaluation URLs:
+- **State Health Command Dashboard (UC-8):** [http://localhost:8080/](http://localhost:8080/) *(or `:7860/` on Hugging Face Spaces)*
+- **Frontline Worker Screener PWA (UC-1/2/3):** [http://localhost:8080/worker/](http://localhost:8080/worker/)
 - **Parent Offline Mini-PWA (UC-5):** [http://localhost:8080/pwa/](http://localhost:8080/pwa/)
+- **Facility Arrival Reception & QR Scanner (UC-7):** [http://localhost:8080/facility/](http://localhost:8080/facility/)
 - **DEIC Capacity Policy Simulator API:** [http://localhost:8080/api/policy/simulate](http://localhost:8080/api/policy/simulate)
 - **Subgroup AI Fairness & Calibration API:** [http://localhost:8080/api/fairness/metrics](http://localhost:8080/api/fairness/metrics)
-- **CalibCard Front SVG (Vector):** [http://localhost:8080/calibcard-assets/calibcard_front.svg](http://localhost:8080/calibcard-assets/calibcard_front.svg)
-- **CalibCard Back Tracing SVG:** [http://localhost:8080/calibcard-assets/calibcard_back.svg](http://localhost:8080/calibcard-assets/calibcard_back.svg)
+- **Health & Diagnostic Check:** [http://localhost:8080/api/health](http://localhost:8080/api/health)
+- **CalibCard Front Vector (SVG):** [http://localhost:8080/calibcard-assets/calibcard_front.svg](http://localhost:8080/calibcard-assets/calibcard_front.svg)
+- **CalibCard Back Tracing (SVG):** [http://localhost:8080/calibcard-assets/calibcard_back.svg](http://localhost:8080/calibcard-assets/calibcard_back.svg)
+
+---
+
+### Hugging Face Spaces Docker Deployment (Option 1 Checklist)
+Bal-Setu is hardened for deployment to **Hugging Face Spaces (Docker SDK, Free CPU Basic 2 vCPU / 16 GB RAM)**:
+1. **YAML Frontmatter Header**: `README.md` specifies `sdk: docker` and `app_port: 7860`.
+2. **Non-Root UID 1000 Execution**: `Dockerfile` creates `user` (UID 1000), runs `COPY --chown=user:user`, and switches to `USER user`.
+3. **OpenCV & Audio Runtime**: `Dockerfile` installs `libgl1`, `libglib2.0-0`, `libgomp1`, and `ffmpeg` with `opencv-python-headless`.
+4. **Auto-Seeding on Ephemeral Disk**: Upon fresh container spin-up or wake-from-sleep, `dashboard/app.py` auto-seeds 6 pre-linked UP referral records (Lucknow, Varanasi, Gorakhpur, Ayodhya, Kanpur, Bareilly) with active HMAC-SHA256 tokens.
+5. **Universal Audio Codecs**: Worker and Parent PWAs include dual `.mp3` and `.m4a` codecs with offline Web Speech API fallback.
+6. **Keep-Warm Automation**: `.github/workflows/keep_alive.yml` provides a scheduled 12-hour health ping workflow hitting `HF_SPACE_URL`.
 
 ---
 
