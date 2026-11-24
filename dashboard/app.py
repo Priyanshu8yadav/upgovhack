@@ -460,12 +460,15 @@ def scan_referral_token(req: FacilityScanRequest):
     # Update SQLite database arrival state
     try:
         tok_id = getattr(record, "referral_id", None) or getattr(record, "token_id", None)
-        if not tok_id and req.raw_qr_data:
+        parsed_payload = {}
+        if req.raw_qr_data:
             try:
-                parsed = json.loads(req.raw_qr_data)
-                tok_id = parsed.get("referral_id") or parsed.get("token_id")
+                parsed_payload = json.loads(req.raw_qr_data)
+                if not tok_id:
+                    tok_id = parsed_payload.get("referral_id") or parsed_payload.get("token_id")
             except Exception:
-                tok_id = req.raw_qr_data.split("|")[0]
+                if not tok_id:
+                    tok_id = req.raw_qr_data.split("|")[0]
 
         with sqlite3.connect(DB_PATH) as conn:
             c = conn.cursor()
@@ -474,6 +477,26 @@ def scan_referral_token(req: FacilityScanRequest):
                 SET status = 'ARRIVED', arrived_at = CURRENT_TIMESTAMP, verified_by = ?
                 WHERE token_id = ?
             """, (req.clerk_id, tok_id))
+            if c.rowcount == 0:
+                child_label = parsed_payload.get("child_id") or (f"CH-{record.child_id_hash[:8].upper()}" if hasattr(record, "child_id_hash") and record.child_id_hash else "CH-OFFLINE")
+                dest_fac = getattr(record, "facility_name", None) or parsed_payload.get("destination_facility") or "DEIC Lucknow"
+                dest_code = getattr(record, "facility_code", None) or parsed_payload.get("destination_facility_code") or "FAC-UP-DEIC"
+                clin_lane = getattr(record, "clinical_lane", None) or parsed_payload.get("clinical_lane") or "Complex Red: Fast-Track DEIC"
+                req_102 = 1 if (parsed_payload.get("requires_102_ambulance") or parsed_payload.get("requires_102") or getattr(record, "requires_102", False)) else 0
+                c.execute("""
+                    INSERT INTO referrals 
+                    (token_id, child_id, clinical_lane, destination_facility, destination_code, status, requires_102, raw_token_data, arrived_at, verified_by)
+                    VALUES (?, ?, ?, ?, ?, 'ARRIVED', ?, ?, CURRENT_TIMESTAMP, ?)
+                """, (
+                    tok_id or "BST-OFFLINE-TOKEN",
+                    child_label,
+                    clin_lane,
+                    dest_fac,
+                    dest_code,
+                    req_102,
+                    req.raw_qr_data,
+                    req.clerk_id
+                ))
             conn.commit()
     except Exception as db_err:
         print(f"[Bal-Setu DB Scan Update Note]: {db_err}")
@@ -811,6 +834,7 @@ os.makedirs(WORKER_PWA_DIR, exist_ok=True)
 os.makedirs(FACILITY_DIR, exist_ok=True)
 app.mount("/worker", StaticFiles(directory=WORKER_PWA_DIR, html=True), name="worker")
 app.mount("/pwa", StaticFiles(directory=MINI_PWA_DIR, html=True), name="pwa")
+app.mount("/parent", StaticFiles(directory=MINI_PWA_DIR, html=True), name="parent")
 app.mount("/facility", StaticFiles(directory=FACILITY_DIR, html=True), name="facility")
 app.mount("/calibcard-assets", StaticFiles(directory=CALIBCARD_DIR, html=True), name="calibcard")
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

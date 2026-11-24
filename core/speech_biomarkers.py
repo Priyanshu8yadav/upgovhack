@@ -58,7 +58,8 @@ class SpeechBiomarkersEngine:
         """
         Evaluates 10-second audio clip (or 1-second 16,000 samples for the ONNX backbone).
         """
-        if audio_16khz is None or len(audio_16khz) == 0:
+        is_synthetic = (audio_16khz is None or len(audio_16khz) == 0)
+        if is_synthetic:
             # Generate synthetic speech signal for demonstration
             # Normal: modulated sine burst; Delay: prolonged pauses, low syllable rate
             t = np.linspace(0, 1.0, 16000)
@@ -125,16 +126,21 @@ class SpeechBiomarkersEngine:
         else:
             computed_syllable_rate = 1.3 if simulated_delay else 2.8
 
-        if simulated_delay:
+        if is_synthetic and simulated_delay:
             syllable_rate = min(computed_syllable_rate, 1.4)
             phonation_ratio = min(computed_phonation, 35.0)
             pitch_var = min(computed_pitch_var, 12.0)
             latency_sec = max(computed_latency, 3.2)
-        else:
+        elif is_synthetic:
             syllable_rate = max(2.3, min(4.2, computed_syllable_rate))
             phonation_ratio = max(computed_phonation, 54.0)
             pitch_var = max(computed_pitch_var, 26.0)
             latency_sec = min(computed_latency, 1.5)
+        else:
+            syllable_rate = float(computed_syllable_rate)
+            phonation_ratio = float(computed_phonation)
+            pitch_var = float(computed_pitch_var)
+            latency_sec = float(computed_latency)
 
         # 2. Ambient Noise Gate Check
         noise_passed = (ambient_noise_db < 55.0)
@@ -156,12 +162,12 @@ class SpeechBiomarkersEngine:
             except Exception as e:
                 print(f"[SpeechBiomarkers] Inference execution: {e}")
 
-        if simulated_delay:
+        if is_synthetic and simulated_delay:
             delay_prob = 0.85
 
         # Speech score: 0 to 100, incorporating acoustic signal features and ONNX prosodic biomarker head
         speech_score = max(10.0, min(100.0, (syllable_rate * 20.0) + (phonation_ratio * 0.4) + (pitch_var * 0.5) - (latency_sec * 8.0) - (delay_prob * 10.0)))
-        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or (delay_prob > 0.5) or simulated_delay
+        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or (delay_prob > 0.5) or (is_synthetic and simulated_delay)
 
         if delay_flagged:
             finding = f"भाषा विकास में विलंब (Syllable rate: {syllable_rate:.1f}/s < 2.0/s, Pitch variability: {pitch_var:.1f} Hz monotone, Response latency: {latency_sec:.1f}s)."

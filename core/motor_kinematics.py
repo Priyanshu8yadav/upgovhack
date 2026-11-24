@@ -53,7 +53,8 @@ class MotorKinematicsEngine:
         """
         Analyzes 30 temporal frames of 33 body keypoints [30, 99].
         """
-        if pose_sequence_30frames is None:
+        is_synthetic = (pose_sequence_30frames is None)
+        if is_synthetic:
             # Generate representative kinematic trajectory for demonstration
             # 30 frames x (33 keypoints x 3 coords = 99 features)
             np.random.seed(42)
@@ -86,15 +87,20 @@ class MotorKinematicsEngine:
         head_stability = float(np.std(head_y))
         calculated_balance_sec = max(0.8, min(10.0, 7.5 - head_stability * 70.0))
 
-        if simulated_delay:
+        if is_synthetic and simulated_delay:
             sway_mm = max(calculated_sway_mm, 13.5)
             gait_ratio = min(calculated_gait_ratio, 0.72)
             balance_sec = min(calculated_balance_sec, 1.5)
             expected = "Walks smoothly, hops on one foot for 3-5 seconds (Age 3-4y)"
-        else:
+        elif is_synthetic:
             sway_mm = min(calculated_sway_mm, 5.0) if calculated_sway_mm > 0 else 3.4
             gait_ratio = max(calculated_gait_ratio, 0.88)
             balance_sec = max(calculated_balance_sec, 5.2)
+            expected = "Walks smoothly, steady head and trunk balance (Age 3-4y)"
+        else:
+            sway_mm = float(calculated_sway_mm)
+            gait_ratio = float(calculated_gait_ratio)
+            balance_sec = float(calculated_balance_sec)
             expected = "Walks smoothly, steady head and trunk balance (Age 3-4y)"
 
         # 2. Run ONNX Kinematics Classifier
@@ -106,10 +112,11 @@ class MotorKinematicsEngine:
                 scores = self.session.run(None, {"pose_sequence_30frames": onnx_input})[0][0]
                 # scores: [sway_idx, gait_sym, balance_score, delay_risk]
                 delay_prob = float(scores[3])
-                if simulated_delay:
-                    delay_prob = max(delay_prob, 0.75)
-                else:
-                    delay_prob = min(delay_prob, 0.22)
+                if is_synthetic:
+                    if simulated_delay:
+                        delay_prob = max(delay_prob, 0.75)
+                    else:
+                        delay_prob = min(delay_prob, 0.22)
             except Exception as e:
                 print(f"[MotorKinematics] Inference execution: {e}")
 

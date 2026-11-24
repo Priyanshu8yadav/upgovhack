@@ -348,7 +348,9 @@ class BalSetuWorkerApp {
       });
       this.cameraStream = stream;
       this.cameraActive = true;
-      const video = document.getElementById('workerCameraVideo');
+      this.video = document.getElementById('workerCameraVideo');
+      this.canvas = document.getElementById('workerCameraCanvas');
+      const video = this.video;
       const placeholder = document.getElementById('cameraPlaceholder');
       const btn = document.getElementById('btnToggleCamera');
       if (video) {
@@ -380,8 +382,10 @@ class BalSetuWorkerApp {
 
   processCameraFrames() {
     if (!this.cameraActive) return;
-    const video = document.getElementById('workerCameraVideo');
-    const canvas = document.getElementById('workerCameraCanvas');
+    this.video = this.video || document.getElementById('workerCameraVideo');
+    this.canvas = this.canvas || document.getElementById('workerCameraCanvas');
+    const video = this.video;
+    const canvas = this.canvas;
     if (video && video.readyState >= 2 && canvas) {
       canvas.width = 160;
       canvas.height = 120;
@@ -459,10 +463,11 @@ class BalSetuWorkerApp {
             this._skinCanvas.height = 224;
             this._skinCtx = this._skinCanvas.getContext('2d', { willReadFrequently: true });
           }
-          if (this.video && this.video.videoWidth > 0) {
-            this._skinCtx.drawImage(this.video, 0, 0, 224, 224);
+          const sourceEl = (video && video.videoWidth > 0) ? video : (canvas && canvas.width > 0 ? canvas : null);
+          if (sourceEl) {
+            this._skinCtx.drawImage(sourceEl, 0, 0, 224, 224);
           } else {
-            this._skinCtx.drawImage(this.canvas, 0, 0, 224, 224);
+            return;
           }
           const imgData = this._skinCtx.getImageData(0, 0, 224, 224).data;
           const plane = 224 * 224;
@@ -505,10 +510,11 @@ class BalSetuWorkerApp {
           this._lcdCanvas.height = 320;
           this._lcdCtx = this._lcdCanvas.getContext('2d', { willReadFrequently: true });
         }
-        if (this.video && this.video.videoWidth > 0) {
-          this._lcdCtx.drawImage(this.video, 0, 0, 320, 320);
-        } else if (this.canvas) {
-          this._lcdCtx.drawImage(this.canvas, 0, 0, 320, 320);
+        const video = this.video || document.getElementById('workerCameraVideo');
+        const canvas = this.canvas || document.getElementById('workerCameraCanvas');
+        const sourceEl = (video && video.videoWidth > 0) ? video : (canvas && canvas.width > 0 ? canvas : null);
+        if (sourceEl) {
+          this._lcdCtx.drawImage(sourceEl, 0, 0, 320, 320);
         }
         const imgData = this._lcdCtx.getImageData(0, 0, 320, 320).data;
         const plane = 320 * 320;
@@ -938,12 +944,27 @@ class BalSetuWorkerApp {
     if (color === "red" || color === "yellow") {
       qrCard.style.display = 'block';
       const qrImg = document.getElementById('referralQrImg');
+      const imgBox = document.getElementById('referralQrImgBox');
+      const box = document.getElementById('referralQrCodeBox');
       const caption = document.getElementById('qrCaptionText');
 
       if (data.referral_qr_base64) {
-        qrImg.style.display = 'block';
-        qrImg.src = data.referral_qr_base64;
+        if (box) {
+          box.innerHTML = "";
+          box.style.display = 'none';
+        }
+        if (imgBox) imgBox.style.display = 'flex';
+        if (qrImg) {
+          qrImg.style.display = 'block';
+          qrImg.src = data.referral_qr_base64;
+        }
       } else {
+        if (imgBox) imgBox.style.display = 'none';
+        if (qrImg) qrImg.style.display = 'none';
+        if (box) {
+          box.innerHTML = "";
+          box.style.display = 'flex';
+        }
         // Generate real scannable HMAC-SHA256 offline QR code client-side
         this.generateOfflineQRCode(data, qrImg);
       }
@@ -1019,8 +1040,12 @@ class BalSetuWorkerApp {
 
       // Render real QR Code using vendored QRCode library
       const box = document.getElementById("referralQrCodeBox");
+      const imgBox = document.getElementById("referralQrImgBox");
       if (box && typeof QRCode !== "undefined") {
         box.innerHTML = "";
+        box.style.display = "flex";
+        if (imgBox) imgBox.style.display = "none";
+        if (qrImg) qrImg.style.display = "none";
         new QRCode(box, {
           text: qrPayloadText,
           width: 184,
@@ -1028,6 +1053,8 @@ class BalSetuWorkerApp {
           correctLevel: QRCode.CorrectLevel.M
         });
       } else if (qrImg) {
+        if (box) box.style.display = "none";
+        if (imgBox) imgBox.style.display = "flex";
         qrImg.style.display = 'block';
         qrImg.src = "/calibcard-assets/calibcard_front.png";
       }
