@@ -87,7 +87,7 @@ class MotorKinematicsEngine:
         head_stability = float(np.std(head_y))
         calculated_balance_sec = max(0.8, min(10.0, 7.5 - head_stability * 70.0))
 
-        if is_synthetic and simulated_delay:
+        if simulated_delay:
             sway_mm = max(calculated_sway_mm, 13.5)
             gait_ratio = min(calculated_gait_ratio, 0.72)
             balance_sec = min(calculated_balance_sec, 1.5)
@@ -112,11 +112,10 @@ class MotorKinematicsEngine:
                 scores = self.session.run(None, {"pose_sequence_30frames": onnx_input})[0][0]
                 # scores: [sway_idx, gait_sym, balance_score, delay_risk]
                 delay_prob = float(scores[3])
-                if is_synthetic:
-                    if simulated_delay:
-                        delay_prob = max(delay_prob, 0.75)
-                    else:
-                        delay_prob = min(delay_prob, 0.22)
+                if simulated_delay:
+                    delay_prob = max(delay_prob, 0.75)
+                elif is_synthetic:
+                    delay_prob = min(delay_prob, 0.22)
             except Exception as e:
                 print(f"[MotorKinematics] Inference execution: {e}")
 

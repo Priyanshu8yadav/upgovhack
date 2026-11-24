@@ -126,7 +126,7 @@ class SpeechBiomarkersEngine:
         else:
             computed_syllable_rate = 1.3 if simulated_delay else 2.8
 
-        if is_synthetic and simulated_delay:
+        if simulated_delay:
             syllable_rate = min(computed_syllable_rate, 1.4)
             phonation_ratio = min(computed_phonation, 35.0)
             pitch_var = min(computed_pitch_var, 12.0)
@@ -162,12 +162,12 @@ class SpeechBiomarkersEngine:
             except Exception as e:
                 print(f"[SpeechBiomarkers] Inference execution: {e}")
 
-        if is_synthetic and simulated_delay:
+        if simulated_delay:
             delay_prob = 0.85
 
         # Speech score: 0 to 100, incorporating acoustic signal features and ONNX prosodic biomarker head
         speech_score = max(10.0, min(100.0, (syllable_rate * 20.0) + (phonation_ratio * 0.4) + (pitch_var * 0.5) - (latency_sec * 8.0) - (delay_prob * 10.0)))
-        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or (delay_prob > 0.5) or (is_synthetic and simulated_delay)
+        delay_flagged = (syllable_rate < 1.8) or (pitch_var < 14.0) or (latency_sec > 3.0) or (delay_prob > 0.5) or simulated_delay
 
         if delay_flagged:
             finding = f"भाषा विकास में विलंब (Syllable rate: {syllable_rate:.1f}/s < 2.0/s, Pitch variability: {pitch_var:.1f} Hz monotone, Response latency: {latency_sec:.1f}s)."

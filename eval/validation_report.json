@@ -1,7 +1,7 @@
 {
   "evaluation_metadata": {
     "framework_version": "Bal-Setu Clinical Evaluation Harness v3.0 (Empirical ONNX Inference)",
-    "validation_timestamp": "2026-11-24T13:00:53.140368+00:00",
+    "validation_timestamp": "2026-11-24T13:36:55.272274+00:00",
     "verification_mode": "Trained & Empirically Calibrated on Synthetic Benchmark Tensors (Zero Real Pediatric Records \u2014 Stage-1 KGMU/DEIC Clinical Fine-Tuning Pending)",
     "dpdp_compliance": "DPDP Act 2023 Section 9(3) Strict Lock: Zero processing or training on real children's biometric data",
     "regulatory_pathway": "CDSCO Medical Device Rules 2017 (Class B SaMD Investigational Protocol)",

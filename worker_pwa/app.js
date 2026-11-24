@@ -382,10 +382,8 @@ class BalSetuWorkerApp {
 
   processCameraFrames() {
     if (!this.cameraActive) return;
-    this.video = this.video || document.getElementById('workerCameraVideo');
-    this.canvas = this.canvas || document.getElementById('workerCameraCanvas');
-    const video = this.video;
-    const canvas = this.canvas;
+    const video = document.getElementById('workerCameraVideo');
+    const canvas = document.getElementById('workerCameraCanvas');
     if (video && video.readyState >= 2 && canvas) {
       canvas.width = 160;
       canvas.height = 120;
@@ -510,8 +508,8 @@ class BalSetuWorkerApp {
           this._lcdCanvas.height = 320;
           this._lcdCtx = this._lcdCanvas.getContext('2d', { willReadFrequently: true });
         }
-        const video = this.video || document.getElementById('workerCameraVideo');
-        const canvas = this.canvas || document.getElementById('workerCameraCanvas');
+        const video = document.getElementById('workerCameraVideo');
+        const canvas = document.getElementById('workerCameraCanvas');
         const sourceEl = (video && video.videoWidth > 0) ? video : (canvas && canvas.width > 0 ? canvas : null);
         if (sourceEl) {
           this._lcdCtx.drawImage(sourceEl, 0, 0, 320, 320);

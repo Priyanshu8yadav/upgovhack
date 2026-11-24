@@ -163,7 +163,7 @@ def seed_initial_demo_data(conn):
             asha_id=item["asha_id"]
         )
         facility_manager.register_new_referral(token)
-        raw_token_serialized = json.dumps(token.__dict__)
+        raw_token_serialized = json.dumps(token.__dict__, ensure_ascii=False)
 
         # Insert into screenings
         c.execute("""
@@ -172,7 +172,7 @@ def seed_initial_demo_data(conn):
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             item["child_id"], item["district_name"], item["district_lgd"], item["age_months"], item["gender"],
-            item["parent_color"], item["clinical_lane"], item["destination_facility"], json.dumps(item["findings"])
+            item["parent_color"], item["clinical_lane"], item["destination_facility"], json.dumps(item["findings"], ensure_ascii=False)
         ))
 
         # Insert into referrals
@@ -412,7 +412,7 @@ def screen_child(req: ChildScreeningRequest):
         )
         referral_token = token.__dict__
         referral_qr_base64 = qr_generator.render_qr_base64(token)
-        raw_token_serialized = json.dumps(referral_token)
+        raw_token_serialized = json.dumps(referral_token, ensure_ascii=False)
         facility_manager.register_new_referral(token)
 
     # Persist live screening & referral state to SQLite
@@ -426,7 +426,7 @@ def screen_child(req: ChildScreeningRequest):
             """, (
                 req.child_id, req.district_name, req.district_lgd, req.age_months, req.gender,
                 summary.overall_parent_color, summary.clinical_routing_lane, summary.destination_facility_type,
-                json.dumps([f.condition_name for f in summary.findings])
+                json.dumps([f.condition_name for f in summary.findings], ensure_ascii=False)
             ))
             if referral_token:
                 c.execute("""
@@ -470,33 +470,32 @@ def scan_referral_token(req: FacilityScanRequest):
                 if not tok_id:
                     tok_id = req.raw_qr_data.split("|")[0]
 
+        child_label = parsed_payload.get("child_id") or (f"CH-{record.child_id_hash[:8].upper()}" if hasattr(record, "child_id_hash") and record.child_id_hash else "CH-OFFLINE")
+        dest_fac = getattr(record, "facility_name", None) or parsed_payload.get("destination_facility") or "DEIC Lucknow"
+        dest_code = getattr(record, "facility_code", None) or parsed_payload.get("destination_facility_code") or "FAC-UP-DEIC"
+        clin_lane = getattr(record, "clinical_lane", None) or parsed_payload.get("clinical_lane") or "Complex Red: Fast-Track DEIC"
+        req_102 = 1 if (parsed_payload.get("requires_102_ambulance") or parsed_payload.get("requires_102") or getattr(record, "requires_102", False)) else 0
+
         with sqlite3.connect(DB_PATH) as conn:
             c = conn.cursor()
             c.execute("""
-                UPDATE referrals 
-                SET status = 'ARRIVED', arrived_at = CURRENT_TIMESTAMP, verified_by = ?
-                WHERE token_id = ?
-            """, (req.clerk_id, tok_id))
-            if c.rowcount == 0:
-                child_label = parsed_payload.get("child_id") or (f"CH-{record.child_id_hash[:8].upper()}" if hasattr(record, "child_id_hash") and record.child_id_hash else "CH-OFFLINE")
-                dest_fac = getattr(record, "facility_name", None) or parsed_payload.get("destination_facility") or "DEIC Lucknow"
-                dest_code = getattr(record, "facility_code", None) or parsed_payload.get("destination_facility_code") or "FAC-UP-DEIC"
-                clin_lane = getattr(record, "clinical_lane", None) or parsed_payload.get("clinical_lane") or "Complex Red: Fast-Track DEIC"
-                req_102 = 1 if (parsed_payload.get("requires_102_ambulance") or parsed_payload.get("requires_102") or getattr(record, "requires_102", False)) else 0
-                c.execute("""
-                    INSERT INTO referrals 
-                    (token_id, child_id, clinical_lane, destination_facility, destination_code, status, requires_102, raw_token_data, arrived_at, verified_by)
-                    VALUES (?, ?, ?, ?, ?, 'ARRIVED', ?, ?, CURRENT_TIMESTAMP, ?)
-                """, (
-                    tok_id or "BST-OFFLINE-TOKEN",
-                    child_label,
-                    clin_lane,
-                    dest_fac,
-                    dest_code,
-                    req_102,
-                    req.raw_qr_data,
-                    req.clerk_id
-                ))
+                INSERT INTO referrals 
+                (token_id, child_id, clinical_lane, destination_facility, destination_code, status, requires_102, raw_token_data, arrived_at, verified_by)
+                VALUES (?, ?, ?, ?, ?, 'ARRIVED', ?, ?, CURRENT_TIMESTAMP, ?)
+                ON CONFLICT(token_id) DO UPDATE SET
+                    status = 'ARRIVED',
+                    arrived_at = CURRENT_TIMESTAMP,
+                    verified_by = excluded.verified_by
+            """, (
+                tok_id or "BST-OFFLINE-TOKEN",
+                child_label,
+                clin_lane,
+                dest_fac,
+                dest_code,
+                req_102,
+                req.raw_qr_data,
+                req.clerk_id
+            ))
             conn.commit()
     except Exception as db_err:
         print(f"[Bal-Setu DB Scan Update Note]: {db_err}")
