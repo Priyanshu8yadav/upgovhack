@@ -2,9 +2,9 @@
 
 ## 1. Regulatory Status under CDSCO July 2026 Final MDSW Guidance
 
-A common trap for hackathon teams is telling clinical judges: *"We are only doing screening and triage, not medical diagnosis, so CDSCO regulations do not apply to us."* 
+A critical misconception in health-tech innovation is asserting: *"We are only doing screening and triage, not medical diagnosis, so CDSCO regulations do not apply to us."* 
 
-This statement will instantly lose credibility with Medical Health evaluators. Under the **Central Drugs Standard Control Organisation (CDSCO) July 2026 final Guidance Document on Medical Device Software** (`CDSCO/MD/GD/MDSW/01/2026`) under the Medical Device Rules, 2017 (MDR-2017):
+This statement instantly loses credibility with Medical Health evaluators. Under the **Central Drugs Standard Control Organisation (CDSCO) July 2026 final Guidance Document on Medical Device Software** (`CDSCO/MD/GD/MDSW/01/2026`) under the Medical Device Rules, 2017 (MDR-2017):
 - Standalone AI software performing **medical screening, risk stratification, or clinical triage** is explicitly regulated as **Software as a Medical Device (SaMD)**.
 - CDSCO specifically cites AI screening algorithms for chest X-rays in tuberculosis as regulated SaMD requiring formal licensing.
 
@@ -40,13 +40,13 @@ Medical AI deployed across India's regional populations suffers from biological 
 Bal-Setu adheres strictly to ICMR's **Ethical Guidelines for AI in Healthcare (2023)** and **Guidelines for Pediatric Biomedical Research (2017)** through a phased four-stage validation strategy:
 
 ```
-[ Stage 0: Hackathon ] ──► [ Stage 1: Silent Shadow ] ──► [ Stage 2: Recalibration ] ──► [ Stage 3: Stepped-Wedge ]
+[ Stage 0: Algorithmic Verification ] ──► [ Stage 1: Silent Shadow ] ──► [ Stage 2: Recalibration ] ──► [ Stage 3: Stepped-Wedge ]
   • Nov–Dec 2026             • Months 1–3                   • Months 4–6                   • Months 7–12
   • Synthetic & Public       • KGMU / JNMC Aligarh          • UP Field Tuning              • 2–4 UP Blocks
   • Zero Real Children       • 2,500 Consented Children     • Class B MD-3/MD-5 Filing     • Health Outcome Proof
 ```
 
-### Stage 0: Algorithmic Verification (Current Hackathon Stage - Nov–Dec 2026)
+### Stage 0: Algorithmic Verification (Baseline Validation - Nov–Dec 2026)
 - **Data Scope:** 100% synthetic cohorts (50,000 UP children) + open licensed research benchmarks. **Zero real children's personal data.**
 - **Deliverable:** Working on-device LiteRT/OpenCV pipeline demonstrating deterministic WHO LMS mathematics, CalibCard homography, and ABDM FHIR R4 schema compliance.
 

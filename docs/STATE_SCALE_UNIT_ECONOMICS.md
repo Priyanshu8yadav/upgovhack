@@ -4,7 +4,7 @@
 
 When evaluating public health technology, senior IAS evaluators and NHM Finance Directors look straight past technical buzzwords to examine the **recurring operational expenditure (OpEx)** burden on the state exchequer.
 
-Most hackathon proposals build a naive architecture:
+Standard digital health proposals build a naive architecture:
 1. Every Anganwadi photo is sent to a commercial cloud Vision-Language Model (VLM) API (e.g., GPT-4o or Gemini).
 2. Every at-risk parent is enrolled in an interactive daily WhatsApp chatbot (exchanging 2–3 messages per day over a 12-week home care cycle).
 

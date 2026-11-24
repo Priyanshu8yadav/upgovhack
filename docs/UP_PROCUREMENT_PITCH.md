@@ -48,8 +48,8 @@ Because Bal-Setu executes 100% of inference on-device using LiteRT and eliminate
 
 ---
 
-## 5. Why the Health Department Should Select Bal-Setu Over Rivals
+## 5. Why the Health Department Should Select Bal-Setu
 
 1. **Zero Frontline App Fatigue:** Bal-Setu does not force ASHAs to download a fourth disconnected mobile app. It embeds as an **offline Android Intent SDK inside e-Kavach**, preserving existing beneficiary registries and ABHA IDs.
 2. **Immediate Protection of UP's 12 DEICs:** Rather than flooding district hospitals with false alarms, Bal-Setu resolves 85% of acute conditions locally at Ayushman Arogya Mandirs (AAMs) and NRCs, eliminating wage-losing journeys for daily-wage families.
-3. **Financially Sustainable After Grant Funding:** While naive apps create a ₹19.45 Crore/year recurring WhatsApp liability that collapses as soon as hackathon prize money runs out, Bal-Setu's modeled statewide recurring cost is just **₹0.86 per child/year**, fitting effortlessly within annual National Health Mission flexi-pool budgets.
+3. **Financially Sustainable After Grant Funding:** While naive apps create a ₹19.45 Crore/year recurring WhatsApp liability that collapses as soon as initial pilot grant funding runs out, Bal-Setu's modeled statewide recurring cost is just **₹0.86 per child/year**, fitting effortlessly within annual National Health Mission flexi-pool budgets.

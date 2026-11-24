@@ -16,7 +16,7 @@ Bal-Setu is architected to be **natively compliant by design** before the May 13
 ## 2. Key Legal Nuances for Uttar Pradesh Evaluators
 
 ### Nuance 1: The Strict Scoping of Fourth Schedule Part A Healthcare Exemptions
-Rival hackathon submissions often claim that healthcare delivery enjoys a "blanket waiver" from DPDP children's data obligations. This is legally incorrect:
+Conventional health-tech submissions often claim that healthcare delivery enjoys a "blanket waiver" from DPDP children's data obligations. This is legally incorrect:
 
 1. **Entries 1 and 2 of Part A of the Fourth Schedule** exempt clinical establishments, registered medical practitioners, and allied health professionals from Section 9(1) (Verifiable Parental Consent) and Section 9(3) (Behavioral Tracking Ban) **strictly and exclusively to the extent necessary for**:
    - Delivering medical health services, or
@@ -98,7 +98,7 @@ object DPDPPolicy {
 
 ## 5. DPDP Compliance Matrix
 
-| Statutory Requirement | DPDP Section / Rule | Naive Hackathon Approaches | Bal-Setu Implementation |
+| Statutory Requirement | DPDP Section / Rule | Conventional Approaches | Bal-Setu Implementation |
 | :--- | :--- | :--- | :--- |
 | **Child Consent Verification** | Section 9(1) & Rule 10 | Unverified parent checkmark or collecting toxic paper Aadhaar scans. | Reuses KYC-verified e-Kavach / ABHA guardian accounts (Rule 10(1)(a)) with spoken Hindi notice. |
 | **Well-Being Protection** | Section 9(2) | Generates stressful false alarms ("Your child may have cancer") sending families on wild chases. | Clear 3-color parent language (UC-3) stating child needs routine care or watchful play, never giving scary raw diagnosis. |

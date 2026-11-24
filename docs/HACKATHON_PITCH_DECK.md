@@ -15,7 +15,7 @@
 ### Minute 0:00 – 0:45: The Brutal Public-Health Logistics Reality
 *(Action: Walk onto stage. Do NOT start with greeting pleasantries or slides. Hand a physical laminated ₹2 RBSK-CalibCard directly into the hands of every evaluator and IAS officer.)*
 
-> *"Respected jury, if you build what 90% of hackathon teams build—a standalone smartphone app that uploads child photos to a cloud AI and runs a daily interactive WhatsApp chatbot—you have designed something that dies in the Uttar Pradesh field in five minutes.*
+> *"Respected jury, if you build what standard digital health teams build—a standalone smartphone app that uploads child photos to a cloud AI and runs a daily interactive WhatsApp chatbot—you have designed something that dies in the Uttar Pradesh field in five minutes.*
 >
 > *Three ground realities kill naive architectures on arrival:*
 > 1. *Uttar Pradesh has 8.53 crore children, but only **12 operational District Early Intervention Centres (DEICs)** across 75 districts—over 7 million children per DEIC. Even a 5% AI false-positive rate floods DEICs with **48 lakh referrals/year—53.7 times their annual clinical ceiling**, causing total systemic collapse and forcing daily-wage parents into 40-kilometer travel debt.*
