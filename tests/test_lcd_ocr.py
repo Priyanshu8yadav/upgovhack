@@ -43,3 +43,19 @@ def test_haemoglobin_meter_reading_severe_anemia(lcd_reader):
     assert res.detected_value == 6.4
     assert "Severe Anaemia" in res.anemia_tier
     assert "Red" in res.routing_tier
+
+
+def test_real_optical_character_recognition_synthetic_lcd(lcd_reader):
+    """
+    Validates genuine OCR without simulated_value override.
+    Extracts 7-segment digital display value directly from image pixels.
+    """
+    scale_img = lcd_reader.generate_synthetic_lcd_image("11.4")
+    res_scale = lcd_reader.parse_scale_reading(scale_img, simulated_value=None)
+    assert res_scale.detected_value == 11.4
+    assert res_scale.confidence_score >= 0.90
+
+    hb_img = lcd_reader.generate_synthetic_lcd_image("8.4")
+    res_hb = lcd_reader.parse_haemoglobin_reading(hb_img, child_age_months=36.0, simulated_value=None)
+    assert res_hb.detected_value == 8.4
+    assert res_hb.anemia_tier == "Moderate Anaemia"

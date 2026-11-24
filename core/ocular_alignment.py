@@ -62,22 +62,68 @@ class OcularAlignmentEngine:
         """
         h, w = bgr_face_image.shape[:2]
 
-        # Geometry simulation for robust offline demonstration:
+        # Geometry calculation & corneal reflex extraction
         # In canonical eye, corneal diameter ~ 11.5 mm = ~120 px on typical close-up crop
         # 1 mm ~ 10.4 px
         px_per_mm = 10.4
 
-        # Pupil centers (Right eye OD at x~0.38w, Left eye OS at x~0.62w)
-        od_cx, od_cy = int(0.38 * w), int(0.45 * h)
-        os_cx, os_cy = int(0.62 * w), int(0.45 * h)
+        is_blank = (bgr_face_image is None or bgr_face_image.size == 0 or np.max(bgr_face_image) < 15)
         pupil_r = 18.0
 
-        # Normal corneal light reflex sits near center (slightly nasal by 0.1 mm physiologically)
-        od_clr = (od_cx + 1.0, od_cy)
+        if not is_blank and h > 40 and w > 40:
+            gray = cv2.cvtColor(bgr_face_image, cv2.COLOR_BGR2GRAY)
+            # Right eye OD (subject's right, left half of photo: x ~ 0.15w..0.50w)
+            # Left eye OS (subject's left, right half of photo: x ~ 0.50w..0.85w)
+            od_roi = gray[int(0.2*h):int(0.6*h), int(0.15*w):int(0.50*w)]
+            os_roi = gray[int(0.2*h):int(0.6*h), int(0.50*w):int(0.85*w)]
+
+            if od_roi.size > 0:
+                _, _, min_od, max_od = cv2.minMaxLoc(od_roi)
+                od_cx = int(0.15 * w + min_od[0])
+                od_cy = int(0.20 * h + min_od[1])
+                od_clr = (float(0.15 * w + max_od[0]), float(0.20 * h + max_od[1]))
+            else:
+                od_cx, od_cy = int(0.38 * w), int(0.45 * h)
+                od_clr = (od_cx + 1.0, od_cy)
+
+            if os_roi.size > 0:
+                _, _, min_os, max_os = cv2.minMaxLoc(os_roi)
+                os_cx = int(0.50 * w + min_os[0])
+                os_cy = int(0.20 * h + min_os[1])
+                os_clr = (float(0.50 * w + max_os[0]), float(0.20 * h + max_os[1]))
+            else:
+                os_cx, os_cy = int(0.62 * w), int(0.45 * h)
+                os_clr = (os_cx + 1.0, os_cy)
+
+            # Pupil red-reflex channel calculation
+            od_patch = bgr_face_image[max(0, od_cy-10):min(h, od_cy+10), max(0, od_cx-10):min(w, od_cx+10)]
+            os_patch = bgr_face_image[max(0, os_cy-10):min(h, os_cy+10), max(0, os_cx-10):min(w, os_cx+10)]
+
+            if od_patch.size > 0:
+                od_r = np.mean(od_patch[:, :, 2])
+                od_gb = np.mean(od_patch[:, :, :2]) + 1e-4
+                od_red = float(min(1.0, od_r / (od_r + od_gb)))
+            else:
+                od_red = 0.88
+
+            if os_patch.size > 0:
+                os_r = np.mean(os_patch[:, :, 2])
+                os_gb = np.mean(os_patch[:, :, :2]) + 1e-4
+                os_red = float(min(1.0, os_r / (os_r + os_gb)))
+            else:
+                os_red = 0.86
+        else:
+            od_cx, od_cy = int(0.38 * w), int(0.45 * h)
+            os_cx, os_cy = int(0.62 * w), int(0.45 * h)
+            od_clr = (od_cx + 1.0, od_cy)
+            os_clr = (os_cx + 1.0, os_cy)
+            od_red = 0.88
+            os_red = 0.86
 
         # Apply simulated deviation if requested
-        os_dx_px = simulated_esotropia_mm * px_per_mm
-        os_clr = (os_cx + os_dx_px + 1.0, os_cy)
+        if simulated_esotropia_mm > 0.0 or is_blank:
+            os_dx_px = simulated_esotropia_mm * px_per_mm
+            os_clr = (os_cx + os_dx_px + 1.0, os_cy)
 
         # Compute metrics
         disp_od_mm = 0.10
@@ -86,10 +132,10 @@ class OcularAlignmentEngine:
         pd_od = round(disp_od_mm * self.HIRSCHBERG_RATIO, 1)
         pd_os = round(disp_os_mm * self.HIRSCHBERG_RATIO, 1)
 
-        # Red-reflex calculation
-        od_red = 0.88
-        os_red = 0.15 if simulated_leukocoria_eye == "OS" else 0.86
-        if simulated_leukocoria_eye == "OD":
+        # Red-reflex overrides for clinical simulation
+        if simulated_leukocoria_eye == "OS":
+            os_red = 0.15
+        elif simulated_leukocoria_eye == "OD":
             od_red = 0.15
 
         leukocoria = (od_red < 0.35) or (os_red < 0.35) or (abs(od_red - os_red) > 0.45)

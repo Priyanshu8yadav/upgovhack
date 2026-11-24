@@ -132,7 +132,7 @@
         <!-- DPDP Act 2023 Mandatory Parental Consent Gate -->
         <div style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-radius: 8px; padding: 12px; margin-top: 14px;">
           <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.85rem; color: #f8fafc;">
-            <input type="checkbox" id="parentalConsentCheck" checked style="width: 18px; height: 18px; accent-color: #10b981; margin-top: 2px;">
+            <input type="checkbox" id="parentalConsentCheck" style="width: 18px; height: 18px; accent-color: #10b981; margin-top: 2px;">
             <span>
               <strong style="color: #34d399;">🛡️ DPDP अधिनियम 2023 धारा 9:</strong>
               अभिभावक की मौखिक एवं डिजिटल सहमति प्राप्त (Parental Consent Recorded)। बच्चे की स्क्रीनिंग केवल स्थानीय ऑन-डिवाइस AI द्वारा की जाएगी।
@@ -494,7 +494,9 @@
         </div>
 
         <div class="qr-display-container">
-          <img id="referralQrImg" class="qr-image" src="" alt="Referral QR">
+          <div id="referralQrCodeBox" style="width: 200px; height: 200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; padding: 8px;">
+            <img id="referralQrImg" class="qr-image" src="" alt="Referral QR" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
           <div class="qr-caption" id="qrCaptionText">
             टोकन आईडी: BST-2026-LKO-XXXX<br>
             <span style="font-size: 0.68rem; color: #64748b;">अस्पताल आगमन पर स्कैन कराएं</span>
@@ -543,6 +545,7 @@
 </div>
 
 <script src="/worker/libs/ort.min.js"></script>
+<script src="/worker/libs/qrcode.min.js"></script>
 <script src="/worker/app.js"></script>
 </body>
 </html>

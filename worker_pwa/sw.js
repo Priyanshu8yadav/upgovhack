@@ -2,7 +2,7 @@
 // Enables 100% Offline Screening in Rural Connectivity Dead Zones
 // Precaches ONNX WASM Runtime, Neural Models, and Native Audio Prompts
 
-const CACHE_NAME = 'balsetu-worker-v6';
+const CACHE_NAME = 'balsetu-worker-v8';
 const ASSETS_TO_CACHE = [
   '/worker/',
   '/worker/index.html',
@@ -11,9 +11,11 @@ const ASSETS_TO_CACHE = [
   '/worker/manifest.json',
   '/worker/libs/ort.min.js',
   '/worker/libs/ort-wasm.wasm',
+  '/worker/libs/qrcode.min.js',
   '/worker/models/skin_pallor_mobilenetv3.onnx',
   '/worker/models/field_lcd_caries_detector.onnx',
   '/worker/models/speech_acoustic_prosody.onnx',
+  '/worker/models/motor_kinematics_classifier.onnx',
   '/worker/audio/step1_hi.mp3',
   '/worker/audio/step1_bho.mp3',
   '/worker/audio/step2_hi.mp3',
