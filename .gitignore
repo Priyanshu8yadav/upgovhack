@@ -63,6 +63,11 @@ Thumbs.db
 *.swp
 *.swo
 
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
 # Explicitly track essential edge models and calibrated assets
 !models/*.onnx
 !models/conformal_calibration_weights.json

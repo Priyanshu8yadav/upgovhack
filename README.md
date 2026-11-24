@@ -7,8 +7,9 @@
 [![ABDM FHIR R4](https://img.shields.io/badge/ABDM%20FHIR%20R4-ndhm.in%236.5.0-green.svg)](https://nrces.in)
 [![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Section%209%20Compliant-purple.svg)](https://meity.gov.in)
 [![CDSCO SaMD](https://img.shields.io/badge/CDSCO%20MDR--2017-Class%20B%20SaMD-teal.svg)](https://cdsco.gov.in)
-[![Tests](https://img.shields.io/badge/Tests-38%2F38%20Passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passing-brightgreen.svg)](tests/)
 [![Edge Footprint](https://img.shields.io/badge/ONNX%20Edge%20Models-0.39%20MB%20Total-orange.svg)](models/)
+[![Eval Benchmark](https://img.shields.io/badge/CDSCO%20Eval-Validated%20Benchmarks-teal.svg)](eval/)
 
 ---
 
@@ -203,7 +204,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 2: Run Automated Test Suite (38/38 Passing)
+### Step 2: Run Automated Test Suite (43/43 Passing)
 ```bash
 pytest tests/ -v
 ```
@@ -213,9 +214,16 @@ pytest tests/ -v
 python scripts/benchmark_edge.py
 ```
 
-### Step 4: Launch Demonstration Server
+### Step 4: Run Training & Held-Out Validation Pipeline
+```bash
+python training/train_eval_pipeline.py
+```
+
+### Step 5: Launch Demonstration Server
 ```bash
 python run_demo.py
+# Or via Docker:
+# docker compose up --build
 ```
 
 ### Demonstration URLs:

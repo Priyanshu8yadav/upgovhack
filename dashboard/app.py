@@ -9,6 +9,7 @@ FastAPI backend orchestrating:
 
 import json
 import os
+import sqlite3
 import sys
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException
@@ -27,6 +28,51 @@ from referral.qr_token import OfflineReferralQRGenerator
 from referral.facility_handshake import FacilityHandshakeManager
 from parent_loop.ivr_simulator import DialectIVRSimulator
 from synthetic.district_stats import UP_DEMOGRAPHICS, UP_DISTRICTS
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+MINI_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "parent_loop", "mini_pwa"))
+WORKER_PWA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "worker_pwa"))
+CALIBCARD_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "calibcard"))
+DB_PATH = os.path.join(BASE_DIR, "balsetu.db")
+
+# Initialize SQLite database for live persistent state
+def init_db():
+    with sqlite3.connect(DB_PATH) as conn:
+        c = conn.cursor()
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS screenings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                child_id TEXT NOT NULL,
+                district_name TEXT NOT NULL,
+                district_lgd INTEGER,
+                age_months REAL,
+                gender TEXT,
+                parent_color TEXT NOT NULL,
+                clinical_lane TEXT NOT NULL,
+                destination_facility TEXT NOT NULL,
+                findings_json TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS referrals (
+                token_id TEXT PRIMARY KEY,
+                child_id TEXT NOT NULL,
+                clinical_lane TEXT NOT NULL,
+                destination_facility TEXT NOT NULL,
+                destination_code TEXT,
+                status TEXT DEFAULT 'REFERRED',
+                requires_102 INTEGER DEFAULT 0,
+                raw_token_data TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                arrived_at TIMESTAMP,
+                verified_by TEXT
+            )
+        """)
+        conn.commit()
+
+init_db()
 
 app = FastAPI(
     title="Bal-Setu (बाल-सेतु) State Health Command API",
@@ -180,6 +226,7 @@ def screen_child(req: ChildScreeningRequest):
     # Generate Referral QR Token if Red or Amber
     referral_token = None
     referral_qr_base64 = None
+    raw_token_serialized = None
     if summary.overall_parent_color == "Red" or "Amber" in summary.clinical_routing_lane:
         reason_list = [f.condition_name for f in summary.findings]
         token = qr_generator.generate_token(
@@ -192,12 +239,41 @@ def screen_child(req: ChildScreeningRequest):
         )
         referral_token = token.__dict__
         referral_qr_base64 = qr_generator.render_qr_base64(token)
+        raw_token_serialized = json.dumps(referral_token)
         facility_manager.register_new_referral(token)
+
+    # Persist live screening & referral state to SQLite
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            c = conn.cursor()
+            c.execute("""
+                INSERT INTO screenings 
+                (child_id, district_name, district_lgd, age_months, gender, parent_color, clinical_lane, destination_facility, findings_json)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                req.child_id, req.district_name, req.district_lgd, req.age_months, req.gender,
+                summary.overall_parent_color, summary.clinical_routing_lane, summary.destination_facility_type,
+                json.dumps([f.condition_name for f in summary.findings])
+            ))
+            if referral_token:
+                c.execute("""
+                    INSERT OR REPLACE INTO referrals
+                    (token_id, child_id, clinical_lane, destination_facility, destination_code, status, requires_102, raw_token_data)
+                    VALUES (?, ?, ?, ?, ?, 'REFERRED', ?, ?)
+                """, (
+                    referral_token["referral_id"], req.child_id, summary.clinical_routing_lane,
+                    summary.destination_facility_type, f"FAC-UP-{req.district_lgd:03d}",
+                    1 if summary.requires_102_ambulance else 0, raw_token_serialized
+                ))
+            conn.commit()
+    except Exception as db_err:
+        print(f"[Bal-Setu SQLite Persistence Note]: {db_err}")
 
     return {
         "triage_summary": summary.__dict__,
         "referral_token": referral_token,
         "referral_qr_base64": referral_qr_base64,
+        "raw_token_serialized": raw_token_serialized,
         "fhir_bundle": fhir_bundle
     }
 
@@ -207,11 +283,88 @@ def scan_referral_token(req: FacilityScanRequest):
     ok, msg, record = facility_manager.process_facility_arrival_scan(req.raw_qr_data, req.clerk_id)
     if not ok:
         raise HTTPException(status_code=400, detail=msg)
+
+    # Update SQLite database arrival state
+    try:
+        tok_id = getattr(record, "referral_id", None) or getattr(record, "token_id", None)
+        if not tok_id and req.raw_qr_data:
+            try:
+                parsed = json.loads(req.raw_qr_data)
+                tok_id = parsed.get("referral_id") or parsed.get("token_id")
+            except Exception:
+                tok_id = req.raw_qr_data.split("|")[0]
+
+        with sqlite3.connect(DB_PATH) as conn:
+            c = conn.cursor()
+            c.execute("""
+                UPDATE referrals 
+                SET status = 'ARRIVED', arrived_at = CURRENT_TIMESTAMP, verified_by = ?
+                WHERE token_id = ?
+            """, (req.clerk_id, tok_id))
+            conn.commit()
+    except Exception as db_err:
+        print(f"[Bal-Setu DB Scan Update Note]: {db_err}")
+
     return {
         "success": True,
         "message": msg,
         "record": record.__dict__ if record else None
     }
+
+
+@app.get("/api/referrals/live")
+def get_live_referrals():
+    """
+    Live End-to-End Closed-Loop Referral State & Facility Arrival Queue
+    """
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            c.execute("SELECT COUNT(*) as total FROM screenings")
+            total_screened = c.fetchone()["total"]
+
+            c.execute("SELECT COUNT(*) as active FROM referrals WHERE status = 'REFERRED'")
+            active = c.fetchone()["active"]
+
+            c.execute("SELECT COUNT(*) as arrived FROM referrals WHERE status = 'ARRIVED'")
+            arrived = c.fetchone()["arrived"]
+
+            c.execute("SELECT COUNT(*) as deic FROM referrals WHERE clinical_lane LIKE '%DEIC%'")
+            deic_count = c.fetchone()["deic"]
+
+            c.execute("SELECT COUNT(*) as aam FROM referrals WHERE clinical_lane LIKE '%AAM%'")
+            aam_count = c.fetchone()["aam"]
+
+            c.execute("""
+                SELECT token_id, child_id, clinical_lane, destination_facility, status, requires_102, raw_token_data, created_at, arrived_at 
+                FROM referrals 
+                ORDER BY created_at DESC LIMIT 15
+            """)
+            rows = [dict(r) for r in c.fetchall()]
+
+        return {
+            "summary": {
+                "total_screenings_recorded": total_screened,
+                "active_in_transit_referrals": active,
+                "facility_arrivals_verified": arrived,
+                "deic_routed_count": deic_count,
+                "local_aam_routed_count": aam_count
+            },
+            "recent_referrals": rows
+        }
+    except Exception as db_err:
+        return {
+            "summary": {
+                "total_screenings_recorded": 0,
+                "active_in_transit_referrals": 0,
+                "facility_arrivals_verified": 0,
+                "deic_routed_count": 0,
+                "local_aam_routed_count": 0
+            },
+            "recent_referrals": [],
+            "error": str(db_err)
+        }
 
 
 class ConformalScreeningRequest(BaseModel):

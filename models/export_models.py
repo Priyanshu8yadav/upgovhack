@@ -222,6 +222,26 @@ def main():
     motor_size = os.path.getsize(motor_onnx_path) / (1024 * 1024)
     print(f"  ✓ Exported: {motor_onnx_path} ({motor_size:.2f} MB)")
 
+    # Consolidate into single-file self-contained ONNX models without .data sidecars
+    import onnx
+    for p in [skin_onnx_path, det_onnx_path, speech_onnx_path, motor_onnx_path]:
+        m = onnx.load_model(p, load_external_data=True)
+        onnx.save_model(m, p, save_as_external_data=False)
+    
+    # Remove any stray .data sidecar files
+    for f in os.listdir(base_dir):
+        if f.endswith(".onnx.data"):
+            os.remove(os.path.join(base_dir, f))
+
+    # INT8 Quantization for Skin Model (for Mobile WASM)
+    try:
+        from onnxruntime.quantization import quantize_dynamic, QuantType
+        quant_skin_path = os.path.join(base_dir, "skin_pallor_mobilenetv3_quant.onnx")
+        quantize_dynamic(skin_onnx_path, quant_skin_path, weight_type=QuantType.QUInt8)
+        print(f"  ✓ INT8 Quantized Mobile Skin Model: {quant_skin_path} ({os.path.getsize(quant_skin_path)/(1024*1024):.2f} MB)")
+    except Exception as q_err:
+        print(f"  Note on INT8 quantization: {q_err}")
+
     # Verify All with onnxruntime if available
     if ort is not None:
         print("\nVerifying models with onnxruntime...")

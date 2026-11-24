@@ -24,12 +24,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const speechFeedback = document.getElementById("speechFeedback");
 
   const promptWords = [
-    { name: "सेब (Apple)", icon: "🍎", audioText: "यह एक सेब है। बोलो: सेब!" },
-    { name: "कटोरी (Bowl)", icon: "🥣", audioText: "यह कटोरी है। बोलो: कटोरी!" },
-    { name: "चम्मच (Spoon)", icon: "🥄", audioText: "यह चम्मच है। बोलो: चम्मच!" },
-    { name: "पानी (Water)", icon: "💧", audioText: "यह पानी है। बोलो: पानी!" }
+    { name: "सेब (Apple)", icon: "🍎", audioText: "यह एक सेब है। बोलो: सेब!", audioKey: "apple_hi" },
+    { name: "कटोरी (Bowl)", icon: "🥣", audioText: "यह कटोरी है। बोलो: कटोरी!", audioKey: "bowl_hi" },
+    { name: "चम्मच (Spoon)", icon: "🥄", audioText: "यह चम्मच है। बोलो: चम्मच!", audioKey: "spoon_hi" },
+    { name: "पानी (Water)", icon: "💧", audioText: "यह पानी है। बोलो: पानी!", audioKey: "water_hi" }
   ];
   let currentPromptIdx = 0;
+  let activeAudio = null;
+
+  function playNativeAudio(key, fallbackText) {
+    if (activeAudio) {
+      try { activeAudio.pause(); } catch(e){}
+    }
+    const audio = new Audio(`/pwa/audio/${key}.m4a`);
+    activeAudio = audio;
+    audio.play().catch(err => {
+      speakHindi(fallbackText);
+    });
+  }
 
   function speakHindi(text) {
     if ("speechSynthesis" in window) {
@@ -44,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnSpeakPrompt) {
     btnSpeakPrompt.addEventListener("click", () => {
       const cur = promptWords[currentPromptIdx];
-      speakHindi(cur.audioText);
+      playNativeAudio(cur.audioKey, cur.audioText);
       speechFeedback.innerHTML = `🔊 बज रहा है: "<em>${cur.audioText}</em>"`;
     });
   }
@@ -53,10 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
     btnRecordVoice.addEventListener("click", () => {
       speechFeedback.innerHTML = "🎙️ सुन रहे हैं... बच्चे को बोलने दें (Listening...)";
       setTimeout(() => {
-        const scores = [85, 92, 95];
+        const scores = [88, 92, 96];
         const randomScore = scores[Math.floor(Math.random() * scores.length)];
         speechFeedback.innerHTML = `⭐ <strong>शानदार! (Score: ${randomScore}/100)</strong><br>ध्वनि और शब्दांश स्पष्ट हैं। अगला शब्द आ रहा है...`;
-        speakHindi("शाबाश! बहुत अच्छा बोला!");
+        playNativeAudio("praise_hi", "शाबाश! बहुत अच्छा बोला!");
         setTimeout(() => {
           currentPromptIdx = (currentPromptIdx + 1) % promptWords.length;
           const next = promptWords[currentPromptIdx];
@@ -64,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.querySelector(".item-name").textContent = next.name;
           speechFeedback.textContent = "नया शब्द तैयार है। ऑडियो सुनें बटन दबाएं।";
         }, 2000);
-      }, 1600);
+      }, 1400);
     });
   }
 
@@ -298,7 +310,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (callBox) callBox.style.display = "block";
       if (callTranscript) callTranscript.textContent = text;
       if (callResult) callResult.style.display = "none";
-      speakHindi(text);
+      if (selectedDialect === "bho") {
+        playNativeAudio("bho_ivr", text);
+      } else if (selectedDialect === "awa") {
+        playNativeAudio("awa_ivr", text);
+      } else {
+        speakHindi(text);
+      }
     });
   }
 

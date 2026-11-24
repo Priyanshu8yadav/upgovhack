@@ -1,13 +1,31 @@
 // Bal-Setu Worker PWA Service Worker (sw.js)
 // Enables 100% Offline Screening in Rural Connectivity Dead Zones
+// Precaches ONNX WASM Runtime, Neural Models, and Native Audio Prompts
 
-const CACHE_NAME = 'balsetu-worker-v1';
+const CACHE_NAME = 'balsetu-worker-v2';
 const ASSETS_TO_CACHE = [
   '/worker/',
   '/worker/index.html',
   '/worker/styles.css',
   '/worker/app.js',
   '/worker/manifest.json',
+  '/worker/libs/ort.min.js',
+  '/worker/models/field_lcd_caries_detector.onnx',
+  '/worker/models/speech_acoustic_prosody.onnx',
+  '/worker/audio/step1_hi.m4a',
+  '/worker/audio/step1_bho.m4a',
+  '/worker/audio/step2_hi.m4a',
+  '/worker/audio/step2_bho.m4a',
+  '/worker/audio/step3_hi.m4a',
+  '/worker/audio/step3_bho.m4a',
+  '/worker/audio/step4_hi.m4a',
+  '/worker/audio/step4_bho.m4a',
+  '/worker/audio/step5_hi.m4a',
+  '/worker/audio/step5_bho.m4a',
+  '/worker/audio/quality_ok_hi.m4a',
+  '/worker/audio/quality_blur_hi.m4a',
+  '/worker/audio/quality_light_hi.m4a',
+  '/worker/audio/ocr_success_hi.m4a',
   '/calibcard-assets/calibcard_front.png',
   '/calibcard-assets/calibcard_specs.json'
 ];
@@ -15,7 +33,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Bal-Setu SW] Pre-caching offline worker shell');
+      console.log('[Bal-Setu SW] Pre-caching offline worker shell, ONNX models, and voice assets...');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
         console.warn('[Bal-Setu SW] Asset caching note:', err);
       });

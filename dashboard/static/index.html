@@ -478,6 +478,63 @@
           </div>
         </div>
       </div>
+
+      <!-- Section 4: Live RBSK Facility Handshake & Closed-Loop Referral Queue (UC-4) -->
+      <div class="card card-wide" style="margin-top: 24px;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">4. Live Closed-Loop Referral Queue &amp; Hospital Arrival Scanner (UC-4)</h2>
+            <p class="card-subtitle">End-to-end verifiable persistence: screenings in Frontline PWA generate encrypted tokens, and facility arrival scans update state live with ASHA PFMS incentive release.</p>
+          </div>
+          <span class="badge badge-success">Live SQLite Persisted</span>
+        </div>
+
+        <!-- Live Metrics Ribbon -->
+        <div class="sim-metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 16px;">
+          <div class="sim-metric-card">
+            <div class="sim-metric-label">Total Screenings Persisted</div>
+            <div class="sim-metric-val text-blue" id="liveTotalScreened">0</div>
+            <div class="sim-metric-sub">SQLite Database Active</div>
+          </div>
+          <div class="sim-metric-card">
+            <div class="sim-metric-label">In-Transit Referrals</div>
+            <div class="sim-metric-val text-amber" id="liveActiveReferrals">0</div>
+            <div class="sim-metric-sub">En route to Clinic / NRC</div>
+          </div>
+          <div class="sim-metric-card">
+            <div class="sim-metric-label">Facility Arrivals Verified</div>
+            <div class="sim-metric-val text-emerald" id="liveVerifiedArrivals">0</div>
+            <div class="sim-metric-sub">PFMS Incentive Released</div>
+          </div>
+          <div class="sim-metric-card">
+            <div class="sim-metric-label">Local AAM / NRC Diversions</div>
+            <div class="sim-metric-val text-purple" id="liveAamDiversions">0</div>
+            <div class="sim-metric-sub">Prevented DEIC Overload</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="gov-table" style="font-size: 12px;">
+            <thead>
+              <tr>
+                <th>Child ID</th>
+                <th>HMAC Token ID</th>
+                <th>Clinical Routing Lane</th>
+                <th>Destination Facility</th>
+                <th>Handshake Status</th>
+                <th>Clerk Desk Action</th>
+              </tr>
+            </thead>
+            <tbody id="liveReferralsTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: #94a3b8; padding: 16px;">
+                  Loading live referral queue...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->

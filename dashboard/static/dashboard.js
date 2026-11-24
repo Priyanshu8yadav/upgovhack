@@ -482,8 +482,80 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 8. Live Closed-Loop Referral Queue & Facility Arrival Scanner
+  async function loadLiveReferralQueue() {
+    try {
+      const res = await fetch("/api/referrals/live");
+      const data = await res.json();
+      if (data.summary) {
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.innerText = val;
+        };
+        setVal("liveTotalScreened", data.summary.total_screenings_recorded);
+        setVal("liveActiveReferrals", data.summary.active_in_transit_referrals);
+        setVal("liveVerifiedArrivals", data.summary.facility_arrivals_verified);
+        setVal("liveAamDiversions", data.summary.local_aam_routed_count);
+      }
+      const tbody = document.getElementById("liveReferralsTableBody");
+      if (tbody && data.recent_referrals) {
+        if (data.recent_referrals.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 16px;">No recent referrals recorded yet. Run a screening in Frontline Screener to populate live queue.</td></tr>';
+        } else {
+          tbody.innerHTML = data.recent_referrals.map(r => `
+            <tr>
+              <td><strong>${r.child_id}</strong></td>
+              <td><code>${r.token_id}</code></td>
+              <td><span class="badge ${r.clinical_lane.includes("DEIC") ? "badge-danger" : "badge-warning"}">${r.clinical_lane}</span></td>
+              <td>${r.destination_facility}</td>
+              <td>
+                <span class="badge ${r.status === "ARRIVED" ? "badge-success" : "badge-warning"}">
+                  ${r.status === "ARRIVED" ? "✓ ARRIVED (Verified)" : "⏳ IN TRANSIT (Referred)"}
+                </span>
+              </td>
+              <td>
+                ${r.status !== "ARRIVED" ? 
+                  `<button class="btn btn-sm btn-primary" onclick="window.triggerLiveArrivalScan('${r.raw_token_data || r.token_id}')">Scan Arrival</button>` : 
+                  `<span style="color: #10B981; font-size: 11px; font-weight: 700;">✓ ₹250 PFMS Released</span>`
+                }
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+    } catch (e) {
+      console.log("Live referrals note:", e);
+    }
+  }
+
+  window.triggerLiveArrivalScan = async function(rawToken) {
+    try {
+      const resp = await fetch("/api/referral/scan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          raw_qr_data: rawToken,
+          clerk_id: "CLERK-LKO-CHC-01"
+        })
+      });
+      const res = await resp.json();
+      if (res.success) {
+        alert("🏥 Facility Desk Scan Success!\n\nChild Arrival Confirmed: " + (res.record?.child_id || '') + "\nASHA Incentive Credited via PFMS: ₹" + (res.record?.asha_incentive?.amount_inr || 250));
+        loadLiveReferralQueue();
+      } else {
+        alert("Scan rejected: " + res.detail);
+      }
+    } catch (err) {
+      alert("Scan error: " + err);
+    }
+  };
+
+  // Poll live referrals every 5 seconds
+  setInterval(loadLiveReferralQueue, 5000);
+
   // Start initialization
   initCharts();
   loadDistrictTable();
   updateSimulation();
+  loadLiveReferralQueue();
 });

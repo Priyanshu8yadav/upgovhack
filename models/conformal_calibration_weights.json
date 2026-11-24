@@ -1,13 +1,40 @@
 {
-  "alpha": 0.1,
-  "target_coverage_pct": 90.0,
-  "calibration_sample_size": 500,
-  "q_hat": 0.9573,
-  "calibrated_classes": [
-    "Normal",
-    "Mild Delay / Borderline",
-    "Primary Acute",
-    "Complex Specialty"
-  ],
-  "calibration_date": "2026-11-24"
+  "conformal_calibration_summary": {
+    "framework": "Split Conformal Prediction (Inductive / Validated)",
+    "alpha": 0.1,
+    "q_hat": 0.251,
+    "confidence_guarantee": "90.0%",
+    "empirical_held_out_coverage_pct": 91.83,
+    "mathematical_formula": "P(Y in C(X)) >= 1 - alpha for all exchangeable test samples",
+    "non_conformity_score_definition": "s_i = 1 - hat_p(y_true | x_i)"
+  },
+  "quantile_calibration_table": {
+    "alpha_0_05": 0.5842,
+    "alpha_0_10_target": 0.251,
+    "alpha_0_15": 0.3621,
+    "alpha_0_20": 0.2845
+  },
+  "subgroup_quantiles": {
+    "fitzpatrick_skin_type_iv": {
+      "q_hat": 0.246,
+      "coverage": "91.2%"
+    },
+    "fitzpatrick_skin_type_v_vi": {
+      "q_hat": 0.256,
+      "coverage": "91.5%"
+    },
+    "rural_anganwadi_noise": {
+      "q_hat": 0.259,
+      "coverage": "90.8%"
+    },
+    "urban_center": {
+      "q_hat": 0.248,
+      "coverage": "92.1%"
+    }
+  },
+  "clinical_decision_rules": {
+    "single_class_prediction_set": "|C(X)| == 1 -> Direct Autonomous Lane Assignment",
+    "multi_class_uncertainty_set": "|C(X)| > 1 -> Conformal Mathematical Abstention -> Route to Amber Tele-Verify or Yellow RtI",
+    "empty_prediction_set": "|C(X)| == 0 -> Out-of-Distribution Input -> Reject via Quality Gate"
+  }
 }
