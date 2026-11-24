@@ -18,7 +18,7 @@ pinned: false
 [![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Section%209%20Compliant-purple.svg)](https://meity.gov.in)
 [![CDSCO SaMD](https://img.shields.io/badge/CDSCO%20MDR--2017-Class%20B%20SaMD-teal.svg)](https://cdsco.gov.in)
 [![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passing-brightgreen.svg)](tests/)
-[![Edge Footprint](https://img.shields.io/badge/ONNX%20Edge%20Models-0.39%20MB%20Total-orange.svg)](models/)
+[![Edge Footprint](https://img.shields.io/badge/ONNX%20Edge%20Models-2.18%20MB%20Total-orange.svg)](models/)
 [![Eval Benchmark](https://img.shields.io/badge/CDSCO%20Eval-Validated%20Benchmarks-teal.svg)](eval/)
 
 ---
@@ -39,7 +39,7 @@ An offline-first, edge-AI screening SDK and capacity-aware care orchestration la
 
 ---
 
-## 2. Bal-Setu's Multi-Modal Edge AI Engine (<0.4 MB Footprint)
+## 2. Bal-Setu's Multi-Modal Edge AI Engine (~2.18 MB Footprint)
 
 Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinical algorithms running 100% locally on CPU without GPU or cloud connectivity:
 
@@ -60,7 +60,7 @@ Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinic
 +-------------------+     +-------------------+     +-------------------+
 |   D1 & D3 VISION  |     |   D2 DEFICIENCY   |     |    D4 KINEMATICS  |
 |  MobileNetV3 ONNX |     |  CIELAB + LCD OCR |     |  MediaPipe + Spech|
-|   (286.1 KB)      |     |    (20.0 KB)      |     |  (35.9 + 60.9 KB) |
+|    (1.21 MB)      |     |    (433.6 KB)     |     | (290.0 + 201.8 KB)|
 +-------------------+     +-------------------+     +-------------------+
 | • Cleft/Clubfoot  |     | • Mucosal a*/L*   |     | • MediaPipe 33-pt |
 | • Hirschberg CLR  |     | • WHO LMS Z-Score |     | • 30-Frame Buffer |
@@ -70,7 +70,7 @@ Bal-Setu is powered by real, sub-10 MB ONNX edge models and deterministic clinic
                                     v
 +-----------------------------------------------------------------------------------------+
 |                  SPLIT CONFORMAL UNCERTAINTY GATING (1 - α = 0.90)                      |
-|    P(Y ∈ C(X)) >= 90.0% • Non-Conformity Scoring: s_i = 1 - p(y_i|x_i) • q̂ = 0.4421     |
+|    P(Y ∈ C(X)) >= 90.0% • Non-Conformity Scoring: s_i = 1 - p(y_i|x_i) • q̂ = 0.2510     |
 |      • |C(X)| == 1 : Autonomous Lane Routing Permitted                                   |
 |      • |C(X)| >  1 : Mathematical Abstention -> Route to Amber Tele-Verify or Yellow RtI|
 +-----------------------------------------------------------------------------------------+
@@ -87,12 +87,12 @@ Tested on macOS arm64 CPU (representative of midrange Dimensity 700 / Snapdragon
 
 | Model Component | File Size | Mean Latency | p95 Latency | Memory | Target Verdict |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Skin Pallor MobileNetV3 (D2/D3)** | 286.1 KB | 1.30 ms | 1.71 ms | <12 MB | **PASS** (<35 ms) |
-| **7-Segment LCD & Caries Detector (D2/D3)** | 20.0 KB | 0.57 ms | 0.68 ms | <4 MB | **PASS** (<15 ms) |
-| **Acoustic Speech Prosody Classifier (D4)** | 35.9 KB | 0.04 ms | 0.05 ms | <2 MB | **PASS** (<5 ms) |
-| **30-Frame Motor Kinematics (D4)** | 60.9 KB | 0.06 ms | 0.07 ms | <3 MB | **PASS** (<5 ms) |
+| **Skin Pallor MobileNetV3 (D2/D3)** | 1,206.7 KB | 2.10 ms | 2.65 ms | <16 MB | **PASS** (<35 ms) |
+| **7-Segment LCD & Caries Detector (D2/D3)** | 433.6 KB | 0.85 ms | 1.10 ms | <6 MB | **PASS** (<15 ms) |
+| **Acoustic Speech Prosody Classifier (D4)** | 201.8 KB | 0.12 ms | 0.18 ms | <4 MB | **PASS** (<5 ms) |
+| **30-Frame Motor Kinematics (D4)** | 290.0 KB | 0.15 ms | 0.22 ms | <4 MB | **PASS** (<5 ms) |
 | **Optical CalibCard ArUco Homography & Color Balance** | — | 1.43 ms | 1.85 ms | <6 MB | **PASS** (<10 ms) |
-| **TOTAL MULTI-MODAL EDGE AI FOOTPRINT** | **0.39 MB** | **<3.5 ms** | **<5.0 ms** | **<25 MB** | **PASS (<10 MB target)** |
+| **TOTAL MULTI-MODAL EDGE AI FOOTPRINT** | **2.18 MB** | **<5.0 ms** | **<6.5 ms** | **<35 MB** | **PASS (<10 MB target)** |
 
 ---
 
@@ -123,7 +123,7 @@ Bal-Setu provides three purpose-built interfaces tailored to distinct user roles
   - **75-District Master Health Table:** Searchable LGD-coded district database tracking 4D morbidity, DEIC capacity stress, and local AAM diversions.
 
 ### 3. Parent Offline Mini-PWA (UC-5, UC-6, UC-7)
-- **URL:** [http://localhost:8080/pwa/](http://localhost:8080/pwa/)
+- **URL:** [http://localhost:7860/pwa/](http://localhost:7860/pwa/) (or port 8080)
 - **Target Users:** Parents in rural UP households (shared-phone evening use).
 - **Key Features:**
   - Zero-fee, lightweight (<2 MB) PWA cached 100% offline via Service Worker (`sw.js`).
@@ -131,6 +131,14 @@ Bal-Setu provides three purpose-built interfaces tailored to distinct user roles
   - Fine-motor canvas tracing on CalibCard back with real-time Hausdorff distance grading.
   - Response-to-Intervention (RtI) progress-velocity curve ($\Delta$ slope auto-escalation).
   - Missed-Call Dialect IVR audio player (Awadhi, Bhojpuri, Bundeli, Braj, Khari Boli).
+
+### 4. Facility Clinical Reception Desk (UC-4)
+- **URL:** [http://localhost:7860/facility/](http://localhost:7860/facility/) (or port 8080)
+- **Target Users:** DEIC Clinical Receptionist, Medical Officer at CHC/NRC.
+- **Key Features:**
+  - Fast offline QR camera scanner reading HMAC-SHA256 encrypted triage tokens with zero network required.
+  - Instantly loads child health dossier, clinical lane (Green/Yellow/Primary Red/Complex Red), and auto-updates arrival timestamp.
+  - ABHA ID and ABDM FHIR R4 Bundle verification.
 
 ---
 

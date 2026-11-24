@@ -71,7 +71,7 @@ self.addEventListener('fetch', (event) => {
             status: "cached_offline_queue",
             message: "कार्यवाही ऑफ़लाइन सहेजी गई। नेटवर्क मिलने पर e-Kavach में सिंक होगी।"
           }),
-          { headers: { 'Content-Type': 'application/json' } }
+          { headers: { 'Content-Type': 'application/json' }, status: 503 }
         );
       })
     );

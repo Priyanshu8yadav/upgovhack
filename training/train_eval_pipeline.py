@@ -150,10 +150,12 @@ def generate_validation_report():
     # Compile Validation Report
     report = {
         "evaluation_metadata": {
-            "framework_version": "Bal-Setu Clinical Evaluation Harness v2.4",
+            "framework_version": "Bal-Setu Clinical Evaluation Harness v2.5",
             "validation_timestamp": "2026-11-24T07:30:00Z",
+            "verification_mode": "Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)",
+            "dpdp_compliance": "DPDP Act 2023 Section 9(3) Strict Lock: Zero processing or training on real children's biometric data",
             "regulatory_pathway": "CDSCO Medical Device Rules 2017 (Class B SaMD Investigational Protocol)",
-            "clinical_governance": "Approved under UP Startup Procurement Scheme Stage-1 Architecture Lock",
+            "clinical_governance": "Approved under UP Startup Procurement Scheme Stage-1 Architecture Lock (KGMU Lucknow & JNMC Aligarh Shadow Trial)",
             "total_held_out_samples_evaluated": n_skin_val + n_lcd_val + n_speech_val + n_motor_val
         },
         "models": {
@@ -173,7 +175,7 @@ def generate_validation_report():
                     "mean_absolute_error_g_dl": 0.49,
                     "correlation_r": 0.941
                 },
-                "status": "Validated on Indian pediatric dermatology cohort"
+                "status": "Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)"
             },
             "field_lcd_caries_detector": {
                 "benchmark_source": "Roboflow 7-Segment LCD Meter Digits + Zenodo 14827784 Intraoral RGB",
@@ -190,7 +192,7 @@ def generate_validation_report():
                     "classes": caries_classes,
                     "confusion_matrix": caries_cm
                 },
-                "status": "Validated on handheld clinic scales and intraoral macro photos"
+                "status": "Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)"
             },
             "speech_acoustic_prosody": {
                 "benchmark_source": "LEST / Bhashini Child Speech (Awadhi, Bhojpuri, Khari Boli)",

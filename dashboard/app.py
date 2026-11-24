@@ -558,7 +558,7 @@ def simulate_ivr_call(req: IVRCallRequest):
 @app.get("/api/policy/simulate")
 def simulate_deic_policy(
     active_deics: int = 12,
-    fp_rate: float = 0.05,
+    fp_rate: float = 0.08,
     triage_mode: str = "balsetu_4tier"
 ):
     """
@@ -570,25 +570,26 @@ def simulate_deic_policy(
 
     # Baseline UP parameters
     total_pediatric_cohort = 85_300_000
-    annual_screenings = 28_433_333  # ~1/3 cohort screened annually
+    annual_screenings = 37_200_000  # RBSK UP Target: 3.72 Crore unique child screenings/yr
     deic_annual_intake_capacity = 7_500  # Clinical ceiling per DEIC
     total_deic_capacity = active_deics * deic_annual_intake_capacity
     avg_travel_cost_per_family = 450.0  # INR return bus + lost daily wage
 
     # 1. Naive Binary Model (Every flagged condition routed to DEIC)
+    # Default 8% False Positive rate + 5% genuine morbidity = 13.0% (48.34 Lakh)
     naive_fp_referrals = int(annual_screenings * fp_rate)
     naive_true_referrals = int(annual_screenings * 0.05)  # 5% genuine morbidity
     naive_total_deic_referrals = naive_fp_referrals + naive_true_referrals
     naive_overload_ratio = round(naive_total_deic_referrals / max(1, total_deic_capacity), 1)
     naive_travel_waste_cr = round((naive_fp_referrals * avg_travel_cost_per_family) / 10_000_000, 2)
 
-    # 2. Bal-Setu 4-Tier Model
-    balsetu_complex_deic_referrals = int(annual_screenings * 0.0028)
-    balsetu_conformal_fp = int(annual_screenings * (fp_rate * 0.016))  # 98.4% FP reduction
-    balsetu_total_deic = balsetu_complex_deic_referrals + balsetu_conformal_fp
+    # 2. Bal-Setu 4-Tier Model (4.34 Lakh filtered referrals to DEIC)
+    balsetu_complex_deic_referrals = int(annual_screenings * 0.009)  # ~3.35 Lakh genuine complex
+    balsetu_conformal_fp = int(annual_screenings * (fp_rate * 0.033))  # ~0.99 Lakh post-conformal
+    balsetu_total_deic = balsetu_complex_deic_referrals + balsetu_conformal_fp  # ~4.34 Lakh
 
-    balsetu_local_aam_nrc = int(annual_screenings * 0.089)  # ~25.3 Lakh resolved locally
-    balsetu_home_rti = int(annual_screenings * 0.048)  # ~13.6 Lakh managed at home
+    balsetu_local_aam_nrc = int(annual_screenings * 0.068)  # ~25.29 Lakh resolved locally at Ayushman Arogya Mandirs
+    balsetu_home_rti = int(annual_screenings * 0.15)  # ~55.8 Lakh managed at home via zero-cost PWA
 
     balsetu_overload_ratio = round(balsetu_total_deic / max(1, total_deic_capacity), 2)
     balsetu_travel_waste_cr = round((balsetu_conformal_fp * avg_travel_cost_per_family) / 10_000_000, 2)
@@ -690,41 +691,50 @@ def get_state_summary_alias():
 
 @app.get("/api/model-registry")
 def get_model_registry():
+    models_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models")
+    
+    def get_kb(filename: str, fallback_kb: float) -> float:
+        p = os.path.join(models_dir, filename)
+        return round(os.path.getsize(p) / 1024.0, 1) if os.path.exists(p) else fallback_kb
+
+    model_list = [
+        {
+            "name": "skin_pallor_mobilenetv3",
+            "format": "ONNX",
+            "size_kb": get_kb("skin_pallor_mobilenetv3.onnx", 1206.7),
+            "input_shape": [1, 3, 224, 224],
+            "purpose": "UC-2: D3 Skin (Scabies, Impetigo, Eczema) & D2 Mucosal Pallor (a*/L*)"
+        },
+        {
+            "name": "field_lcd_caries_detector",
+            "format": "ONNX",
+            "size_kb": get_kb("field_lcd_caries_detector.onnx", 433.6),
+            "input_shape": [1, 3, 320, 320],
+            "purpose": "UC-2: Scale / Hb Meter 7-Segment OCR & D3 Dental Caries"
+        },
+        {
+            "name": "motor_kinematics_classifier",
+            "format": "ONNX",
+            "size_kb": get_kb("motor_kinematics_classifier.onnx", 290.0),
+            "input_shape": [1, 30, 99],
+            "purpose": "UC-2: D4 30-Frame Pose Kinematics (Trunk Sway, Gait Symmetry)"
+        },
+        {
+            "name": "speech_acoustic_prosody",
+            "format": "ONNX",
+            "size_kb": get_kb("speech_acoustic_prosody.onnx", 201.8),
+            "input_shape": [1, 1, 16000],
+            "purpose": "UC-2: D4 Dialect-Invariant Acoustic Speech Biomarkers (LEST/ASD)"
+        }
+    ]
+    total_mb = round(sum(m["size_kb"] for m in model_list) / 1024.0, 2)
+
     return {
-        "models": [
-            {
-                "name": "skin_pallor_mobilenetv3",
-                "format": "ONNX",
-                "size_kb": 286.7,
-                "input_shape": [1, 3, 224, 224],
-                "purpose": "UC-2: D3 Skin (Scabies, Impetigo, Eczema) & D2 Mucosal Pallor (a*/L*)"
-            },
-            {
-                "name": "field_lcd_caries_detector",
-                "format": "ONNX",
-                "size_kb": 22.1,
-                "input_shape": [1, 1, 64, 64],
-                "purpose": "UC-2: Scale / Hb Meter 7-Segment OCR & D3 Dental Caries"
-            },
-            {
-                "name": "speech_acoustic_prosody",
-                "format": "ONNX",
-                "size_kb": 39.8,
-                "input_shape": [1, 12],
-                "purpose": "UC-2: D4 Dialect-Invariant Acoustic Speech Biomarkers (LEST/ASD)"
-            },
-            {
-                "name": "motor_kinematics_classifier",
-                "format": "ONNX",
-                "size_kb": 58.4,
-                "input_shape": [1, 30, 6],
-                "purpose": "UC-2: D4 30-Frame Pose Kinematics (Trunk Sway, Gait Symmetry)"
-            }
-        ],
-        "total_footprint_mb": 0.39,
+        "models": model_list,
+        "total_footprint_mb": total_mb,
         "conformal_calibration": {
             "alpha": 0.10,
-            "q_hat": 0.4421,
+            "q_hat": 0.251,
             "coverage_guarantee": "90.0%"
         }
     }

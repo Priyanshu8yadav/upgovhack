@@ -87,7 +87,7 @@ class SplitConformalCalibrator:
             try:
                 with open(self.weights_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    self.q_hat = data.get("q_hat", 0.42)
+                    self.q_hat = data.get("conformal_calibration_summary", {}).get("q_hat", data.get("q_hat", 0.251))
                     return
             except Exception:
                 pass

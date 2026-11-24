@@ -342,6 +342,11 @@ function renderArrivalDossier(record) {
   document.getElementById('arrivalDossierCard').style.display = 'block';
   document.getElementById('dossierChildId').innerText = record.child_id_hash || "UP-LKO-2026-LIVE-101";
   document.getElementById('dossierTokenId').innerText = record.referral_id || "REF-VERIFIED";
+  const laneEl = document.getElementById('dossierLane');
+  if (laneEl) {
+    laneEl.innerText = record.clinical_lane || record.notes?.[0] || "Verified Referral Lane";
+    laneEl.style.color = (record.facility_name && record.facility_name.includes("DEIC")) ? "var(--red)" : "var(--accent)";
+  }
   document.getElementById('dossierFacility').innerText = record.facility_name || "जिला शीघ्र हस्तक्षेप केंद्र (DEIC)";
   document.getElementById('dossierIncentiveAmount').innerText = record.asha_incentive?.amount_inr || "250";
   document.getElementById('dossierAshaId').innerText = `आशा आईडी: ${record.asha_incentive?.asha_id || 'ASHA-LKO-4421'} • PFMS संदर्भ: ${record.asha_incentive?.transaction_ref || 'TXN-PFMS-9941'}`;

@@ -68,6 +68,9 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 
+# Audit and temp text dumps
+code_audit.txt
+
 # Explicitly track essential edge models and calibrated assets
 !models/*.onnx
 !models/conformal_calibration_weights.json

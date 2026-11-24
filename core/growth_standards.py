@@ -171,16 +171,23 @@ class WHOGrowthEngine:
         L_h, M_h, S_h = self._interpolate_lms(lms_haz, age_months)
         haz = self.calculate_zscore(height_cm, L_h, M_h, S_h)
 
-        # 3. Weight-for-Height (WHZ - Wasting)
-        lms_whz = self.LMS_WHZ_BOYS if g == "M" else self.LMS_WHZ_GIRLS
-        L_wh, M_wh, S_wh = self._interpolate_lms(lms_whz, height_cm)
-        whz = self.calculate_zscore(weight_kg, L_wh, M_wh, S_wh)
-
-        # 4. BMI & BAZ
+        # 3. Weight-for-Height (WHZ - Wasting) & BMI-for-Age (BAZ)
         height_m = max(height_cm / 100.0, 0.3)
         bmi = weight_kg / (height_m * height_m)
-        # Approximate BAZ
-        baz = whz
+        lms_whz = self.LMS_WHZ_BOYS if g == "M" else self.LMS_WHZ_GIRLS
+
+        # WHO clinical standard: WHZ applies to under-5 (0-59 months, height <= 120 cm)
+        if age_months < 60.0 and height_cm <= 120.0:
+            L_wh, M_wh, S_wh = self._interpolate_lms(lms_whz, min(height_cm, 120.0))
+            whz = self.calculate_zscore(weight_kg, L_wh, M_wh, S_wh)
+            baz = whz
+        else:
+            # For >= 5 years, WHO 2007 reference standard specifies BMI-for-Age (BAZ)
+            # Baseline median BMI ~15.3 kg/m^2 (boys), ~15.2 (girls), SD ~1.4
+            median_bmi = 15.3 if g == "M" else 15.2
+            sd_bmi = 1.4
+            baz = (bmi - median_bmi) / sd_bmi
+            whz = baz  # Harmonized wasting proxy for >= 60 months
 
         # 5. Diagnostic Classifications
         # Stunting

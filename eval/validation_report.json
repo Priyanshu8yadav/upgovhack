@@ -65,7 +65,7 @@
         "mean_absolute_error_g_dl": 0.49,
         "correlation_r": 0.941
       },
-      "status": "Validated on Indian pediatric dermatology cohort"
+      "status": "Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)"
     },
     "field_lcd_caries_detector": {
       "benchmark_source": "Roboflow 7-Segment LCD Meter Digits + Zenodo 14827784 Intraoral RGB",
@@ -102,7 +102,7 @@
           ]
         ]
       },
-      "status": "Validated on handheld clinic scales and intraoral macro photos"
+      "status": "Simulated Calibration Stress-Test (Untrained PoC Architecture Weights — Clinical Training Pending Stage-1 KGMU IEC Trial)"
     },
     "speech_acoustic_prosody": {
       "benchmark_source": "LEST / Bhashini Child Speech (Awadhi, Bhojpuri, Khari Boli)",

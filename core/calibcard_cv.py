@@ -57,11 +57,6 @@ class CalibCardCVPipeline:
         else:
             self.detector = None
 
-    def _detect_markers(self, gray: np.ndarray):
-        if self.detector is not None:
-            return self.detector.detectMarkers(gray)
-        return aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruco_params)
-
         # Canonical corner coordinates (top-left, top-right, bottom-right, bottom-left)
         # In the CalibCard, markers are placed 3.5mm from outer edge, 11.8mm wide
         self.canonical_dst = np.array([
@@ -70,6 +65,11 @@ class CalibCardCVPipeline:
             [float(self.width_px), float(self.height_px)],
             [0.0, float(self.height_px)]
         ], dtype=np.float32)
+
+    def _detect_markers(self, gray: np.ndarray):
+        if self.detector is not None:
+            return self.detector.detectMarkers(gray)
+        return aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruco_params)
 
     def detect_and_rectify(self, bgr_image: np.ndarray) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Dict]:
         """
@@ -132,16 +132,23 @@ class CalibCardCVPipeline:
         Von Kries diagonal white balance multipliers.
         """
         # Canonical patch bounding boxes:
+        # Reference template is rendered at 1011 x 638 px. Scale dynamically to target rectified card.
+        sx = self.width_px / 1011.0
+        sy = self.height_px / 638.0
         # start_x = 180, start_y = 150, p_w = 60, p_h = 75, gap_x = 15, gap_y = 20
         # Column 0: x in [180, 240], Column 1: x in [255, 315]
         # Row 0: y in [150, 225], Row 1: y in [245, 320], Row 2: y in [340, 415]
-        patch_coords = [
+        patch_coords_ref = [
             ("WHT", "Neutral White", (245, 245, 245), (180, 150, 60, 75)),
             ("GRY", "Mid-Gray 18%", (118, 118, 118), (255, 150, 60, 75)),
             ("BLK", "Dark Gray", (45, 45, 45), (180, 245, 60, 75)),
             ("RED", "Crimson Red", (180, 20, 30), (255, 245, 60, 75)),
             ("SKN1", "Warm Skin IV", (198, 134, 105), (180, 340, 60, 75)),
             ("SKN2", "Deep Skin V/VI", (120, 75, 55), (255, 340, 60, 75)),
+        ]
+        patch_coords = [
+            (code, name, target_rgb, (int(rx * sx), int(ry * sy), max(4, int(rw * sx)), max(4, int(rh * sy))))
+            for code, name, target_rgb, (rx, ry, rw, rh) in patch_coords_ref
         ]
 
         measurements = []
@@ -203,37 +210,39 @@ class CalibCardCVPipeline:
             - 'cross': Pattern 2 (Ages 4-5, center (505, 320), arm length 70px / 7mm)
             - 'zigzag': Pattern 3 (Ages 5-6, center (740, 320), span 140px / 14mm)
         """
-        # Define reference canonical path points
+        # Define reference canonical path points with dynamic coordinate scaling
+        sx = self.width_px / 1011.0
+        sy = self.height_px / 638.0
         if pattern_type.lower() == "circle":
             target_age = "3-4 years"
             threshold_dev_mm = 3.5
-            cx, cy, r = 270.0, 320.0, 70.0
+            cx, cy, r = 270.0 * sx, 320.0 * sy, 70.0 * sx
             angles = np.linspace(0, 2 * np.pi, 200)
             ref_pts = np.column_stack([cx + r * np.cos(angles), cy + r * np.sin(angles)])
-            roi = (int(cx - 100), int(cy - 100), 200, 200)
+            roi = (int(cx - 100 * sx), int(cy - 100 * sy), int(200 * sx), int(200 * sy))
         elif pattern_type.lower() == "cross":
             target_age = "4-5 years"
             threshold_dev_mm = 2.8
-            cx, cy, arm = 505.0, 320.0, 70.0
+            cx, cy, arm = 505.0 * sx, 320.0 * sy, 70.0 * sx
             v_line = np.column_stack([np.full(100, cx), np.linspace(cy - arm, cy + arm, 100)])
             h_line = np.column_stack([np.linspace(cx - arm, cx + arm, 100), np.full(100, cy)])
             ref_pts = np.vstack([v_line, h_line])
-            roi = (int(cx - 100), int(cy - 100), 200, 200)
+            roi = (int(cx - 100 * sx), int(cy - 100 * sy), int(200 * sx), int(200 * sy))
         else:  # zigzag
             target_age = "5-6 years"
             threshold_dev_mm = 2.2
-            cx, cy = 740.0, 320.0
-            p1 = np.array([cx - 70, cy + 40])
-            p2 = np.array([cx - 35, cy - 40])
-            p3 = np.array([cx, cy + 40])
-            p4 = np.array([cx + 35, cy - 40])
-            p5 = np.array([cx + 70, cy + 40])
+            cx, cy = 740.0 * sx, 320.0 * sy
+            p1 = np.array([cx - 70 * sx, cy + 40 * sy])
+            p2 = np.array([cx - 35 * sx, cy - 40 * sy])
+            p3 = np.array([cx, cy + 40 * sy])
+            p4 = np.array([cx + 35 * sx, cy - 40 * sy])
+            p5 = np.array([cx + 70 * sx, cy + 40 * sy])
             s1 = np.linspace(p1, p2, 50)
             s2 = np.linspace(p2, p3, 50)
             s3 = np.linspace(p3, p4, 50)
             s4 = np.linspace(p4, p5, 50)
             ref_pts = np.vstack([s1, s2, s3, s4])
-            roi = (int(cx - 100), int(cy - 100), 200, 200)
+            roi = (int(cx - 100 * sx), int(cy - 100 * sy), int(200 * sx), int(200 * sy))
 
         # Extract ROI
         rx, ry, rw, rh = roi

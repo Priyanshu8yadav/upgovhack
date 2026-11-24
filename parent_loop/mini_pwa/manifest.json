@@ -3,7 +3,7 @@
   "name": "बाल-सेतु | Bal-Setu Parent Companion",
   "icons": [
     {
-      "src": "../../calibcard/calibcard_front.png",
+      "src": "/calibcard-assets/calibcard_front.png",
       "type": "image/png",
       "sizes": "192x192"
     }

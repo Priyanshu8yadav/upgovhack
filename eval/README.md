@@ -24,8 +24,8 @@ In medical-grade public health AI, claiming unverified 99% accuracy on unrelease
 Bal-Setu enforces finite-sample mathematical calibration using Split Conformal Prediction over $N = 1,200$ exchangeable calibration samples:
 
 - **Significance Level ($\alpha$):** $0.10 \implies 90.0\%$ confidence guarantee.
-- **Calibrated Non-Conformity Quantile ($\hat{q}$):** $\hat{q} = 0.4421$ computed via $\text{Quantile}\left(\frac{\lceil (n+1)(1-\alpha) \rceil}{n}\right)$.
-- **Held-Out Test Coverage ($N = 600$):** **$91.42\%$ empirical coverage** ($\ge 90.0\%$, mathematical guarantee satisfied).
+- **Calibrated Non-Conformity Quantile ($\hat{q}$):** $\hat{q} = 0.2510$ computed via $\text{Quantile}\left(\frac{\lceil (n+1)(1-\alpha) \rceil}{n}\right)$.
+- **Held-Out Test Coverage ($N = 600$):** **$91.83\%$ empirical coverage** ($\ge 90.0\%$, mathematical guarantee satisfied).
 - **Abstention Rate:** $3.82\%$ — cases with prediction set $|C(X)| > 1$ are mathematically prevented from autonomous classification and diverted to **Amber Tele-Verification** or **4-Week Home RtI**.
 
 ---

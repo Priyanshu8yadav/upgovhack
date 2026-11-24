@@ -1,11 +1,12 @@
 // Bal-Setu Service Worker: Cache First for Zero-Cost Offline Execution
-const CACHE_NAME = "balsetu-pwa-v5";
+const CACHE_NAME = "balsetu-pwa-v6";
 const ASSETS_TO_CACHE = [
   "/pwa/",
   "/pwa/index.html",
   "/pwa/styles.css",
   "/pwa/app.js",
   "/pwa/manifest.json",
+  "/pwa/libs/chart.umd.min.js",
   "/pwa/audio/apple_hi.mp3",
   "/pwa/audio/bowl_hi.mp3",
   "/pwa/audio/spoon_hi.mp3",

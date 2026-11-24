@@ -502,7 +502,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.recent_referrals.length === 0) {
           tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 16px;">No recent referrals recorded yet. Run a screening in Frontline Screener to populate live queue.</td></tr>';
         } else {
-          tbody.innerHTML = data.recent_referrals.map(r => `
+          window.latestReferralsList = data.recent_referrals;
+          tbody.innerHTML = data.recent_referrals.map((r, idx) => `
             <tr>
               <td><strong>${r.child_id}</strong></td>
               <td><code>${r.token_id}</code></td>
@@ -515,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
               </td>
               <td>
                 ${r.status !== "ARRIVED" ? 
-                  `<button class="btn btn-sm btn-primary" onclick="window.triggerLiveArrivalScan('${r.raw_token_data || r.token_id}')">Scan Arrival</button>` : 
+                  `<button class="btn btn-sm btn-primary" onclick="window.triggerLiveArrivalScanByIndex(${idx})">Scan Arrival</button>` : 
                   `<span style="color: #10B981; font-size: 11px; font-weight: 700;">✓ ₹250 PFMS Released</span>`
                 }
               </td>
@@ -528,7 +529,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  window.triggerLiveArrivalScan = async function(rawToken) {
+  window.triggerLiveArrivalScanByIndex = async function(idx) {
+    const r = window.latestReferralsList && window.latestReferralsList[idx];
+    if (!r) return;
+    const rawToken = r.raw_token_data || r.token_id;
     try {
       const resp = await fetch("/api/referral/scan", {
         method: "POST",
@@ -540,10 +544,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const res = await resp.json();
       if (res.success) {
-        alert("🏥 Facility Desk Scan Success!\n\nChild Arrival Confirmed: " + (res.record?.child_id || '') + "\nASHA Incentive Credited via PFMS: ₹" + (res.record?.asha_incentive?.amount_inr || 250));
+        const childIdentifier = r.child_id || res.record?.child_id_hash || res.record?.referral_id || "Child";
+        alert("🏥 Facility Desk Scan Success!\n\nChild Arrival Confirmed: " + childIdentifier + "\nASHA Incentive Credited via PFMS: ₹" + (res.record?.asha_incentive?.amount_inr || 250));
         loadLiveReferralQueue();
       } else {
-        alert("Scan rejected: " + res.detail);
+        alert("Scan rejected: " + (res.detail || res.message));
       }
     } catch (err) {
       alert("Scan error: " + err);
