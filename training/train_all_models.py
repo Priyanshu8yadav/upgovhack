@@ -77,8 +77,8 @@ def train_skin_pallor_model():
     # Generate synthetic training & validation batches matching clinical distributions
     # 4 classes: Normal Skin (0), Scabies (1), Fungal/Tinea (2), Eczema (3)
     # Fitzpatrick skin types IV-VI (Wheatish to Deep Brown)
-    n_train = 1200
-    n_val = 300
+    n_train = 400
+    n_val = 100
 
     # Image generator with realistic skin hues and pathological lesions
     def generate_skin_data(n_samples):
@@ -159,7 +159,7 @@ def train_skin_pallor_model():
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3, weight_decay=1e-4)
 
     model.train()
-    for epoch in range(5):
+    for epoch in range(3):
         total_loss = 0.0
         correct = 0
         total = 0
@@ -195,29 +195,20 @@ def train_skin_pallor_model():
         model,
         dummy_input,
         onnx_path,
+        dynamo=False,
+        opset_version=17,
         input_names=["normalized_roi"],
         output_names=["skin_disease_logits", "pallor_metrics"],
-        dynamic_axes={"normalized_roi": {0: "batch_size"}},
-        opset_version=14
+        dynamic_axes={
+            "normalized_roi": {0: "batch_size"},
+            "skin_disease_logits": {0: "batch_size"},
+            "pallor_metrics": {0: "batch_size"}
+        }
     )
 
-    # Save as self-contained single-file ONNX
-    m = onnx.load_model(onnx_path, load_external_data=True)
-    onnx.save_model(m, onnx_path, save_as_external_data=False)
     size_mb = os.path.getsize(onnx_path) / (1024 * 1024)
     print(f"  ✓ Exported Skin Model: {onnx_path} ({size_mb:.2f} MB)")
-
-    # INT8 Quantization
-    try:
-        from onnxruntime.quantization import quantize_dynamic, QuantType
-        quant_path = os.path.join(MODELS_DIR, "skin_pallor_mobilenetv3_quant.onnx")
-        quantize_dynamic(onnx_path, quant_path, weight_type=QuantType.QUInt8)
-        q_size = os.path.getsize(quant_path) / (1024 * 1024)
-        print(f"  ✓ INT8 Quantized Skin Model: {quant_path} ({q_size:.2f} MB)")
-        shutil.copy2(quant_path, os.path.join(WORKER_MODELS_DIR, "skin_pallor_mobilenetv3.onnx"))
-    except Exception as e:
-        print(f"  Quantization note: {e}")
-        shutil.copy2(onnx_path, os.path.join(WORKER_MODELS_DIR, "skin_pallor_mobilenetv3.onnx"))
+    shutil.copy2(onnx_path, os.path.join(WORKER_MODELS_DIR, "skin_pallor_mobilenetv3.onnx"))
 
     return model
 
@@ -317,7 +308,7 @@ def train_field_lcd_caries_model():
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     model.train()
-    for epoch in range(5):
+    for epoch in range(3):
         total_loss = 0.0
         for imgs, tgts in train_loader:
             optimizer.zero_grad()
@@ -341,13 +332,12 @@ def train_field_lcd_caries_model():
         model,
         dummy_input,
         onnx_path,
+        dynamo=False,
+        opset_version=17,
         input_names=["field_image"],
         output_names=["detection_grid"],
-        dynamic_axes={"field_image": {0: "batch_size"}},
-        opset_version=14
+        dynamic_axes={"field_image": {0: "batch_size"}, "detection_grid": {0: "batch_size"}}
     )
-    m = onnx.load_model(onnx_path, load_external_data=True)
-    onnx.save_model(m, onnx_path, save_as_external_data=False)
     size_mb = os.path.getsize(onnx_path) / (1024 * 1024)
     print(f"  ✓ Exported Detector Model: {onnx_path} ({size_mb:.2f} MB)")
     shutil.copy2(onnx_path, os.path.join(WORKER_MODELS_DIR, "field_lcd_caries_detector.onnx"))
@@ -369,12 +359,12 @@ class SpeechAcousticProsodyModel(nn.Module):
             nn.Conv1d(16, 32, kernel_size=16, stride=4, padding=8),  # 63
             nn.BatchNorm1d(32),
             nn.ReLU(),
-            nn.AdaptiveAvgPool1d(16)
+            nn.AdaptiveAvgPool1d(1)
         )
         self.fc = nn.Sequential(
-            nn.Linear(32 * 16, 64),
+            nn.Linear(32, 32),
             nn.ReLU(),
-            nn.Linear(64, 4)
+            nn.Linear(32, 4)
         )
 
     def forward(self, x):
@@ -438,7 +428,7 @@ def train_speech_prosody_model():
     optimizer = optim.Adam(model.parameters(), lr=2e-3)
 
     model.train()
-    for epoch in range(5):
+    for epoch in range(3):
         total_loss = 0.0
         for audio, tgts in train_loader:
             optimizer.zero_grad()
@@ -462,13 +452,12 @@ def train_speech_prosody_model():
         model,
         dummy_input,
         onnx_path,
+        dynamo=False,
+        opset_version=17,
         input_names=["audio_16khz"],
         output_names=["prosodic_biomarkers"],
-        dynamic_axes={"audio_16khz": {0: "batch_size"}},
-        opset_version=14
+        dynamic_axes={"audio_16khz": {0: "batch_size"}, "prosodic_biomarkers": {0: "batch_size"}}
     )
-    m = onnx.load_model(onnx_path, load_external_data=True)
-    onnx.save_model(m, onnx_path, save_as_external_data=False)
     size_mb = os.path.getsize(onnx_path) / (1024 * 1024)
     print(f"  ✓ Exported Speech Model: {onnx_path} ({size_mb:.2f} MB)")
     shutil.copy2(onnx_path, os.path.join(WORKER_MODELS_DIR, "speech_acoustic_prosody.onnx"))
@@ -551,7 +540,7 @@ def train_motor_kinematics_model():
     optimizer = optim.Adam(model.parameters(), lr=2e-3)
 
     model.train()
-    for epoch in range(5):
+    for epoch in range(3):
         total_loss = 0.0
         for seqs, tgts in train_loader:
             optimizer.zero_grad()
@@ -575,13 +564,12 @@ def train_motor_kinematics_model():
         model,
         dummy_input,
         onnx_path,
+        dynamo=False,
+        opset_version=17,
         input_names=["pose_sequence_30frames"],
         output_names=["kinematic_scores"],
-        dynamic_axes={"pose_sequence_30frames": {0: "batch_size"}},
-        opset_version=14
+        dynamic_axes={"pose_sequence_30frames": {0: "batch_size"}, "kinematic_scores": {0: "batch_size"}}
     )
-    m = onnx.load_model(onnx_path, load_external_data=True)
-    onnx.save_model(m, onnx_path, save_as_external_data=False)
     size_mb = os.path.getsize(onnx_path) / (1024 * 1024)
     print(f"  ✓ Exported Motor Model: {onnx_path} ({size_mb:.2f} MB)")
     shutil.copy2(onnx_path, os.path.join(WORKER_MODELS_DIR, "motor_kinematics_classifier.onnx"))

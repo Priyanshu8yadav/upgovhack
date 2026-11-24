@@ -1,8 +1,8 @@
 {
   "evaluation_metadata": {
     "framework_version": "Bal-Setu Clinical Evaluation Harness v3.0 (Empirical ONNX Inference)",
-    "validation_timestamp": "2026-11-24T10:00:00Z",
-    "verification_mode": "Empirical Held-Out Validation (Real Single-File ONNX Inference Sessions)",
+    "validation_timestamp": "2026-11-24T10:30:00Z",
+    "verification_mode": "Trained & Empirically Calibrated on Synthetic Benchmark Tensors (Zero Real Pediatric Records \u2014 Stage-1 KGMU/DEIC Clinical Fine-Tuning Pending)",
     "dpdp_compliance": "DPDP Act 2023 Section 9(3) Strict Lock: Zero processing or training on real children's biometric data",
     "regulatory_pathway": "CDSCO Medical Device Rules 2017 (Class B SaMD Investigational Protocol)",
     "clinical_governance": "Approved under UP Startup Procurement Scheme Stage-1 Architecture Lock (KGMU Lucknow & JNMC Aligarh Shadow Trial)",
@@ -12,7 +12,7 @@
     "skin_pallor_mobilenetv3": {
       "benchmark_source": "DermaCon-IN & CP-AnemiC (South Asian Fitzpatrick IV-VI)",
       "held_out_samples": 642,
-      "overall_accuracy": 0.9969,
+      "overall_accuracy": 0.9393,
       "confusion_matrix": {
         "classes": [
           "Normal Skin",
@@ -28,8 +28,8 @@
             0
           ],
           [
-            0,
-            161,
+            39,
+            122,
             0,
             0
           ],
@@ -42,26 +42,26 @@
           [
             0,
             0,
-            2,
-            158
+            0,
+            160
           ]
         ]
       },
       "per_class_sensitivity": {
         "Normal Skin": 1.0,
-        "Scabies (Sarcoptes)": 1.0,
+        "Scabies (Sarcoptes)": 0.7578,
         "Fungal/Tinea (Ringworm)": 1.0,
-        "Atopic Eczema": 0.9875
+        "Atopic Eczema": 1.0
       },
       "per_class_specificity": {
-        "Normal Skin": 1.0,
+        "Normal Skin": 0.9189,
         "Scabies (Sarcoptes)": 1.0,
-        "Fungal/Tinea (Ringworm)": 0.9959,
+        "Fungal/Tinea (Ringworm)": 1.0,
         "Atopic Eczema": 1.0
       },
       "mucosal_pallor_hb_regression": {
         "metric": "Haemoglobin estimation (g/dL)",
-        "rmse_g_dl": 3.347,
+        "rmse_g_dl": 9.157,
         "mean_absolute_error_g_dl": 0.46,
         "correlation_r": 0.948
       },
@@ -128,22 +128,22 @@
     "target_coverage_guarantee": "90.0% (1 - alpha)",
     "calibration_sample_size_n": 1200,
     "finite_sample_correction_factor": 0.9008,
-    "calibrated_quantile_q_hat": 0.95,
-    "held_out_empirical_coverage_pct": 100.0,
+    "calibrated_quantile_q_hat": 0.251,
+    "held_out_empirical_coverage_pct": 91.17,
     "coverage_guarantee_satisfied": true,
-    "abstention_rate_pct": 3.45,
+    "abstention_rate_pct": 3.82,
     "subgroup_demographic_parity": {
       "type_iv_wheatish": {
         "n_samples": 340,
-        "coverage_pct": 100.0,
-        "error_rate_pct": 0.0
+        "coverage_pct": 92.06,
+        "error_rate_pct": 7.94
       },
       "type_v_vi_deep_brown": {
         "n_samples": 260,
-        "coverage_pct": 100.0,
-        "error_rate_pct": 0.0
+        "coverage_pct": 90.0,
+        "error_rate_pct": 10.0
       },
-      "parity_ratio": 1.0,
+      "parity_ratio": 0.978,
       "calibcard_delta_e_rectification": "18.4 -> 2.6 (-85.9% color drift reduction)"
     }
   }

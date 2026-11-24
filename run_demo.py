@@ -37,10 +37,10 @@ def main():
     # 2. Ensure ONNX Edge Models exist
     onnx_skin = os.path.join(base_dir, "models", "skin_pallor_mobilenetv3.onnx")
     if not os.path.exists(onnx_skin):
-        print("\n[2/4] Exporting sub-10 MB multi-modal ONNX edge models...")
-        subprocess.run([sys.executable, os.path.join(base_dir, "models", "export_models.py")], check=True)
+        print("\n[2/4] Training and exporting sub-10 MB multi-modal ONNX edge models...")
+        subprocess.run([sys.executable, os.path.join(base_dir, "training", "train_all_models.py")], check=True)
     else:
-        print("\n[2/4] Multi-modal ONNX edge AI models ready (Total footprint: 2.18 MB).")
+        print("\n[2/4] Multi-modal ONNX edge AI models ready (Total footprint: 4.65 MB).")
 
     # 3. Ensure Synthetic 50k cohort summary exists
     cohort_summary = os.path.join(base_dir, "synthetic", "synthetic_cohort_summary.json")

@@ -70,6 +70,7 @@ Thumbs.db
 
 # Audit and temp text dumps
 code_audit.txt
+diff_audit.txt
 
 # Explicitly track essential edge models and calibrated assets
 !models/*.onnx

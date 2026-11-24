@@ -87,12 +87,12 @@ Tested on macOS arm64 CPU (representative of midrange Dimensity 700 / Snapdragon
 
 | Model Component | File Size | Mean Latency | p95 Latency | Memory | Target Verdict |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Skin Pallor MobileNetV3 (D2/D3)** | 1,206.7 KB | 2.10 ms | 2.65 ms | <16 MB | **PASS** (<35 ms) |
-| **7-Segment LCD & Caries Detector (D2/D3)** | 433.6 KB | 0.85 ms | 1.10 ms | <6 MB | **PASS** (<15 ms) |
-| **Acoustic Speech Prosody Classifier (D4)** | 201.8 KB | 0.12 ms | 0.18 ms | <4 MB | **PASS** (<5 ms) |
-| **30-Frame Motor Kinematics (D4)** | 290.0 KB | 0.15 ms | 0.22 ms | <4 MB | **PASS** (<5 ms) |
+| **Skin Pallor MobileNetV3 (D2/D3)** | 3.97 MB | 2.10 ms | 2.65 ms | <16 MB | **PASS** (<35 ms) |
+| **7-Segment LCD & Caries Detector (D2/D3)** | 0.41 MB | 0.85 ms | 1.10 ms | <6 MB | **PASS** (<15 ms) |
+| **Acoustic Speech Prosody Classifier (D4)** | 0.04 MB | 0.12 ms | 0.18 ms | <4 MB | **PASS** (<5 ms) |
+| **30-Frame Motor Kinematics (D4)** | 0.23 MB | 0.15 ms | 0.22 ms | <4 MB | **PASS** (<5 ms) |
 | **Optical CalibCard ArUco Homography & Color Balance** | — | 1.43 ms | 1.85 ms | <6 MB | **PASS** (<10 ms) |
-| **TOTAL MULTI-MODAL EDGE AI FOOTPRINT** | **2.18 MB** | **<5.0 ms** | **<6.5 ms** | **<35 MB** | **PASS (<10 MB target)** |
+| **TOTAL MULTI-MODAL EDGE AI FOOTPRINT** | **4.65 MB** | **<5.0 ms** | **<6.5 ms** | **<35 MB** | **PASS (<10 MB target)** |
 
 ---
 
@@ -157,11 +157,11 @@ upgovhack/
 │   ├── calibcard_back.svg             # Age-graded motor tracing patterns (circle, square, star)
 │   ├── generate_calibcard.py          # Procedural generator producing SVG, PNG, and JSON specs
 │   └── calibcard_specs.json           # Exact geometric mm measurements & colorimetric ground truths
-├── models/                            # Real Multi-Modal ONNX Edge AI Weights (Total: 0.39 MB)
-│   ├── skin_pallor_mobilenetv3.onnx   # MobileNetV3 skin lesions & mucosal pallor (0.28 MB)
-│   ├── field_lcd_caries_detector.onnx # 7-segment digital scale/Hb OCR & dental caries (0.02 MB)
+├── models/                            # Real Multi-Modal ONNX Edge AI Weights (Total: 4.65 MB)
+│   ├── skin_pallor_mobilenetv3.onnx   # MobileNetV3 skin lesions & mucosal pallor (3.97 MB)
+│   ├── field_lcd_caries_detector.onnx # 7-segment digital scale/Hb OCR & dental caries (0.41 MB)
 │   ├── speech_acoustic_prosody.onnx   # Dialect-invariant prosodic speech delay classifier (0.04 MB)
-│   ├── motor_kinematics_classifier.onnx # 30-frame temporal pose kinematics classifier (0.06 MB)
+│   ├── motor_kinematics_classifier.onnx # 30-frame temporal pose kinematics classifier (0.23 MB)
 │   ├── export_models.py               # PyTorch to ONNX exporter with dynamic quantization
 │   └── conformal_calibration_weights.json # Conformal quantiles q̂, alpha=0.10 calibration data
 ├── core/                              # Core Clinical & Computer Vision Modules
